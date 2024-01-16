@@ -1,0 +1,7 @@
+go 1.21.6
+
+use (
+	./crafty-backend/internal/app/api
+	./crafty-backend/internal/pkg/auth
+	./crafty-backend/pkg/infrastructure
+)
