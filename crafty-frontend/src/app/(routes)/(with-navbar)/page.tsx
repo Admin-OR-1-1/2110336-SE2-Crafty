@@ -4,7 +4,7 @@ const HomePage: FC = () => {
   return (
     <div>
       Home Page
-      <button className="btn- btn-active btn-ct_primary">+</button>
+      <button className="btn btn-primary">test</button>
     </div>
   );
 };
