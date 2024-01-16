@@ -5,10 +5,10 @@ export default function NavbarLayout({
 }) {
   return (
     <div className="flex flex-col w-full min-h-screen">
-      <div className="flex flex-row p-4 items-center h-16 bg-[#eac696]">
+      <div className="flex flex-row w-full p-4 items-center h-16 bg-[#ffffff] sticky top-0 z-50">
         <span className="text-xl">Navbar</span>
       </div>
-      <div className="p-8">{children}</div>
+      <div>{children}</div>
     </div>
   );
 }
