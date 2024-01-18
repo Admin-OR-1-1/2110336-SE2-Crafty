@@ -8,9 +8,9 @@ const FeedCard: FC = () => {
         src={`https://picsum.photos/seed/${Math.random() * 1000}/500/${
           (Math.floor(Math.random() * 10) + 5) * 100
         }`}
-        className="w-full h-auto"
+        className="w-full h-auto overflow-hidden"
         placeholder="blur"
-        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/IX3tQAAAABJRU5ErkJggg=="
+        blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
         width={5000}
         height={5000}
         alt={`Image`}
