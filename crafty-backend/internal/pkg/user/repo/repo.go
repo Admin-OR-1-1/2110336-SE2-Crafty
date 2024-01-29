@@ -7,4 +7,6 @@ import (
 type IUserRepo interface {
 	CreateUser(User user.TUser) error
 	DeleteUser(UID string) error
+	GetUserById(UID string) (user.TUser, error)
+	UpdateUser(User user.TUser) error
 }

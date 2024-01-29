@@ -22,6 +22,6 @@ type TUser struct {
 type IUser interface {
 	CreateUser(User TUser) error
 	GetUserById(UID string) (TUser, error)
-	UpdateUserInfo(User TUser) error
+	UpdateUser(User TUser) error
 	DeleteUser(UID string) error
 }
