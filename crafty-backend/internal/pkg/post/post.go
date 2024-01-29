@@ -30,4 +30,5 @@ type IPost interface {
 	CreatePost(Post TPost) error
 	EditPost(Post TPost) error
 	DeletePost(ID string) error
+	GetPostById(ID string) (TPost, error)
 }

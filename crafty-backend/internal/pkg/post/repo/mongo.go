@@ -8,5 +8,5 @@ type IPostRepo interface {
 	CreatePost(Post post.TPost) error
 	EditPost(Post post.TPost) error
 	DeletePost(ID string) error
-	GetPost
+	GetPostById(ID string) (post.TPost, error)
 }
