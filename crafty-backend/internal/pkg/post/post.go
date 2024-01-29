@@ -29,5 +29,5 @@ type TPost struct {
 type IPost interface {
 	CreatePost(Post TPost) error
 	EditPost(Post TPost) error
-	RemovePost(ID string) error
+	DeletePost(ID string) error
 }
