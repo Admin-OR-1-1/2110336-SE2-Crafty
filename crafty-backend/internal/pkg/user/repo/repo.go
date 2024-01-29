@@ -20,26 +20,31 @@ type TUser struct {
 type IUserRepo interface {
 	InsertUser(User TUser) error
 	DeleteUser(UID string) error
-	GetUserById(UID string) (TUser, error)
+	GetUserById(UID string) error
 	UpdateUser(User TUser) error
+	ToUser() TUser
 }
 
-func CreateUserInstance(User TUser) (IUserRepo, error) {
+func CreateUserInstance() (IUserRepo, error) {
 	return &TUser{}, nil
 }
 
-func (User *TUser) InsertUser(User TUser) error {
+func (r *TUser) InsertUser(user TUser) error {
 	return nil
 }
 
-func (User *TUser) DeleteUser(UID string) error {
+func (r *TUser) DeleteUser(uid string) error {
 	return nil
 }
 
-func (User *TUser) GetUserById(UID string) (TUser, error) {
-	return TUser{}, nil
+func (r *TUser) GetUserById(uid string) error {
+	return nil
 }
 
-func (User *TUser) UpdateUser(User TUser) error {
+func (r *TUser) UpdateUser(user TUser) error {
 	return nil
+}
+
+func (r *TUser) ToUser() TUser {
+	return *r
 }

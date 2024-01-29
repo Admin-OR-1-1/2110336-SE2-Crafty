@@ -1,5 +1,7 @@
 package user
 
+import userRepo "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/user/repo"
+
 // type IUser interface {
 // 	CreateUser(User TUser) error
 // 	GetUserById(UID string) (TUser, error)
@@ -11,7 +13,13 @@ func CreateUser(User userRepo.TUser) error {
 	return nil
 }
 
-func GetUserById(UID string) (repo.TUser, error) {
-	user, err := repo.GetUserById(UID)
-	return TUser{}, nil
+func GetUserById(UID string) (userRepo.TUser, error) {
+	user, err := userRepo.CreateUserInstance()
+	if err != nil {
+		return userRepo.TUser{}, err
+	}
+	if err := user.GetUserById(UID); err != nil {
+		return userRepo.TUser{}, err
+	}
+	return user.ToUser(), err
 }
