@@ -7,4 +7,4 @@ Feature: Create Post
         And "Post datas" is valid
         And I press "Create"
         Then I should see "Post datas"
-        
+    
