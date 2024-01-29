@@ -1,7 +1,5 @@
 package user
 
-import "google.golang.org/genproto/googleapis/type/phone_number"
-
 type TAddress struct {
 	Address_1   string
 	Street      string
@@ -14,7 +12,7 @@ type TAddress struct {
 type TUser struct {
 	UID          string
 	Username     string
-	Phone_number phone_number.PhoneNumber
+	Phone_number string
 	Address      TAddress
 	PictureUrl   string
 }
