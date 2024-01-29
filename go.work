@@ -6,4 +6,5 @@ use (
 		// ./crafty-backend/internal/app/admin-api
 	./crafty-backend/internal/pkg/admin-auth
 	./crafty-backend/pkg/infrastructure
+	./crafty-backend/internal/pkg/user
 )
