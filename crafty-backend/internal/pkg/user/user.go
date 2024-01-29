@@ -16,12 +16,13 @@ type TUser struct {
 	Username     string
 	Phone_number phone_number.PhoneNumber
 	Address      TAddress
+	PictureUrl   string
 }
 
 type IUser interface {
-	CreateUser(User TUser) (error)
+	CreateUser(User TUser) error
 	GetUserById(UID string) (TUser, error)
-	EditUserInfo(User TUser) (error)
-	DeleteUser(UID string) (error)
-	VerifyUser(UID string) (error)	
+	EditUserInfo(User TUser) error
+	DeleteUser(UID string) error
+	VerifyUser(UID string) error
 }
