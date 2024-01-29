@@ -23,7 +23,7 @@ type TPost struct {
 	PackageList []TPackage
 	Detail      string
 	Content     string
-	OwnerID     string
+	CrafterID   string
 }
 
 type IPost interface {
