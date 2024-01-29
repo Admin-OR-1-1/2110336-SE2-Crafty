@@ -1,4 +1,4 @@
-Feature: Edit User Personal Info
+Feature: Update User Personal Info
 
     Scenario: User edits personal info with invalid info
         Given I am a "User"
