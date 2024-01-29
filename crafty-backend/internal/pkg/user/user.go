@@ -2,7 +2,7 @@ package user
 
 import "google.golang.org/genproto/googleapis/type/phone_number"
 
-type Address struct {
+type TAddress struct {
 	Address_1   string
 	Street      string
 	Tambon      string
@@ -11,9 +11,17 @@ type Address struct {
 	Postal_code string
 }
 
-type User struct {
+type TUser struct {
 	UID          string
 	Username     string
 	Phone_number phone_number.PhoneNumber
-	Address      Address
+	Address      TAddress
+}
+
+type IUser interface {
+	CreateUser(User TUser) (error)
+	GetUserById(UID string) (TUser, error)
+	EditUserInfo(User TUser) (error)
+	DeleteUser(UID string) (error)
+	VerifyUser(UID string) (error)	
 }
