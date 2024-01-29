@@ -24,5 +24,4 @@ type IUser interface {
 	GetUserById(UID string) (TUser, error)
 	EditUserInfo(User TUser) error
 	DeleteUser(UID string) error
-	VerifyUser(UID string) error
 }
