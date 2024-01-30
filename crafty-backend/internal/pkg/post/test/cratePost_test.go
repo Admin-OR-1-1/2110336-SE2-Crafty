@@ -5,6 +5,7 @@ import (
 
 	post "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/post"
 	repo "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/post/repo"
+	"github.com/stretchr/testify/assert"
 )
 
 func ValidPost() (string, repo.TPost) {
@@ -37,11 +38,13 @@ func ValidPost() (string, repo.TPost) {
 
 func TestCreatePost(t *testing.T) {
 	// Call the function to create a post
-	_, ValidTPost := ValidPost()
+	ID, ValidTPost := ValidPost()
 	c_post := post.CreatePost(ValidTPost)
 
 	// have to call get
-
+	post1, err1 := post.GetPostById(ID)
+	assert.Equal(t, ValidTPost, post1)
+	assert.Equal(t, nil, err1)
 	// Check if an error occurred
 	if c_post != nil {
 		t.Errorf("Failed to create post: %v", err)
