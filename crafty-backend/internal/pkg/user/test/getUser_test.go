@@ -5,12 +5,13 @@ import (
 	"strings"
 	"testing"
 
-	userPkg "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/user"
+	user "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/user"
+	userRepo "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/user/repo"
 	"github.com/go-playground/assert"
 )
 
-func ValidUID() (string, user.TUser) {
-	ValidAddress := userPkg.TAddress{
+func ValidUID() (string, userRepo.TUser) {
+	ValidAddress := userRepo.TAddress{
 		Address_1:   "Address_1ThatIsValid",
 		Street:      "StreetThatIsValid",
 		Tambon:      "TambonThatIsValid",
@@ -18,7 +19,7 @@ func ValidUID() (string, user.TUser) {
 		Province:    "ProvinceThatIsValid",
 		Postal_code: "Postal_codeThatIsValid",
 	}
-	ValidUser := userPkg.TUser{
+	ValidUser := userRepo.TUser{
 		UID:          "UidThatIsValid",
 		Username:     "UsernameThatIsValid",
 		Phone_number: "PhoneNumberThatIsValid",
@@ -28,13 +29,18 @@ func ValidUID() (string, user.TUser) {
 	return "UidThatIsValid", ValidUser
 }
 
+// Example function from Kongphob not used in this test
 func InvalidField(fieldNames []string) error {
 	return fmt.Errorf("Invalid field: %s", strings.Join(fieldNames, ", "))
 }
 
+func InvalidUID() string {
+	return "UidThatIsInvalid"
+}
+
 func TestGetUser(t *testing.T) {
 	ValidUID, ValidUser := ValidUID()
-	User1, Err1 := userPkg.GetUserById(ValidUID)
+	User1, Err1 := user.GetUserById(ValidUID)
 	assert.Equal(t, ValidUser, User1)
 	assert.Equal(t, nil, Err1)
 
