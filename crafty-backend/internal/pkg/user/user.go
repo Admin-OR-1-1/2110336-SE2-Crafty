@@ -23,3 +23,8 @@ func GetUserById(UID string) (userRepo.TUser, error) {
 	}
 	return user.ToUser(), err
 }
+
+// not yet written
+func UpdateUser(User userRepo.TUser) error {
+	return nil
+}

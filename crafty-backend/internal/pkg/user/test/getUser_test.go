@@ -11,6 +11,7 @@ import (
 )
 
 func ValidUID() (string, userRepo.TUser) {
+	UID := "UidThatIsValid"
 	ValidAddress := userRepo.TAddress{
 		Address_1:   "Address_1ThatIsValid",
 		Street:      "StreetThatIsValid",
@@ -20,13 +21,13 @@ func ValidUID() (string, userRepo.TUser) {
 		Postal_code: "Postal_codeThatIsValid",
 	}
 	ValidUser := userRepo.TUser{
-		UID:          "UidThatIsValid",
+		UID:          UID,
 		Username:     "UsernameThatIsValid",
 		Phone_number: "PhoneNumberThatIsValid",
 		Address:      ValidAddress,
 		PictureUrl:   "PictureUrlThatIsValid",
 	}
-	return "UidThatIsValid", ValidUser
+	return UID, ValidUser
 }
 
 // Example function from Kongphob not used in this test
