@@ -1,6 +1,7 @@
 package post_test
 
 import (
+	"fmt"
 	"testing"
 
 	post "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/post"
@@ -36,24 +37,23 @@ func ValidPost() (string, repo.TPost) {
 	return ID, ValidTPost
 }
 
+func InValidPost() string {
+	return "Failed to create post"
+}
+
 func TestCreatePost(t *testing.T) {
 	// Call the function to create a post
 	ID, ValidTPost := ValidPost()
-	c_post := post.CreatePost(ValidTPost)
+	post.CreatePost(ValidTPost)
 
 	// have to call get
 	post1, err1 := post.GetPostById(ID)
 	assert.Equal(t, ValidTPost, post1)
 	assert.Equal(t, nil, err1)
-	// Check if an error occurred
-	if c_post != nil {
-		t.Errorf("Failed to create post: %v", err)
-	}
 
-	// Check if the post ID is not empty
-	if postID == "" {
-		t.Error("Empty post ID returned")
-	}
+	InvalidTPost := InValidPost()
+	post2, err2 := post.GetPostById(InvalidTPost)
+	assert.Equal(t, repo.TPost{}, post2)
+	assert.Equal(t, fmt.Errorf("Failed to create post"), err2)
 
-	// Optionally, you can add more assertions here
 }
