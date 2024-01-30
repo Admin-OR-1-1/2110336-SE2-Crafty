@@ -10,3 +10,8 @@ type IPostRepo interface {
 	DeletePost(ID string) error
 	GetPostById(ID string) (post.TPost, error)
 }
+
+func CreatePost(Post post.TPost) error {
+	// logic for creating a post
+	return nil
+}
