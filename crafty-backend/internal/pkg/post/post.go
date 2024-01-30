@@ -12,7 +12,7 @@ import (
 		GetPostById(ID string) (postRepo.TPost, error)
 	}
 */
-func CreatePost(User postRepo.TPost) error {
+func CreatePost(Post postRepo.TPost) error {
 	return nil
 }
 func UpdatePost(User postRepo.TPost) error {

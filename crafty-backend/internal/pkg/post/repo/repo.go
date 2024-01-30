@@ -33,7 +33,27 @@ type IPostRepo interface {
 	GetPostById(ID string) (TPost, error)
 }
 
-func CreatePost(Post TPost) error {
-	// logic for creating a post
+func (repo *TPost) CreatePost(post TPost) error {
+	// Implement logic to create a post
 	return nil
+}
+
+func (repo *TPost) UpdatePost(post TPost) error {
+	// Implement logic to update a post
+	return nil
+}
+
+func (repo *TPost) DeletePost(ID string) error {
+	// Implement logic to delete a post
+	return nil
+}
+
+func (repo *TPost) GetPostById(ID string) (TPost, error) {
+	// Implement logic to get a post by ID
+	return TPost{}, nil
+}
+
+// CreateUserInstance creates and returns an instance of PostRepo
+func CreateUserInstance() (IPostRepo, error) {
+	return &TPost{}, nil
 }
