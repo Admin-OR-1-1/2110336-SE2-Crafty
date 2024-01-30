@@ -1,34 +1,20 @@
 package post
 
-type TThumbnail struct {
-	ThumbnailUrl  string
-	ThumbnailType string
-}
+import (
+	postRepo "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/post/repo"
+)
 
-type TReview struct {
-	RatingStar float32
-	Comment    string
-	UID        string
+/*
+	type IPost interface {
+		CreatePost(Post postRepo.TPost) error
+		UpdatePost(Post postRepo.TPost) error
+		DeletePost(ID string) error
+		GetPostById(ID string) (postRepo.TPost, error)
+	}
+*/
+func CreatePost(User postRepo.TPost) error {
+	return nil
 }
-
-type TPackage struct {
-	Price float64
-}
-
-type TPost struct {
-	ID          string
-	Thumbnail   TThumbnail
-	Name        string
-	ReviewList  []TReview
-	PackageList []TPackage
-	Detail      string
-	Content     string
-	CrafterID   string
-}
-
-type IPost interface {
-	CreatePost(Post TPost) error
-	UpdatePost(Post TPost) error
-	DeletePost(ID string) error
-	GetPostById(ID string) (TPost, error)
+func UpdatePost(User postRepo.TPost) error {
+	return nil
 }

@@ -1,17 +1,39 @@
-package user_repo
+package post_repo
 
-import (
-	post "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/post"
-)
-
-type IPostRepo interface {
-	CreatePost(Post post.TPost) error
-	UpdatePost(Post post.TPost) error
-	DeletePost(ID string) error
-	GetPostById(ID string) (post.TPost, error)
+type TThumbnail struct {
+	ThumbnailUrl  string
+	ThumbnailType string
 }
 
-func CreatePost(Post post.TPost) error {
+type TReview struct {
+	RatingStar float32
+	Comment    string
+	UID        string
+}
+
+type TPackage struct {
+	Price float64
+}
+
+type TPost struct {
+	ID          string
+	Thumbnail   TThumbnail
+	Name        string
+	ReviewList  []TReview
+	PackageList []TPackage
+	Detail      string
+	Content     string
+	CrafterID   string
+}
+
+type IPostRepo interface {
+	CreatePost(Post TPost) error
+	UpdatePost(Post TPost) error
+	DeletePost(ID string) error
+	GetPostById(ID string) (TPost, error)
+}
+
+func CreatePost(Post TPost) error {
 	// logic for creating a post
 	return nil
 }
