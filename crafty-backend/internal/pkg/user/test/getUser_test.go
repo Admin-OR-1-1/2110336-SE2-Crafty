@@ -48,5 +48,4 @@ func TestGetUser(t *testing.T) {
 	User2, Err2 := user.GetUserById(InvalidUID)
 	assert.Equal(t, nil, User2)
 	assert.Equal(t, fmt.Errorf("Invalid UID"), Err2)
-	return
 }
