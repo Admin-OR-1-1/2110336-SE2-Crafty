@@ -7,10 +7,10 @@ Feature: Create User
     Then I should can craete user success
 
   #The Second case
-  Scenario: email is already use to create user
+  Scenario: Phone number is already use to create user
     Given I am the user
     When My email is alraedy use to register
-    Then I should get error "This email is already use"
+    Then I should get error "This phone number is already use"
 
   #The personal case 1
   Scenario: Personal Information "Username" 

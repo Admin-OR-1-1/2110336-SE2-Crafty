@@ -28,3 +28,7 @@ func GetUserById(UID string) (userRepo.TUser, error) {
 func UpdateUser(User userRepo.TUser) error {
 	return nil
 }
+
+func DeleteUser(UID string) error {
+	return nil
+}
