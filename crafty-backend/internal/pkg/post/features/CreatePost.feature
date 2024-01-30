@@ -1,10 +1,13 @@
 Feature: Create Post
     #
-    Scenario: Crafter creates Post with valid datas
-        Given I am a "Crafter"
+    Scenario: create post success
+        Given I am the crafter
         When I go to the Create Post
-        And I fill in "Post datas"
-        And "Post datas" is valid
-        And I press "Create"
-        Then I should see "Post datas"
-    
+        And I fill in the valid informations
+        Then I should can craete post success
+
+    Scenario: create post failed
+        Given I am the crafter
+        When I go to the Create Post
+        And I fill in the invalid informations
+        Then I should get error "Post informations is invalid"

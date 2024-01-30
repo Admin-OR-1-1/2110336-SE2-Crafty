@@ -6,7 +6,7 @@ import (
 
 type IPostRepo interface {
 	CreatePost(Post post.TPost) error
-	EditPost(Post post.TPost) error
+	UpdatePost(Post post.TPost) error
 	DeletePost(ID string) error
 	GetPostById(ID string) (post.TPost, error)
 }
