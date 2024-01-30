@@ -9,11 +9,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// ValidPost and InValidPost from create post
 func TestGetPostById(t *testing.T) {
-	// Call the function to create a post
+
 	ID, ValidTPost := ValidPost()
 
-	// have to call get
 	post1, err1 := post.GetPostById(ID)
 	assert.Equal(t, ValidTPost, post1)
 	assert.Equal(t, nil, err1)
