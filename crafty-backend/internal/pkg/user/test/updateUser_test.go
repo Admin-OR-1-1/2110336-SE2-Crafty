@@ -1,5 +1,8 @@
 package user_test
 
+//---*IMPORTANT*---//
+// Test getUser.go first before testing this file //
+
 import (
 	"fmt"
 	"testing"
