@@ -1,13 +1,11 @@
-Feature: Delete User
+Feature: Delete Post
     #
     Scenario: delete post success
-        Given I am the user 
-        And UID of user account that I want to delete is valid
-        When I want to delete user
-        Then The user account should be deleted
+        Given I am the crafter
+        When I want to delete user by using ID which is valid
+        Then The post should be deleted
 
-    Scenario: The UID is invalid
-        Given I am the user
-        And UID of user account that I want to delete is invalid
-        When I want to delete user
-        Then The system should show error "The User account is invalid"
+    Scenario: delete post failed
+        Given I am the crafter
+        When I want to delete user by using ID which is invalid
+        Then The system should show error "ID is invalid"
