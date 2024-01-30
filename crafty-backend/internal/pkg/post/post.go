@@ -15,6 +15,12 @@ import (
 func CreatePost(Post postRepo.TPost) error {
 	return nil
 }
-func UpdatePost(User postRepo.TPost) error {
+func UpdatePost(Post postRepo.TPost) error {
+	return nil
+}
+func DeletePost(ID string) error {
+	return nil
+}
+func GetPostById(ID string) error {
 	return nil
 }
