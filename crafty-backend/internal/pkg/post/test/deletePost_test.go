@@ -10,7 +10,8 @@ import (
 )
 
 // ValidPost from create post
-func InvalidDeletePost() (string, repo.TPost) {
+
+func InvalidPost2() (string, repo.TPost) {
 	InvalidID := "invalid"
 	InvalidTThumnail := repo.TThumbnail{
 		ThumbnailUrl:  "invalid",
@@ -45,7 +46,7 @@ func TestDeletePost(t *testing.T) {
 	assert.Equal(t, nil, err1)
 
 	//case ID is invalid
-	ID2, _ := InvalidDeletePost()
+	ID2, _ := InvalidPost2()
 	err2 := post.DeletePost(ID2)
 	assert.Equal(t, fmt.Errorf("ID is invalid"), err2)
 }
