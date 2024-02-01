@@ -2,6 +2,7 @@ package post
 
 import (
 	"errors"
+	"fmt"
 
 	postRepo "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/post/repo"
 )
@@ -14,8 +15,41 @@ import (
 		GetPostById(ID string) (postRepo.TPost, error)
 	}
 */
+
+// not have list now
+func HaveNil(Post postRepo.TPost) bool {
+	if Post.ID == "" {
+		return true
+	}
+	if Post.Name == "" {
+		return true
+	}
+	if Post.Detail == "" {
+		return true
+	}
+	if Post.Content == "" {
+		return true
+	}
+	if Post.CrafterID == "" {
+		return true
+	}
+	if Post.Thumbnail.ThumbnailUrl == "" {
+		return true
+	}
+	if Post.Thumbnail.ThumbnailType == "" {
+		return true
+	}
+	return false
+}
+
 func CreatePost(Post postRepo.TPost) error {
-	return nil
+	postInstance, _ := postRepo.CreatePostInstance()
+	if HaveNil(Post) {
+		return fmt.Errorf("Failed to create post")
+	} else {
+		postInstance.CreatePost(Post)
+		return nil
+	}
 }
 
 // Jinny
