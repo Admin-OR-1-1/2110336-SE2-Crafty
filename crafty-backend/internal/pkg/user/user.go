@@ -14,6 +14,36 @@ import (
 // }
 
 func IsValidUser(User userRepo.TUser) bool {
+	if User.UID == "" {
+		return false
+	}
+	if User.Username == "" {
+		return false
+	}
+	if User.Phone_number == "" {
+		return false
+	}
+	if User.Address.Address_1 == "" {
+		return false
+	}
+	if User.Address.Street == "" {
+		return false
+	}
+	if User.Address.Tambon == "" {
+		return false
+	}
+	if User.Address.Amphoe == "" {
+		return false
+	}
+	if User.Address.Province == "" {
+		return false
+	}
+	if User.Address.Postal_code == "" {
+		return false
+	}
+	if User.PictureUrl == "" {
+		return false
+	}
 	return true
 }
 
