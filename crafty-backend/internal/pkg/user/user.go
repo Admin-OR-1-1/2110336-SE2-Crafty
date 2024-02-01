@@ -1,6 +1,10 @@
 package user
 
-import userRepo "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/user/repo"
+import (
+	"fmt"
+
+	userRepo "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/user/repo"
+)
 
 // type IUser interface {
 // 	CreateUser(User TUser) error
@@ -9,8 +13,18 @@ import userRepo "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/inter
 // 	DeleteUser(UID string) error
 // }
 
+func IsValidUser(User userRepo.TUser) bool {
+	return true
+}
+
 func CreateUser(User userRepo.TUser) error {
-	return nil
+	userInstance, _ := userRepo.CreateUserInstance()
+	if IsValidUser(User) {
+		userInstance.CreateUser(User)
+		return nil
+	} else {
+		return fmt.Errorf("Invalid User")
+	}
 }
 
 func GetUserById(UID string) (userRepo.TUser, error) {

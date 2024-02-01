@@ -22,6 +22,7 @@ type IUserRepo interface {
 	DeleteUser(UID string) error
 	GetUserById(UID string) error
 	UpdateUser(User TUser) error
+	CreateUser(User TUser) error
 	ToUser() TUser
 }
 
@@ -42,6 +43,10 @@ func (r *TUser) GetUserById(uid string) error {
 }
 
 func (r *TUser) UpdateUser(user TUser) error {
+	return nil
+}
+
+func (r *TUser) CreateUser(user TUser) error {
 	return nil
 }
 
