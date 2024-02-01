@@ -53,7 +53,7 @@ func (repo *TPost) GetPostById(ID string) (TPost, error) {
 	return TPost{}, nil
 }
 
-// CreateUserInstance creates and returns an instance of PostRepo
-func CreateUserInstance() (IPostRepo, error) {
+// CreatePostInstance creates and returns an instance of PostRepo
+func CreatePostInstance() (IPostRepo, error) {
 	return &TPost{}, nil
 }
