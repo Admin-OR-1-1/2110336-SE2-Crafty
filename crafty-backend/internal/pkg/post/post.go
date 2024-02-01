@@ -45,7 +45,7 @@ func HaveNil(Post postRepo.TPost) bool {
 func CreatePost(Post postRepo.TPost) error {
 	postInstance, _ := postRepo.CreatePostInstance()
 	if HaveNil(Post) {
-		return fmt.Errorf("Failed to create post")
+		return fmt.Errorf("FailedToCreatePost")
 	} else {
 		postInstance.CreatePost(Post)
 		return nil

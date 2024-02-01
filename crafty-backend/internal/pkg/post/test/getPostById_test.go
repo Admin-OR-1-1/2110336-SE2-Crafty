@@ -21,6 +21,6 @@ func TestGetPostById(t *testing.T) {
 	InvalidTPost := InValidPost()
 	post2, err2 := post.GetPostById(InvalidTPost)
 	assert.Equal(t, repo.TPost{}, post2)
-	assert.Equal(t, fmt.Errorf("Failed to create post"), err2)
+	assert.Equal(t, fmt.Errorf("FailedToGetPost"), err2)
 
 }

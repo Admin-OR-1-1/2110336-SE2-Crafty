@@ -48,5 +48,5 @@ func TestDeletePost(t *testing.T) {
 	//case ID is invalid
 	ID2, _ := InvalidPost2()
 	err2 := post.DeletePost(ID2)
-	assert.Equal(t, fmt.Errorf("ID is invalid"), err2)
+	assert.Equal(t, fmt.Errorf("InvalidID"), err2)
 }

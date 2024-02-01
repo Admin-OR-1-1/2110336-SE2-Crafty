@@ -22,6 +22,6 @@ func TestUpdatePost(t *testing.T) {
 	BeforeTPost2, _ := post.GetPostById(ID2)
 	err2 := post.UpdatePost(NewTPost2)
 	AfterTPost2, _ := post.GetPostById(ID2)
-	assert.Equal(t, fmt.Errorf("Failed to update post"), err2)
+	assert.Equal(t, fmt.Errorf("FailedToUpdatePost"), err2)
 	assert.Equal(t, BeforeTPost2, AfterTPost2)
 }
