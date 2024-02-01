@@ -13,7 +13,7 @@ func ValidPost() (string, repo.TPost) {
 	ID := "123456"
 	ValidTThumnail := repo.TThumbnail{
 		ThumbnailUrl:  "www.123.com",
-		ThumbnailType: "vedio",
+		ThumbnailType: "video",
 	}
 	ValidTReview := repo.TReview{
 		RatingStar: 3.5,
