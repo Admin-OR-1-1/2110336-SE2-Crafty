@@ -37,5 +37,4 @@ func TestGetPostById(t *testing.T) {
 	assert.Equal(t, repo.TPost{}, post4)
 	assert.Equal(t, fmt.Errorf("FailedToGetPost"), err4)
 
-	// You can add more scenarios here based on the requirements
 }
