@@ -1,7 +1,6 @@
 package post_test
 
 import (
-	"fmt"
 	"testing"
 
 	post "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/post"
@@ -13,7 +12,7 @@ func ValidPost() (string, repo.TPost) {
 	ID := "123456"
 	ValidTThumnail := repo.TThumbnail{
 		ThumbnailUrl:  "www.123.com",
-		ThumbnailType: "video",
+		ThumbnailType: "vedio",
 	}
 	ValidTReview := repo.TReview{
 		RatingStar: 3.5,
@@ -41,7 +40,7 @@ func InValidPost() string {
 	return "Failed to create post"
 }
 
-func TestCreatePost(t *testing.T) {
+func TestCreatePost_Success(t *testing.T) {
 	// Call the function to create a post
 	ID, ValidTPost := ValidPost()
 	post.CreatePost(ValidTPost)
@@ -49,11 +48,66 @@ func TestCreatePost(t *testing.T) {
 	// have to call get
 	post1, err1 := post.GetPostById(ID)
 	assert.Equal(t, ValidTPost, post1)
-	assert.Equal(t, nil, err1)
+	assert.Nil(t, err1)
+}
 
-	InvalidTPost := InValidPost()
-	post2, err2 := post.GetPostById(InvalidTPost)
-	assert.Equal(t, repo.TPost{}, post2)
-	assert.Equal(t, fmt.Errorf("FailedToCreatePost"), err2)
+func TestCreatePost_InvalidThumbnailURL(t *testing.T) {
+	// Create post with invalid thumbnail URL
+	invalidThumbnailPost := repo.TPost{
+		Thumbnail: repo.TThumbnail{
+			ThumbnailUrl:  "invalid_url",
+			ThumbnailType: "video",
+		},
+	}
+	err := post.CreatePost(invalidThumbnailPost)
+	assert.Error(t, err) // Check if an error occurred
+}
 
+func TestCreatePost_EmptyName(t *testing.T) {
+	// Create post with empty name
+	emptyNamePost := repo.TPost{
+		Name: "",
+	}
+	err := post.CreatePost(emptyNamePost)
+	assert.Error(t, err) // Check if an error occurred
+}
+
+func TestCreatePost_EmptyContent(t *testing.T) {
+	// Create post with empty content
+	emptyContentPost := repo.TPost{
+		Content: "",
+	}
+	err := post.CreatePost(emptyContentPost)
+	assert.Error(t, err) // Check if an error occurred
+}
+
+func TestCreatePost_InvalidReview(t *testing.T) {
+	// Create post with invalid review
+	invalidReviewPost := repo.TPost{
+		ReviewList: []repo.TReview{
+			{RatingStar: 6.0}, // Rating greater than maximum allowed value
+		},
+	}
+	err := post.CreatePost(invalidReviewPost)
+	assert.Error(t, err) // Check if an error occurred
+}
+
+func TestCreatePost_NoCrafterID(t *testing.T) {
+	// Create post without crafter ID
+	noCrafterIDPost := repo.TPost{
+		CrafterID: "",
+	}
+	err := post.CreatePost(noCrafterIDPost)
+	assert.Error(t, err) // Check if an error occurred
+}
+
+func TestCreatePost_InvalidPackage(t *testing.T) {
+	// Create post with invalid package
+	invalidPackagePost := repo.TPost{
+		PackageList: []repo.TPackage{
+			{Price: -100.0}, // Negative price
+		},
+	}
+	err := post.CreatePost(invalidPackagePost)
+	assert.Error(t, err) // Check if an error occurred
 }
