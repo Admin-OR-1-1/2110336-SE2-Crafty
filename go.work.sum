@@ -81,7 +81,6 @@ cloud.google.com/go/oslogin v1.13.0/go.mod h1:xPJqLwpTZ90LSE5IL1/svko+6c5avZLlui
 cloud.google.com/go/phishingprotection v0.8.4/go.mod h1:6b3kNPAc2AQ6jZfFHioZKg9MQNybDg4ixFd4RPZZ2nE=
 cloud.google.com/go/policytroubleshooter v1.10.2/go.mod h1:m4uF3f6LseVEnMV6nknlN2vYGRb+75ylQwJdnOXfnv0=
 cloud.google.com/go/privatecatalog v0.9.4/go.mod h1:SOjm93f+5hp/U3PqMZAHTtBtluqLygrDrVO8X8tYtG0=
-cloud.google.com/go/pubsub v1.33.0/go.mod h1:f+w71I33OMyxf9VpMVcZbnG5KSUkCOUHYpFd5U1GdRc=
 cloud.google.com/go/pubsub v1.34.0/go.mod h1:alj4l4rBg+N3YTFDDC+/YyFTs6JAjam2QfYsddcAW4c=
 cloud.google.com/go/pubsublite v1.8.1/go.mod h1:fOLdU4f5xldK4RGJrBMm+J7zMWNj/k4PxwEZXy39QS0=
 cloud.google.com/go/recaptchaenterprise/v2 v2.9.0/go.mod h1:Dak54rw6lC2gBY8FBznpOCAR58wKf+R+ZSJRoeJok4w=
@@ -139,6 +138,7 @@ github.com/google/uuid v1.3.1/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+
 github.com/json-iterator/go v1.1.12/go.mod h1:e30LSqwooZae/UwlEbR2852Gd8hjQvJoHmT4TnhNGBo=
 github.com/klauspost/compress v1.15.9 h1:wKRjX6JRtDdrE9qwa4b/Cip7ACOshUI4smpCQanqjSY=
 github.com/klauspost/compress v1.15.9/go.mod h1:PhcZ0MbTNciWF3rruxRgKxI5NkcHHrHUDtV4Yw2GlzU=
+github.com/klauspost/cpuid/v2 v2.0.9/go.mod h1:FInQzS24/EEf25PyTYn52gqo7WaD8xa0213Md/qVLRg=
 github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421/go.mod h1:6dJC0mAP4ikYIbvyc7fijjWJddQyLn8Ig3JB5CqoB9Q=
 github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjYzDa0/r8luk=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
@@ -197,5 +197,6 @@ google.golang.org/grpc v1.37.0/go.mod h1:NREThFqKR1f3iQ6oBuvc5LadQuXVGo9rkm5ZGrQ
 google.golang.org/grpc v1.59.0/go.mod h1:aUPDwccQo6OTjy7Hct4AfBPD1GptF4fyUjIkQ9YtF98=
 google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0/go.mod h1:6Kw0yEErY5E/yWrBtf03jp27GLLJujG4z/JK95pnjjw=
 google.golang.org/protobuf v1.31.0/go.mod h1:HV8QOd/L58Z+nl8r43ehVNZIU/HEI6OcFqwMG9pJV4I=
+gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=
 gopkg.in/yaml.v2 v2.2.2/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
