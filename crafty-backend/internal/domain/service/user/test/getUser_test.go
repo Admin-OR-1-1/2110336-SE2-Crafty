@@ -1,18 +1,17 @@
-package user_test
+package model_test
 
 import (
 	"fmt"
 	"strings"
 	"testing"
 
-	user "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/user"
-	userRepo "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/user/repo"
+	model "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/model"
 	"github.com/go-playground/assert"
 )
 
-func ValidUID() (string, userRepo.TUser) {
+func ValidUID() (string, model.Tmodel) {
 	UID := "UidThatIsValid"
-	ValidAddress := userRepo.TAddress{
+	ValidAddress := model.TAddress{
 		Address_1:   "Address_1ThatIsValid",
 		Street:      "StreetThatIsValid",
 		Tambon:      "TambonThatIsValid",
@@ -20,14 +19,14 @@ func ValidUID() (string, userRepo.TUser) {
 		Province:    "ProvinceThatIsValid",
 		Postal_code: "Postal_codeThatIsValid",
 	}
-	ValidUser := userRepo.TUser{
+	Validmodel := model.Tmodel{
 		UID:          UID,
-		Username:     "UsernameThatIsValid",
+		modelname:    "modelnameThatIsValid",
 		Phone_number: "PhoneNumberThatIsValid",
 		Address:      ValidAddress,
 		PictureUrl:   "PictureUrlThatIsValid",
 	}
-	return UID, ValidUser
+	return UID, Validmodel
 }
 
 // Example function from Kongphob not used in this test
@@ -39,14 +38,14 @@ func InvalidUID() string {
 	return "UidThatIsInvalid"
 }
 
-func TestGetUser(t *testing.T) {
-	ValidUID, ValidUser := ValidUID()
-	User1, Err1 := user.GetUserById(ValidUID)
-	assert.Equal(t, ValidUser, User1)
+func TestGetmodel(t *testing.T) {
+	ValidUID, Validmodel := ValidUID()
+	model1, Err1 := model.GetmodelById(ValidUID)
+	assert.Equal(t, Validmodel, model1)
 	assert.Equal(t, nil, Err1)
 
 	InvalidUID := InvalidUID()
-	User2, Err2 := user.GetUserById(InvalidUID)
-	assert.Equal(t, nil, User2)
+	model2, Err2 := model.GetmodelById(InvalidUID)
+	assert.Equal(t, nil, model2)
 	assert.Equal(t, fmt.Errorf("Invalid UID"), Err2)
 }

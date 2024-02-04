@@ -1,17 +1,16 @@
-package user_test
+package model_test
 
 import (
 	"fmt"
 	"testing"
 
-	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/user"
-	userRepo "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/user/repo"
+	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/model"
 	"github.com/go-playground/assert"
 )
 
-func ValidCreatedUser() (string, userRepo.TUser) {
+func ValidCreatedmodel() (string, model.Tmodel) {
 	UID := "UidThatIsValid"
-	ValidAddress := userRepo.TAddress{
+	ValidAddress := model.TAddress{
 		Address_1:   "Address_1ThatIsValid",
 		Street:      "StreetThatIsValid",
 		Tambon:      "TambonThatIsValid",
@@ -19,19 +18,19 @@ func ValidCreatedUser() (string, userRepo.TUser) {
 		Province:    "ProvinceThatIsValid",
 		Postal_code: "Postal_codeThatIsValid",
 	}
-	ValidUser := userRepo.TUser{
+	Validmodel := model.Tmodel{
 		UID:          UID,
-		Username:     "UsernameThatIsValid",
+		modelname:    "modelnameThatIsValid",
 		Phone_number: "PhoneNumberThatIsValid",
 		Address:      ValidAddress,
 		PictureUrl:   "PictureUrlThatIsValid",
 	}
-	return UID, ValidUser
+	return UID, Validmodel
 }
 
-func InvalidCraetedUser() (string, userRepo.TUser) {
+func InvalidCraetedmodel() (string, model.Tmodel) {
 	UID := "UidThatIsInvalid"
-	InvalidAddress := userRepo.TAddress{
+	InvalidAddress := model.TAddress{
 		Address_1:   "Address_1ThatIsInvalid",
 		Street:      "StreetThatIsInvalid",
 		Tambon:      "TambonThatIsInvalid",
@@ -39,19 +38,19 @@ func InvalidCraetedUser() (string, userRepo.TUser) {
 		Province:    "ProvinceThatIsInvalid",
 		Postal_code: "Postal_codeThatIsInvalid",
 	}
-	InvalidUser := userRepo.TUser{
+	Invalidmodel := model.Tmodel{
 		UID:          UID,
-		Username:     "UsernameThatIsInvalid",
+		modelname:    "modelnameThatIsInvalid",
 		Phone_number: "PhoneNumberThatIsInvalid",
 		Address:      InvalidAddress,
 		PictureUrl:   "PictureUrlThatIsInvalid",
 	}
-	return UID, InvalidUser
+	return UID, Invalidmodel
 }
 
-func UsedNumberUser() (string, userRepo.TUser) {
+func UsedNumbermodel() (string, model.Tmodel) {
 	UID := "UidThatIsValid"
-	ValidAddress := userRepo.TAddress{
+	ValidAddress := model.TAddress{
 		Address_1:   "Address_1ThatIsValid",
 		Street:      "StreetThatIsValid",
 		Tambon:      "TambonThatIsValid",
@@ -59,33 +58,33 @@ func UsedNumberUser() (string, userRepo.TUser) {
 		Province:    "ProvinceThatIsValid",
 		Postal_code: "Postal_codeThatIsValid",
 	}
-	UsedNumberUser := userRepo.TUser{
+	UsedNumbermodel := model.Tmodel{
 		UID:          UID,
-		Username:     "UsernameThatIsValid",
+		modelname:    "modelnameThatIsValid",
 		Phone_number: "PhoneNumberThatIsUsed",
 		Address:      ValidAddress,
 		PictureUrl:   "PictureUrlThatIsValid",
 	}
-	return UID, UsedNumberUser
+	return UID, UsedNumbermodel
 }
 
-func TestCreateUser(t *testing.T) {
+func TestCreatemodel(t *testing.T) {
 	//case success
-	ValidCreateUID, ValidCreateUser := ValidCreatedUser()
-	err1 := user.CreateUser(ValidCreateUser)
-	UserFetched1, _ := user.GetUserById(ValidCreateUID)
+	ValidCreateUID, ValidCreatemodel := ValidCreatedmodel()
+	err1 := model.Createmodel(ValidCreatemodel)
+	modelFetched1, _ := model.GetmodelById(ValidCreateUID)
 	assert.Equal(t, nil, err1)
-	assert.Equal(t, ValidCreateUID, UserFetched1)
+	assert.Equal(t, ValidCreateUID, modelFetched1)
 
 	//case phone number already use
-	_, UsedNumberUser := UsedNumberUser()
-	err2 := user.CreateUser(UsedNumberUser)
+	_, UsedNumbermodel := UsedNumbermodel()
+	err2 := model.Createmodel(UsedNumbermodel)
 	assert.Equal(t, fmt.Errorf("Phone Number is already used"), err2)
 
 	//case invalid
-	_, ValidCreateUser3 := InvalidCraetedUser()
-	err3 := user.CreateUser(ValidCreateUser3)
-	//UserFetched2, _ := user.GetUserById(ValidCreateUID2)
+	_, ValidCreatemodel3 := InvalidCraetedmodel()
+	err3 := model.Createmodel(ValidCreatemodel3)
+	//modelFetched2, _ := model.GetmodelById(ValidCreateUID2)
 	assert.Equal(t, fmt.Errorf("Invalid Information"), err3)
-	//assert.Equal(t, ValidCreateUID, UserFetched2)
+	//assert.Equal(t, ValidCreateUID, modelFetched2)
 }

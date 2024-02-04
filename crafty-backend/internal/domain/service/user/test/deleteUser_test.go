@@ -1,17 +1,16 @@
-package user_test
+package model_test
 
 import (
 	"fmt"
 	"testing"
 
-	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/user"
-	userRepo "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/user/repo"
+	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/model"
 	"github.com/go-playground/assert"
 )
 
-func ValidDeletedUser() (string, userRepo.TUser) {
+func ValidDeletedmodel() (string, model.Tmodel) {
 	UID := "UidThatIsValid"
-	ValidAddress := userRepo.TAddress{
+	ValidAddress := model.TAddress{
 		Address_1:   "Address_1ThatIsValid",
 		Street:      "StreetThatIsValid",
 		Tambon:      "TambonThatIsValid",
@@ -19,19 +18,19 @@ func ValidDeletedUser() (string, userRepo.TUser) {
 		Province:    "ProvinceThatIsValid",
 		Postal_code: "Postal_codeThatIsValid",
 	}
-	ValidUser := userRepo.TUser{
+	Validmodel := model.Tmodel{
 		UID:          UID,
-		Username:     "UsernameThatIsValid",
+		modelname:    "modelnameThatIsValid",
 		Phone_number: "PhoneNumberThatIsValid",
 		Address:      ValidAddress,
 		PictureUrl:   "PictureUrlThatIsValid",
 	}
-	return UID, ValidUser
+	return UID, Validmodel
 }
 
-func InvalidDeletedUser() (string, userRepo.TUser) {
+func InvalidDeletedmodel() (string, model.Tmodel) {
 	UID := "UidThatIsInvalid"
-	ValidAddress := userRepo.TAddress{
+	ValidAddress := model.TAddress{
 		Address_1:   "Address_1ThatIsValid",
 		Street:      "StreetThatIsValid",
 		Tambon:      "TambonThatIsValid",
@@ -39,24 +38,24 @@ func InvalidDeletedUser() (string, userRepo.TUser) {
 		Province:    "ProvinceThatIsValid",
 		Postal_code: "Postal_codeThatIsValid",
 	}
-	ValidUser := userRepo.TUser{
+	Validmodel := model.Tmodel{
 		UID:          UID,
-		Username:     "UsernameThatIsValid",
+		modelname:    "modelnameThatIsValid",
 		Phone_number: "PhoneNumberThatIsValid",
 		Address:      ValidAddress,
 		PictureUrl:   "PictureUrlThatIsValid",
 	}
-	return UID, ValidUser
+	return UID, Validmodel
 }
 
-func TestDeleteUser(t *testing.T) {
+func TestDeletemodel(t *testing.T) {
 	//case UID is valid
-	DeletedUID, _ := ValidDeletedUser()
-	err1 := user.DeleteUser(DeletedUID)
+	DeletedUID, _ := ValidDeletedmodel()
+	err1 := model.Deletemodel(DeletedUID)
 	assert.Equal(t, nil, err1)
 
 	//case UID is invalid
-	DeletedUID2, _ := ValidDeletedUser()
-	err2 := user.DeleteUser(DeletedUID2)
+	DeletedUID2, _ := ValidDeletedmodel()
+	err2 := model.Deletemodel(DeletedUID2)
 	assert.Equal(t, fmt.Errorf("UID is invalid"), err2)
 }

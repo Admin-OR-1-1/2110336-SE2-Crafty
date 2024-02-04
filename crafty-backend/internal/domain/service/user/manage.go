@@ -3,7 +3,8 @@ package user
 import (
 	"fmt"
 
-	userRepo "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/user/repo"
+	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/model"
+	// "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/user/repo/mongo"
 )
 
 // type IUser interface {
@@ -13,7 +14,7 @@ import (
 // 	DeleteUser(UID string) error
 // }
 
-func IsValidUser(User userRepo.TUser) bool {
+func IsValidUser(User model.TUser) bool {
 	if User.UID == "" {
 		return false
 	}
@@ -47,32 +48,29 @@ func IsValidUser(User userRepo.TUser) bool {
 	return true
 }
 
-func CreateUser(User userRepo.TUser) error {
-	userInstance, _ := userRepo.CreateUserInstance()
+func (s *UserService) CreateUser(User model.TUser) error {
+
 	if IsValidUser(User) {
-		userInstance.CreateUser(User)
-		return nil
+		err := s.r.UserRepository.InsertUser(User)
+		return err
 	} else {
 		return fmt.Errorf("Invalid User")
 	}
 }
 
-func GetUserById(UID string) (userRepo.TUser, error) {
-	user, err := userRepo.CreateUserInstance()
+func (s *UserService) GetUserById(UID string) (model.TUser, error) {
+	user, err := s.r.UserRepository.GetUserById(UID)
 	if err != nil {
-		return userRepo.TUser{}, err
+		return model.TUser{}, err
 	}
-	if err := user.GetUserById(UID); err != nil {
-		return userRepo.TUser{}, err
-	}
-	return user.ToUser(), err
+	return user, err
 }
 
 // not yet written
-func UpdateUser(User userRepo.TUser) error {
+func (s *UserService) UpdateUser(User model.TUser) error {
 	return nil
 }
 
-func DeleteUser(UID string) error {
+func (s *UserService) DeleteUser(UID string) error {
 	return nil
 }
