@@ -78,14 +78,3 @@ func DeletePost(ID string) error {
 func GetPostById(ID string) (postRepo.TPost, error) {
 	return postRepo.TPost{}, nil
 }
-
-// func GetPostById(ID string) (postRepo.TPost, error) {
-// wait for the connection to the database.
-// for _, post := range "Database" {
-//     if post.ID == ID {
-//         return post, nil
-//     }
-// }
-
-// return postRepo.TPost{}, errors.New("post not found")
-// }
