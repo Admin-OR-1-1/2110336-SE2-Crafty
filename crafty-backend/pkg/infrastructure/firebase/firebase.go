@@ -1,4 +1,4 @@
-package infrastructure_firebase
+package firebase
 
 import (
 	"context"
