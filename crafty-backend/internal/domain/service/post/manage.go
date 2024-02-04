@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	postRepo "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/post/repo"
+	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/model"
 )
 
 /*
@@ -42,7 +42,7 @@ func HaveNil(Post postRepo.TPost) bool {
 	return false
 }
 
-func CreatePost(Post postRepo.TPost) error {
+func (s *PostService) CreatePost(Post model.TPost) error {
 	postInstance, _ := postRepo.CreatePostInstance()
 	if HaveNil(Post) {
 		return fmt.Errorf("FailedToCreatePost")
@@ -53,12 +53,12 @@ func CreatePost(Post postRepo.TPost) error {
 }
 
 // Jinny
-func UpdatePost(Post postRepo.TPost) error {
+func (s *PostService) UpdatePost(Post model.TPost) error {
 	return nil
 }
 
 // Jinny
-func DeletePost(ID string) error {
+func (s *PostService) DeletePost(ID string) error {
 	post, err := GetPostById(ID)
 	if err != nil {
 		return err // Return error if GetPostById fails
@@ -75,6 +75,6 @@ func DeletePost(ID string) error {
 	return errors.New("post not found")
 }
 
-func GetPostById(ID string) (postRepo.TPost, error) {
+func (s *PostService) GetPostById(ID string) (model.TPost, error) {
 	return postRepo.TPost{}, nil
 }
