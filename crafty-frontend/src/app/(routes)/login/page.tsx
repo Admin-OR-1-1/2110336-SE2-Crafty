@@ -47,18 +47,21 @@ const Page = () => {
       });
   };
 
-  const onSubmitOtp = () => {
+  const onSubmitOtp = (): boolean => {
     if (confirmationResult && otp.length == 6) {
       confirmationResult
         .confirm(otp)
         .then(() => {
-          if (checkUserValid()) router.push('/after');
+          if (checkUserValid()) router.push('/');
           else setState(2);
+          return true;
         })
         .catch((error) => {
           console.error(error);
+          return false;
         });
     }
+    return false;
   };
 
   const checkUserValid = (): boolean => {
@@ -68,13 +71,17 @@ const Page = () => {
 
   return (
     <LogoLeftSide>
-      <button
+      {/* <button
         className="h-12 w-12 bg-black"
         onClick={() => {
           setState((state + 1) % 3);
-        }}></button>
+        }}></button> */}
       {state === 0 && (
-        <RegisterPage onSubmitPhoneNumber={onSubmitPhoneNumber} setPhoneNumber={setPhoneNumber} />
+        <RegisterPage
+          phoneNumber={phoneNumber}
+          onSubmitPhoneNumber={onSubmitPhoneNumber}
+          setPhoneNumber={setPhoneNumber}
+        />
       )}
       {state === 1 && (
         <OtpPage
@@ -82,6 +89,7 @@ const Page = () => {
           setOtp={setOtp}
           otpSubmit={onSubmitOtp}
           checkUserValid={checkUserValid}
+          reSendOtp={onSubmitOtp}
         />
       )}
       {state === 2 && <PersonalInfomationPage />}
