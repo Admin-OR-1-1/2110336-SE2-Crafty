@@ -1,61 +1,90 @@
-import React from 'react';
-import { FaFacebook } from 'react-icons/fa6';
-import VerticalLogo from '@assets/svgs/vertical_logo.svg';
-import GmailIcon from '@assets/svgs/gmail_icon.svg';
-import Link from 'next/link';
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { OtpPage, PersonalInfomationPage, RegisterPage } from './_components';
+import { RecaptchaVerifier, signInWithPhoneNumber, ConfirmationResult } from 'firebase/auth';
+import { auth } from '@/configs/firebaseConfig';
 
 import LogoLeftSide from '@/app/_components/ui/logoLeftSide';
+import { useRouter } from 'next/navigation';
 
 const Page = () => {
+  const router = useRouter();
+
+  const [state, setState] = useState(0);
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [otp, setOtp] = useState<string>('');
+  const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult>();
+
+  useEffect(() => {
+    (window as any).recaptchaVerifier = new RecaptchaVerifier(auth, 'sign-in-button', {
+      size: 'invisible',
+    });
+  }, []);
+
+  const onSubmitPhoneNumber = async () => {
+    const appVerifier = (window as any).recaptchaVerifier;
+
+    const formattedPhoneNumber = '+66' + phoneNumber.slice(1);
+
+    signInWithPhoneNumber(auth, formattedPhoneNumber, appVerifier)
+      .then((confirmationResult) => {
+        setState(1);
+        setConfirmationResult(confirmationResult);
+      })
+      .catch((error) => {
+        console.log(error);
+        // toast.error(error, {
+        //   position: 'top-right',
+        //   autoClose: 5000,
+        //   hideProgressBar: false,
+        //   closeOnClick: true,
+        //   pauseOnHover: true,
+        //   draggable: true,
+        //   progress: undefined,
+        //   theme: 'colored',
+        // });
+      });
+  };
+
+  const onSubmitOtp = () => {
+    if (confirmationResult && otp.length == 6) {
+      confirmationResult
+        .confirm(otp)
+        .then(() => {
+          if (checkUserValid()) router.push('/after');
+          else setState(2);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+
+  const checkUserValid = (): boolean => {
+    if (auth.currentUser) return Math.random() > 0.5;
+    return false;
+  };
+
   return (
     <LogoLeftSide>
-      <div className="flex w-[400px] flex-col items-center justify-center gap-y-6">
-        <p className="text-center text-4xl font-bold text-ct_brown-500">ล็อคอิน</p>
-        <div className="flex w-full flex-col items-center justify-center gap-y-2">
-          <input
-            type="email"
-            placeholder="example@email.com"
-            className="input h-10 w-full rounded-lg border-2 border-ct_brown-500 py-4 focus:border-ct_brown-500 focus:outline-none active:outline-none"
-          />
-          <input
-            type="password"
-            placeholder="รหัสผ่าน"
-            className="input h-10 w-full rounded-lg border-2 border-ct_brown-500 py-4 focus:border-ct_brown-500 focus:outline-none active:outline-none"
-          />
-          <button className="btn h-10 min-h-0 w-full rounded-lg bg-ct_brown-500 text-base text-white">
-            ล็อคอิน
-          </button>
-          <p className="w-full text-ct_brown-400">
-            ยังไม่มีบัญชีผู้ใช้?{' '}
-            <Link href={'/register'}>
-              <span className="cursor-pointer font-bold text-ct_brown-500 hover:underline">
-                ลงทะเบียน
-              </span>
-            </Link>
-          </p>
-        </div>
-        <div className="flex w-full flex-row items-center justify-center gap-x-2">
-          <div className="flex h-0.5 flex-grow items-center rounded-full bg-ct_brown-500"></div>
-          <p className="text-ct_brown-500">หรือ</p>
-          <div className="flex h-0.5 flex-grow items-center rounded-full bg-ct_brown-500"></div>
-        </div>
-        <div className="flex w-full flex-row items-center justify-between">
-          <button className="btn w-48 flex-row items-center rounded-xl bg-white">
-            <FaFacebook className="h-8 w-auto text-[#1877f2]" />
-            <p className="text-ct_brown-500">Facebook</p>
-          </button>
-          <button className="btn w-48 flex-row items-center rounded-xl bg-white">
-            <GmailIcon className="h-6 w-auto" />
-            <p className="text-ct_brown-500">Gmail</p>
-          </button>
-        </div>
-        <p className="w-full text-sm text-ct_brown-300">
-          การล็อคอิน เป็นไปตามข้อกำหนดของ{' '}
-          <span className="cursor-pointer font-bold text-ct_brown-500 underline">
-            นโยบายความเป็นส่วนตัว
-          </span>
-        </p>
-      </div>
+      <button
+        className="h-12 w-12 bg-black"
+        onClick={() => {
+          setState((state + 1) % 3);
+        }}></button>
+      {state === 0 && (
+        <RegisterPage onSubmitPhoneNumber={onSubmitPhoneNumber} setPhoneNumber={setPhoneNumber} />
+      )}
+      {state === 1 && (
+        <OtpPage
+          otp={otp}
+          setOtp={setOtp}
+          otpSubmit={onSubmitOtp}
+          checkUserValid={checkUserValid}
+        />
+      )}
+      {state === 2 && <PersonalInfomationPage />}
     </LogoLeftSide>
   );
 };
