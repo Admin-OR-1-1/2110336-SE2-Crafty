@@ -4,5 +4,8 @@
     "_components": "components",
     "_types": "Typescript",
     "(routes)": "routes"
-  }
+  },
+  "conventionalCommits.scopes": [
+    "Basic auth"
+  ]
 }

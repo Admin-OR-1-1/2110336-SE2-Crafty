@@ -43,6 +43,10 @@ nextConfig.images = {
       port: "",
       pathname: "/images/stock/**",
     },
+    {
+      protocol: "https",
+      hostname: "**"
+    },
   ],
 };
 
