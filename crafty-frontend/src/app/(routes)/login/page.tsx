@@ -2,7 +2,14 @@
 
 import React, { useEffect, useState } from 'react';
 import { OtpPage, PersonalInfomationPage, RegisterPage } from './_components';
-import { RecaptchaVerifier, signInWithPhoneNumber, ConfirmationResult } from 'firebase/auth';
+import {
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+  ConfirmationResult,
+  signInWithPopup,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+} from 'firebase/auth';
 import { auth } from '@/configs/firebaseConfig';
 
 import LogoLeftSide from '@/app/_components/ui/logoLeftSide';
@@ -21,6 +28,59 @@ const Page = () => {
       size: 'invisible',
     });
   }, []);
+
+  const handleSignInWithGoogle = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access Google APIs.
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
+        console.log(result.user.email);
+        if (checkUserValid()) router.push('/');
+        else setState(2);
+        // if(credential === null) return;
+        // const token = credential.accessToken;
+        // // The signed-in user info.
+        // const user = result.user;
+        // ...
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+  };
+
+  const handleSignInWithFacebook = () => {
+    const provider = new FacebookAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+        // const credential = FacebookAuthProvider.credentialFromResult(result);
+        // const token = credential.accessToken;
+        // The signed-in user info.
+        // const user = result.user;
+        console.log(result.user.email);
+        if (checkUserValid()) router.push('/');
+        else setState(2);
+        // ...
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.email;
+        // The AuthCredential type that was used.
+        const credential = FacebookAuthProvider.credentialFromError(error);
+        // ...
+      });
+  };
 
   const onSubmitPhoneNumber = async () => {
     const appVerifier = (window as any).recaptchaVerifier;
@@ -81,6 +141,8 @@ const Page = () => {
           phoneNumber={phoneNumber}
           onSubmitPhoneNumber={onSubmitPhoneNumber}
           setPhoneNumber={setPhoneNumber}
+          handleSignInWithGoogle={handleSignInWithGoogle}
+          handleSignInWithFacebook={handleSignInWithFacebook}
         />
       )}
       {state === 1 && (

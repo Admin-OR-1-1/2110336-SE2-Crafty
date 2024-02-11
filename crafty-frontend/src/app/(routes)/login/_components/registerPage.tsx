@@ -10,9 +10,17 @@ interface Props {
   phoneNumber: string;
   setPhoneNumber: (phoneNumber: string) => void;
   onSubmitPhoneNumber: () => void;
+  handleSignInWithGoogle: () => void;
+  handleSignInWithFacebook: () => void;
 }
 
-const RegisterPage: FC<Props> = ({ setPhoneNumber, onSubmitPhoneNumber, phoneNumber }) => {
+const RegisterPage: FC<Props> = ({
+  setPhoneNumber,
+  onSubmitPhoneNumber,
+  phoneNumber,
+  handleSignInWithGoogle,
+  handleSignInWithFacebook,
+}) => {
   const validPhoneNumber = (): boolean => {
     if (phoneNumber.length === 10 && phoneNumber[0] === '0') {
       return true;
@@ -60,7 +68,7 @@ const RegisterPage: FC<Props> = ({ setPhoneNumber, onSubmitPhoneNumber, phoneNum
                 : 'border-ct_brown-500 hover:border-ct_brown-500'
             }`}
             id="box">
-            <BsFillTelephoneFill className="text-ct_brown-600 flex h-8 w-8" />
+            <BsFillTelephoneFill className="flex h-8 w-8 text-ct_brown-600" />
             <input
               id="text-field"
               type="tel"
@@ -102,11 +110,15 @@ const RegisterPage: FC<Props> = ({ setPhoneNumber, onSubmitPhoneNumber, phoneNum
         <div className="flex h-0.5 flex-grow items-center rounded-full bg-ct_brown-500"></div>
       </div>
       <div className="flex w-full flex-row items-center justify-between">
-        <button className="btn w-48 flex-row items-center rounded-xl bg-white">
+        <button
+          className="btn w-48 flex-row items-center rounded-xl bg-white"
+          onClick={handleSignInWithFacebook}>
           <FaFacebook className="h-8 w-auto text-[#1877f2]" />
           <p className="text-ct_brown-500">Facebook</p>
         </button>
-        <button className="btn w-48 flex-row items-center rounded-xl bg-white">
+        <button
+          className="btn w-48 flex-row items-center rounded-xl bg-white"
+          onClick={handleSignInWithGoogle}>
           <GmailIcon className="h-6 w-auto" />
           <p className="text-ct_brown-500">Gmail</p>
         </button>
