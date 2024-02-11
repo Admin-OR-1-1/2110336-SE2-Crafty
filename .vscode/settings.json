@@ -5,6 +5,6 @@
     "_types": "Typescript",
     "(routes)": "routes"
   },
-  "conventionalCommits.scopes": ["Basic auth", "Frontend"],
+  "conventionalCommits.scopes": ["Backend/basic-auth", "Backend/user", "Frontend"],
   "eslint.workingDirectories": ["./crafty-backend", "./crafty-frontend"]
 }
