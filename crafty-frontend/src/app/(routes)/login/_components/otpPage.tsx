@@ -1,15 +1,19 @@
-import { Dispatch, FC, SetStateAction, useRef, KeyboardEvent } from 'react';
+'use client';
+
+import { Dispatch, FC, SetStateAction, useRef, KeyboardEvent, useState } from 'react';
 import Link from 'next/link';
 
 interface OTPFormProps {
   otp: string;
   setOtp: Dispatch<SetStateAction<string>>;
-  otpSubmit: () => void;
+  otpSubmit: () => boolean;
   checkUserValid: () => boolean;
+  reSendOtp: () => void;
 }
 
-const OTPForm: FC<OTPFormProps> = ({ otp, setOtp, otpSubmit, checkUserValid }) => {
+const OTPForm: FC<OTPFormProps> = ({ otp, setOtp, otpSubmit, checkUserValid, reSendOtp }) => {
   const inputsRef = useRef<HTMLInputElement[]>([]);
+  const [isOtpValid, setOtpValid] = useState(true);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, index: number) => {
     if (e.key === 'Backspace') {
@@ -44,12 +48,12 @@ const OTPForm: FC<OTPFormProps> = ({ otp, setOtp, otpSubmit, checkUserValid }) =
       }
     } else if (e.key === 'ArrowLeft') {
       e.preventDefault();
-      if (inputsRef.current[index - 1]) {
+      if (inputsRef.current[index - 1] && index > 0) {
         inputsRef.current[index - 1].focus();
       }
     } else if (e.key === 'ArrowRight') {
       e.preventDefault();
-      if (inputsRef.current[index]) {
+      if (inputsRef.current[index] && index < 5) {
         inputsRef.current[index + 1].focus();
       }
     } else if (e.key <= '9' && e.key >= '0') {
@@ -69,90 +73,38 @@ const OTPForm: FC<OTPFormProps> = ({ otp, setOtp, otpSubmit, checkUserValid }) =
     }
   };
 
-  return (
-    <div className="flex flex-col">
-      <div className="flex-grow overflow-hidden">
-        <div className="top-0 col-span-1 flex h-[136px] grid-cols-[1fr] grid-rows-[auto_1fr_auto] items-center overflow-hidden px-6 leading-6 text-zinc-800 md:hidden">
-          <div className="text-zinc-800">
-            <h1 className="mb-4 mt-0 block text-3xl font-normal leading-tight">OTP Verify</h1>
-          </div>
-        </div>
+  const renderOTPInputs = () => {
+    return Array.from({ length: 6 }).map((_, i) => {
+      return (
+        <input
+          key={i}
+          type="text"
+          value={otp[i] || ''}
+          onKeyDown={(e) => handleKeyDown(e, i)}
+          onChange={(e) => e.preventDefault()}
+          maxLength={1}
+          ref={(input) => {
+            if (input) inputsRef.current[i] = input;
+          }}
+          className="h-10 w-10 rounded-xl border-2 border-solid border-gray-200 text-center text-3xl text-ct_brown-500 caret-transparent focus:border-ct_brown-500 focus:outline-none md:h-14 md:w-14"
+        />
+      );
+    });
+  };
 
-        <div className="mt-2 grid grid-cols-8 gap-x-6 px-6 leading-6 text-zinc-800 md:mt-0 md:pt-20">
-          <div className="col-span-8 text-zinc-800 md:col-span-6 md:col-start-2">
-            <div className="flex flex-col items-center justify-center text-stone-700">
-              <form className="rounded bg-white p-8">
-                <h2 className="font-kanit text-xl font-normal">รหัสยืนยัน</h2>
-                <div className="mb-4 flex items-center gap-4">
-                  <input
-                    type="text"
-                    value={otp[0] || ''}
-                    onKeyDown={(e) => handleKeyDown(e, 0)}
-                    onChange={(e) => e.preventDefault()}
-                    maxLength={1}
-                    ref={(input) => {
-                      if (input) inputsRef.current[0] = input;
-                    }}
-                    className="font-circular h-10 w-10 rounded-xl border-2 border-solid border-gray-200 text-center text-3xl text-zinc-800 caret-transparent focus:border-primary focus:outline-none md:h-14 md:w-14"
-                  />
-                  <input
-                    type="text"
-                    value={otp[1] || ''}
-                    onKeyDown={(e) => handleKeyDown(e, 1)}
-                    onChange={(e) => e.preventDefault()}
-                    maxLength={1}
-                    ref={(input) => {
-                      if (input) inputsRef.current[1] = input;
-                    }}
-                    className="font-circular h-10 w-10 rounded-xl border-2 border-solid border-gray-200 text-center text-3xl text-zinc-800 caret-transparent focus:border-primary focus:outline-none md:h-14 md:w-14"
-                  />
-                  <input
-                    type="text"
-                    value={otp[2] || ''}
-                    onKeyDown={(e) => handleKeyDown(e, 2)}
-                    onChange={(e) => e.preventDefault()}
-                    maxLength={1}
-                    ref={(input) => {
-                      if (input) inputsRef.current[2] = input;
-                    }}
-                    className="font-circular h-10 w-10 rounded-xl border-2 border-solid border-gray-200 text-center text-3xl text-zinc-800 caret-transparent focus:border-primary focus:outline-none md:h-14 md:w-14"
-                  />
-                  <input
-                    type="text"
-                    value={otp[3] || ''}
-                    onKeyDown={(e) => handleKeyDown(e, 3)}
-                    onChange={(e) => e.preventDefault()}
-                    maxLength={1}
-                    ref={(input) => {
-                      if (input) inputsRef.current[3] = input;
-                    }}
-                    className="font-circular h-10 w-10 rounded-xl border-2 border-solid border-gray-200 text-center text-3xl text-zinc-800 caret-transparent focus:border-primary focus:outline-none md:h-14 md:w-14"
-                  />
-                  <input
-                    type="text"
-                    value={otp[4] || ''}
-                    onKeyDown={(e) => handleKeyDown(e, 4)}
-                    onChange={(e) => e.preventDefault()}
-                    maxLength={1}
-                    ref={(input) => {
-                      if (input) inputsRef.current[4] = input;
-                    }}
-                    className="font-circular h-10 w-10 rounded-xl border-2 border-solid border-gray-200 text-center text-3xl text-zinc-800 caret-transparent focus:border-primary focus:outline-none md:h-14 md:w-14"
-                  />
-                  <input
-                    type="text"
-                    value={otp[5] || ''}
-                    onKeyDown={(e) => handleKeyDown(e, 5)}
-                    onChange={(e) => e.preventDefault()}
-                    maxLength={1}
-                    ref={(input) => {
-                      if (input) inputsRef.current[5] = input;
-                    }}
-                    className="font-circular h-10 w-10 rounded-xl border-2 border-solid border-gray-200 text-center text-3xl text-zinc-800 caret-transparent focus:border-primary focus:outline-none md:h-14 md:w-14"
-                  />
-                </div>
+  return (
+    <div className="flex w-full max-w-[400px] flex-col px-4 md:px-0">
+      <div className="flex-grow overflow-hidden">
+        <div className="leading-6 text-ct_brown-500">
+          <div className="col-span-8 text-ct_brown-500 md:col-span-6 md:col-start-2">
+            <div className="flex w-full flex-col items-center justify-center text-stone-700">
+              <form className="w-full">
+                <h2 className="text-xl font-bold text-ct_brown-500">รหัสยืนยัน</h2>
+                <div className="mb-4 flex items-center justify-between">{renderOTPInputs()}</div>
                 <div className="mb-4">
-                  <p className="font-kanit inline-block w-auto cursor-pointer justify-self-start underline hover:no-underline">
+                  <p
+                    onClick={reSendOtp}
+                    className="w-auto cursor-pointer justify-self-start text-ct_brown-500 underline hover:no-underline">
                     ส่งรหัสยืนยันใหม่
                   </p>
                 </div>
@@ -161,7 +113,7 @@ const OTPForm: FC<OTPFormProps> = ({ otp, setOtp, otpSubmit, checkUserValid }) =
                       id="default-checkbox"
                       type="checkbox"
                       value=""
-                      className="w-4 h-4 accent-primary bg-gray-100 border-gray-300 rounded"
+                      className="w-4 h-4 accent-ct_brown-500 bg-gray-100 border-gray-300 rounded"
                     />
                     <label htmlFor="default-checkbox" className="ml-2 text-sm font-medium">
                       Keep this device verified for 30 days
@@ -172,13 +124,13 @@ const OTPForm: FC<OTPFormProps> = ({ otp, setOtp, otpSubmit, checkUserValid }) =
           </div>
         </div>
       </div>
-      <div className="sticky bottom-2 col-span-8 mb-3 flex max-h-[720px] items-center justify-end border-0 border-t-[1px] border-zinc-200 bg-transparent px-6 py-0 md:m-0 md:border-solid md:bg-white md:px-14 md:py-8">
+      <div className="sticky bottom-2 col-span-8 mb-3 flex max-h-[720px] items-center justify-end border-0 border-t-[1px] border-zinc-200 bg-transparent py-0 md:m-0 md:border-solid md:py-8">
         <button
-          className="font-kanit hover:bg-primaryDark right-0 m-0 inline-flex min-h-[3rem] w-full min-w-[150px] cursor-pointer appearance-none items-center justify-center rounded-xl border-0 bg-primary px-6 py-2 text-center text-base font-medium leading-normal tracking-wide text-white no-underline hover:text-white md:h-14 md:w-auto"
+          className="hover:bg-ct_brown-600 right-0 m-0 inline-flex min-h-[3rem] w-full min-w-[150px] cursor-pointer appearance-none items-center justify-center rounded-xl border-0 bg-ct_brown-500 px-6 py-2 text-center text-base font-medium leading-normal tracking-wide text-white no-underline md:h-14 md:w-auto"
           type="submit"
           onClick={() => {
-            otpSubmit();
-            checkUserValid;
+            if (otpSubmit()) checkUserValid();
+            else setOtpValid(false);
           }}>
           ยืนยัน
         </button>
