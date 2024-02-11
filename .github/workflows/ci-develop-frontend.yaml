@@ -28,10 +28,10 @@ jobs:
       id-token: "write"
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: develop
+      # - name: Checkout
+      #   uses: actions/checkout@v3
+      #   with:
+      #     ref: develop
 
       # - name: Create env file
       #   run: |
