@@ -1,10 +1,31 @@
+// @ts-check
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'via.placeholder.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'daisyui.com',
+        port: '',
+        pathname: '/images/stock/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
+  },
   webpack(config) {
     // Grab the existing rule that handles SVG imports
-    const fileLoaderRule = config.module.rules.find((rule) =>
-      rule.test?.test?.(".svg")
-    );
+    const fileLoaderRule = config.module.rules.find((rule) => rule.test?.test?.('.svg'));
 
     config.module.rules.push(
       // Reapply the existing rule, but only for svg imports ending in ?url
@@ -18,7 +39,7 @@ const nextConfig = {
         test: /\.svg$/i,
         issuer: fileLoaderRule.issuer,
         resourceQuery: { not: [...fileLoaderRule.resourceQuery.not, /url/] }, // exclude if *.svg?url
-        use: ["@svgr/webpack"],
+        use: ['@svgr/webpack'],
       }
     );
 
@@ -27,27 +48,6 @@ const nextConfig = {
 
     return config;
   },
-};
-
-nextConfig.images = {
-  remotePatterns: [
-    {
-      protocol: "https",
-      hostname: "via.placeholder.com",
-      port: "",
-      pathname: "/**",
-    },
-    {
-      protocol: "https",
-      hostname: "daisyui.com",
-      port: "",
-      pathname: "/images/stock/**",
-    },
-    {
-      protocol: "https",
-      hostname: "**"
-    },
-  ],
 };
 
 module.exports = nextConfig;
