@@ -3,3 +3,4 @@
 !.example.env
 *.exe 
 *.bin
+deployment/kube/secret.yaml
