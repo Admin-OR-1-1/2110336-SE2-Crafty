@@ -3,6 +3,7 @@ FROM golang:alpine AS build
 WORKDIR /src/app
 COPY . . 
 
+
 ENV GO111MODULE=on
 RUN go mod download
 
