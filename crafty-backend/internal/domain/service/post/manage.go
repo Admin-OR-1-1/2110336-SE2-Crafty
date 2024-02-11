@@ -17,7 +17,7 @@ import (
 */
 
 // not have list now
-func HaveNil(Post postRepo.TPost) bool {
+func HaveNil(Post model.TPost) bool {
 	if Post.ID == "" {
 		return true
 	}
@@ -43,11 +43,10 @@ func HaveNil(Post postRepo.TPost) bool {
 }
 
 func (s *PostService) CreatePost(Post model.TPost) error {
-	postInstance, _ := postRepo.CreatePostInstance()
 	if HaveNil(Post) {
 		return fmt.Errorf("FailedToCreatePost")
 	} else {
-		postInstance.CreatePost(Post)
+		s.r.PostRepository.CreatePost(Post)
 		return nil
 	}
 }
@@ -59,7 +58,7 @@ func (s *PostService) UpdatePost(Post model.TPost) error {
 
 // Jinny
 func (s *PostService) DeletePost(ID string) error {
-	post, err := GetPostById(ID)
+	post, err := s.r.PostRepository.GetPostById(ID)
 	if err != nil {
 		return err // Return error if GetPostById fails
 	}
@@ -76,5 +75,5 @@ func (s *PostService) DeletePost(ID string) error {
 }
 
 func (s *PostService) GetPostById(ID string) (model.TPost, error) {
-	return postRepo.TPost{}, nil
+	return model.TPost{}, nil
 }
