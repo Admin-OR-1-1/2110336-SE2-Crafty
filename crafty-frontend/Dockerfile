@@ -16,7 +16,6 @@ RUN \
   fi
 
 
-
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app

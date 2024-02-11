@@ -15,7 +15,6 @@ WORKDIR /app
 COPY --from=build /src/app .
 # COPY --from=build /src/app/server .
 
-
 EXPOSE 8000
 
 CMD ./server
