@@ -66,4 +66,6 @@ jobs:
           context: "{{defaultContext}}:crafty-frontend"
           push: true
           tags: kuranasaki/crafty-frontend:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
   

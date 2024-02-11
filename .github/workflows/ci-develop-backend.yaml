@@ -58,3 +58,5 @@ jobs:
           context: "{{defaultContext}}:crafty-backend"
           push: true
           tags: kuranasaki/crafty-backend:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
