@@ -9,22 +9,315 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "email": "kongphop.c@kuranasaki.work"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+        "/user": {
+            "get": {
+                "security": [
+                    {
+                        "Firebase": []
+                    }
+                ],
+                "description": "Get User's Info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/userAPI.GetUserByIDResponse"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "$ref": "#/definitions/authMiddleware.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "No Permissions",
+                        "schema": {
+                            "$ref": "#/definitions/authMiddleware.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "Firebase": []
+                    }
+                ],
+                "description": "UpdateUser",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "parameters": [
+                    {
+                        "description": "UpdateUser",
+                        "name": "UpdateUser",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/userAPI.UpdateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Update User Success",
+                        "schema": {
+                            "$ref": "#/definitions/userAPI.UpdateUserResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "$ref": "#/definitions/authMiddleware.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "No Permissions",
+                        "schema": {
+                            "$ref": "#/definitions/authMiddleware.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Update User Failed",
+                        "schema": {
+                            "$ref": "#/definitions/userAPI.UpdateUserResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "Firebase": []
+                    }
+                ],
+                "description": "DeleteUser",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Delete User Success",
+                        "schema": {
+                            "$ref": "#/definitions/userAPI.UpdateUserResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "$ref": "#/definitions/authMiddleware.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "No Permissions",
+                        "schema": {
+                            "$ref": "#/definitions/authMiddleware.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Delete User Failed",
+                        "schema": {
+                            "$ref": "#/definitions/userAPI.UpdateUserResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "authMiddleware.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {},
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.TAddress": {
+            "type": "object",
+            "properties": {
+                "address_1": {
+                    "type": "string"
+                },
+                "amphoe": {
+                    "type": "string"
+                },
+                "postal_code": {
+                    "type": "string"
+                },
+                "province": {
+                    "type": "string"
+                },
+                "street": {
+                    "type": "string"
+                },
+                "tambon": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.TUser": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "$ref": "#/definitions/model.TAddress"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "pictureUrl": {
+                    "type": "string"
+                },
+                "uid": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "userAPI.Address": {
+            "type": "object",
+            "properties": {
+                "address_1": {
+                    "type": "string"
+                },
+                "amphoe": {
+                    "type": "string"
+                },
+                "postal_code": {
+                    "type": "string"
+                },
+                "province": {
+                    "type": "string"
+                },
+                "street": {
+                    "type": "string"
+                },
+                "tambon": {
+                    "type": "string"
+                }
+            }
+        },
+        "userAPI.GetUserByIDResponse": {
+            "type": "object",
+            "properties": {
+                "error": {},
+                "user": {
+                    "$ref": "#/definitions/model.TUser"
+                }
+            }
+        },
+        "userAPI.UpdateUserRequest": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "$ref": "#/definitions/userAPI.User"
+                }
+            }
+        },
+        "userAPI.UpdateUserResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "userAPI.User": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "$ref": "#/definitions/userAPI.Address"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "picture_url": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        },
+        "Firebase": {
+            "type": "oauth2",
+            "flow": "password",
+            "tokenUrl": "https://crafty.kuranasaki.work/api/v1/auth/oauth/token",
+            "scopes": {
+                "admin": "  All Permissions Granted",
+                "mod": " All Permissions Except adding MOD",
+                "user": " Permissions granted upto project owner"
+            }
+        }
+    }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
-	Host:             "",
-	BasePath:         "",
-	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Version:          "1.0.0",
+	Host:             "https://crafty.kuranasaki.work",
+	BasePath:         "/api/v1",
+	Schemes:          []string{"https"},
+	Title:            "CraftyUserAPI Documents",
+	Description:      "This is an auto-generated API Docs.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

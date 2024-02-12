@@ -1,8 +1,8 @@
 package route
 
 import (
-	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/app/user-api/pkg/user"
-	userAPI "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/app/user-api/pkg/user"
+	authMiddleware "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/app/user-api/middleware/auth"
+	userRoute "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/app/user-api/pkg/user"
 	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/repository"
 	"github.com/gofiber/fiber/v2"
 )
@@ -20,7 +20,7 @@ func SetupUserAPI(repos *repository.Repositories) *UserAPI {
 func (api *UserAPI) SetupRoute(ro fiber.Router) error {
 
 	authMW := authMiddleware.NewAuthMiddleware()
-	userRouter := userAPI.NewUserRouter(api.r)
+	userRouter := userRoute.NewUserRouter(api.r)
 	userRouter.SetupRoute(ro.Group("/user", authMW.VerifyToken))
 	return nil
 }
