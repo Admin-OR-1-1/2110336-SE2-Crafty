@@ -19,6 +19,18 @@ func NewUserHandler(repository *repository.Repositories) IUserHandler {
 	return &UserHandler{repos: repository}
 }
 
+// CreateProject
+// @Description CreateProject
+// @Tags Project
+// @Security Firebase
+// @Accept json
+// @Produce json
+// @Param CreateProject body models.CreateProject true "CreateProject"
+// @Failure 401 {object} models.ErrorResponse "Invalid Token"
+// @Failure 403 {object} models.ErrorResponse "No Permissions"
+// @Success 201 {object} models.CreateProjectResponse "Create Project Success"
+// @Failure 500 {object} models.CreateProjectResponse "Create Project Failed"
+// @Router /projects [post]
 func (h *UserHandler) GetUserInfo(c *fiber.Ctx) error {
 
 	userid := c.Locals("user").(string)
