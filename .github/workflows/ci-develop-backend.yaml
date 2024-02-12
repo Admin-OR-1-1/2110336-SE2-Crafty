@@ -8,6 +8,7 @@ on:
       - crafty-backend/**
     branches:
       - "develop"
+      - "develop-backend"
 
 
 jobs:
