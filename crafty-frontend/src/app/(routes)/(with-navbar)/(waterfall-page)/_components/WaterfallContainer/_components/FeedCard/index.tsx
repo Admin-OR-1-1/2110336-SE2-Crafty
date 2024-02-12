@@ -18,7 +18,12 @@ const FeedCard: FC = () => {
       />
 
       {/* Masking */}
-      <div className="absolute top-0 z-20 flex h-full w-full bg-[#000] opacity-0 duration-100 hover:cursor-pointer hover:opacity-25" />
+      <div
+        className="absolute top-0 z-20 flex h-full w-full bg-[#000] opacity-0 duration-100 hover:cursor-pointer hover:opacity-25"
+        onClick={() => {
+          window.location.href = '/feed-detail';
+        }}
+      />
     </div>
   );
 };
