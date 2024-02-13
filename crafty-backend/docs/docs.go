@@ -23,6 +23,210 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/post": {
+            "put": {
+                "security": [
+                    {
+                        "Firebase": []
+                    }
+                ],
+                "description": "UpdateUser",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Post"
+                ],
+                "parameters": [
+                    {
+                        "description": "UpdateUser",
+                        "name": "UpdateUser",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/postAPI.UpdatePostRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Update User Success",
+                        "schema": {
+                            "$ref": "#/definitions/postAPI.UpdatePostResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "$ref": "#/definitions/authMiddleware.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "No Permissions",
+                        "schema": {
+                            "$ref": "#/definitions/authMiddleware.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Update User Failed",
+                        "schema": {
+                            "$ref": "#/definitions/postAPI.UpdatePostResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "Firebase": []
+                    }
+                ],
+                "description": "DeleteUser",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Post"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Delete User Success",
+                        "schema": {
+                            "$ref": "#/definitions/postAPI.UpdatePostResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "$ref": "#/definitions/authMiddleware.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "No Permissions",
+                        "schema": {
+                            "$ref": "#/definitions/authMiddleware.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Delete User Failed",
+                        "schema": {
+                            "$ref": "#/definitions/postAPI.UpdatePostResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/post/list": {
+            "get": {
+                "security": [
+                    {
+                        "Firebase": []
+                    }
+                ],
+                "description": "ListPost",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Post"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/postAPI.GetPostByIDResponse"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "$ref": "#/definitions/authMiddleware.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "No Permissions",
+                        "schema": {
+                            "$ref": "#/definitions/authMiddleware.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/post/{PostID}": {
+            "get": {
+                "security": [
+                    {
+                        "Firebase": []
+                    }
+                ],
+                "description": "Get User's Info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Post"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "PostID",
+                        "name": "PostID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/postAPI.GetPostByIDResponse"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "$ref": "#/definitions/authMiddleware.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "No Permissions",
+                        "schema": {
+                            "$ref": "#/definitions/authMiddleware.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/upload": {
             "post": {
                 "security": [
@@ -106,12 +310,6 @@ const docTemplate = `{
                     },
                     "401": {
                         "description": "Invalid Token",
-                        "schema": {
-                            "$ref": "#/definitions/authMiddleware.ErrorResponse"
-                        }
-                    },
-                    "403": {
-                        "description": "No Permissions",
                         "schema": {
                             "$ref": "#/definitions/authMiddleware.ErrorResponse"
                         }
@@ -488,7 +686,9 @@ const docTemplate = `{
         "userAPI.GetUserByIDResponse": {
             "type": "object",
             "properties": {
-                "error": {},
+                "message": {
+                    "type": "string"
+                },
                 "user": {
                     "$ref": "#/definitions/model.TUser"
                 }
@@ -553,7 +753,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0.0",
-	Host:             "https://crafty.kuranasaki.work",
+	Host:             "crafty.kuranasaki.work",
 	BasePath:         "/api/v1",
 	Schemes:          []string{"https"},
 	Title:            "CraftyUserAPI Documents",

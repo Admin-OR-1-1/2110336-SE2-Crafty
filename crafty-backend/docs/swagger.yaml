@@ -171,7 +171,8 @@ definitions:
     type: object
   userAPI.GetUserByIDResponse:
     properties:
-      error: {}
+      message:
+        type: string
       user:
         $ref: '#/definitions/model.TUser'
     type: object
@@ -198,7 +199,7 @@ definitions:
       username:
         type: string
     type: object
-host: https://crafty.kuranasaki.work
+host: crafty.kuranasaki.work
 info:
   contact:
     email: kongphop.c@kuranasaki.work
@@ -211,6 +212,134 @@ info:
   title: CraftyUserAPI Documents
   version: 1.0.0
 paths:
+  /post:
+    delete:
+      consumes:
+      - application/json
+      description: DeleteUser
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Delete User Success
+          schema:
+            $ref: '#/definitions/postAPI.UpdatePostResponse'
+        "401":
+          description: Invalid Token
+          schema:
+            $ref: '#/definitions/authMiddleware.ErrorResponse'
+        "403":
+          description: No Permissions
+          schema:
+            $ref: '#/definitions/authMiddleware.ErrorResponse'
+        "500":
+          description: Delete User Failed
+          schema:
+            $ref: '#/definitions/postAPI.UpdatePostResponse'
+      security:
+      - Firebase: []
+      tags:
+      - Post
+    put:
+      consumes:
+      - application/json
+      description: UpdateUser
+      parameters:
+      - description: UpdateUser
+        in: body
+        name: UpdateUser
+        required: true
+        schema:
+          $ref: '#/definitions/postAPI.UpdatePostRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Update User Success
+          schema:
+            $ref: '#/definitions/postAPI.UpdatePostResponse'
+        "401":
+          description: Invalid Token
+          schema:
+            $ref: '#/definitions/authMiddleware.ErrorResponse'
+        "403":
+          description: No Permissions
+          schema:
+            $ref: '#/definitions/authMiddleware.ErrorResponse'
+        "500":
+          description: Update User Failed
+          schema:
+            $ref: '#/definitions/postAPI.UpdatePostResponse'
+      security:
+      - Firebase: []
+      tags:
+      - Post
+  /post/{PostID}:
+    get:
+      consumes:
+      - application/json
+      description: Get User's Info
+      parameters:
+      - description: PostID
+        in: path
+        name: PostID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/postAPI.GetPostByIDResponse'
+            type: array
+        "401":
+          description: Invalid Token
+          schema:
+            $ref: '#/definitions/authMiddleware.ErrorResponse'
+        "403":
+          description: No Permissions
+          schema:
+            $ref: '#/definitions/authMiddleware.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - Firebase: []
+      tags:
+      - Post
+  /post/list:
+    get:
+      consumes:
+      - application/json
+      description: ListPost
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/postAPI.GetPostByIDResponse'
+            type: array
+        "401":
+          description: Invalid Token
+          schema:
+            $ref: '#/definitions/authMiddleware.ErrorResponse'
+        "403":
+          description: No Permissions
+          schema:
+            $ref: '#/definitions/authMiddleware.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - Firebase: []
+      tags:
+      - Post
   /upload:
     post:
       consumes:
@@ -288,10 +417,6 @@ paths:
             type: array
         "401":
           description: Invalid Token
-          schema:
-            $ref: '#/definitions/authMiddleware.ErrorResponse'
-        "403":
-          description: No Permissions
           schema:
             $ref: '#/definitions/authMiddleware.ErrorResponse'
         "500":

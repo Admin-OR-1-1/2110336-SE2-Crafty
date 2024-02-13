@@ -1,27 +1,29 @@
 package postAPI
 
 import (
-	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/repository"
+	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/model"
+	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/service"
 	"github.com/gofiber/fiber/v2"
 )
 
 type PostHandler struct {
-	repos *repository.Repositories
+	s *service.ServiceRegistry
 }
 
 type IPostHandler interface {
+	ListPost(*fiber.Ctx) error
 	GetPostInfo(*fiber.Ctx) error
 	UpdatePost(*fiber.Ctx) error
 	DeletePost(*fiber.Ctx) error
 }
 
-func NewPostHandler(repository *repository.Repositories) IPostHandler {
-	return &PostHandler{repos: repository}
+func NewPostHandler(svc *service.ServiceRegistry) IPostHandler {
+	return &PostHandler{s: svc}
 }
 
-// GetUserInfo
-// @Description Get User's Info
-// @Tags User
+// ListPost
+// @Description ListPost
+// @Tags Post
 // @Security Firebase
 // @Accept json
 // @Produce json
@@ -29,12 +31,31 @@ func NewPostHandler(repository *repository.Repositories) IPostHandler {
 // @Failure 401 {object} authMiddleware.ErrorResponse "Invalid Token"
 // @Failure 403 {object} authMiddleware.ErrorResponse "No Permissions"
 // @Failure 500 {string} authMiddleware.ErrorResponse message
-// @Router /user [get]
+// @Router /post/list [get]
+func (h *PostHandler) ListPost(c *fiber.Ctx) error {
+	posts, err := h.s.PostService.GetPost(model.TPost{}, -1, -1, 100)
+	if err != nil {
+		return c.Status(404).JSON(GetPostByIDResponse{Error: err})
+	}
+	return c.Status(200).JSON(ListPostResponse{Post: posts, Error: err})
+}
+
+// GetUserInfo
+// @Description Get User's Info
+// @Tags Post
+// @Security Firebase
+// @Accept json
+// @Produce json
+// @Param PostID path string true "PostID"
+// @Success 200 {array} GetPostByIDResponse
+// @Failure 401 {object} authMiddleware.ErrorResponse "Invalid Token"
+// @Failure 403 {object} authMiddleware.ErrorResponse "No Permissions"
+// @Failure 500 {string} authMiddleware.ErrorResponse message
+// @Router /post/{PostID} [get]
 func (h *PostHandler) GetPostInfo(c *fiber.Ctx) error {
 
-	postid := c.Locals("post").(string)
-
-	post, err := h.repos.PostRepository.GetPostById(postid)
+	postid := c.Params("postId")
+	post, err := h.s.PostService.GetPostById(postid)
 	if err != nil {
 		return c.Status(404).JSON(GetPostByIDResponse{Error: err})
 	}
@@ -44,7 +65,7 @@ func (h *PostHandler) GetPostInfo(c *fiber.Ctx) error {
 
 // UpdateUser
 // @Description UpdateUser
-// @Tags User
+// @Tags Post
 // @Security Firebase
 // @Accept json
 // @Produce json
@@ -53,7 +74,7 @@ func (h *PostHandler) GetPostInfo(c *fiber.Ctx) error {
 // @Failure 403 {object} authMiddleware.ErrorResponse "No Permissions"
 // @Success 201 {object} UpdatePostResponse "Update User Success"
 // @Failure  500 {object} UpdatePostResponse "Update User Failed"
-// @Router /user [put]
+// @Router /post [put]
 func (h *PostHandler) UpdatePost(c *fiber.Ctx) error {
 	uid := c.Locals("post").(string)
 	req := new(UpdatePostRequest)
@@ -61,7 +82,7 @@ func (h *PostHandler) UpdatePost(c *fiber.Ctx) error {
 		return c.Status(400).JSON(UpdatePostResponse{Error: err.Error()})
 	}
 
-	err := h.repos.PostRepository.CreatePost(req.Post.ToModel(uid))
+	err := h.s.PostService.CreatePost(req.Post.ToModel(uid))
 	if err != nil {
 		return c.Status(400).JSON(UpdatePostResponse{Error: err.Error()})
 	}
@@ -71,7 +92,7 @@ func (h *PostHandler) UpdatePost(c *fiber.Ctx) error {
 
 // DeleteUser
 // @Description DeleteUser
-// @Tags User
+// @Tags Post
 // @Security Firebase
 // @Accept json
 // @Produce json
@@ -79,12 +100,12 @@ func (h *PostHandler) UpdatePost(c *fiber.Ctx) error {
 // @Failure 403 {object} authMiddleware.ErrorResponse "No Permissions"
 // @Success 201 {object} UpdatePostResponse "Delete User Success"
 // @Failure  500 {object} UpdatePostResponse "Delete User Failed"
-// @Router /user [delete]
+// @Router /post [delete]
 func (h *PostHandler) DeletePost(c *fiber.Ctx) error {
 
 	uid := c.Locals("post").(string)
 
-	err := h.repos.PostRepository.DeletePost(uid)
+	err := h.s.PostService.DeletePost(uid)
 	if err != nil {
 		return c.Status(400).JSON(UpdatePostResponse{Error: err.Error()})
 	}
