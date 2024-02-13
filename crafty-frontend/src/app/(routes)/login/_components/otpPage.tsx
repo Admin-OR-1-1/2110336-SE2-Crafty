@@ -10,7 +10,7 @@ interface OTPFormProps {
   reSendOtp: () => void;
 }
 
-const OTPForm: FC<OTPFormProps> = ({ otp, setOtp, otpSubmit,  reSendOtp }) => {
+const OTPForm: FC<OTPFormProps> = ({ otp, setOtp, otpSubmit, reSendOtp }) => {
   const inputsRef = useRef<HTMLInputElement[]>([]);
   const [isOtpValid, setOtpValid] = useState(true);
 
