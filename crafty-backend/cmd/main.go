@@ -41,7 +41,10 @@ func main() {
 	godotenv.Load(".local.env")
 	infra := infrastructure.NewInfrastructure()
 	repos := repository.NewRepositories(infra)
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+    BodyLimit: 100 * 1024 * 1024, //100MB
+    StreamRequestBody:            true,
+  })
 
 	v1 := app.Group("/api/v1")
 

@@ -192,9 +192,9 @@ securityDefinitions:
   Firebase:
     flow: password
     scopes:
-      admin: '  All Permissions Granted'
-      mod: ' All Permissions Except adding MOD'
-      user: ' Permissions granted upto project owner'
+      admin: All Permissions Granted
+      mod: All Permissions Except adding MOD
+      user: Permissions granted upto project owner
     tokenUrl: https://crafty.kuranasaki.work/api/v1/auth/oauth/token
     type: oauth2
 swagger: "2.0"

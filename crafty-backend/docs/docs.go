@@ -302,9 +302,9 @@ const docTemplate = `{
             "flow": "password",
             "tokenUrl": "https://crafty.kuranasaki.work/api/v1/auth/oauth/token",
             "scopes": {
-                "admin": "  All Permissions Granted",
-                "mod": " All Permissions Except adding MOD",
-                "user": " Permissions granted upto project owner"
+                "admin": "All Permissions Granted",
+                "mod": "All Permissions Except adding MOD",
+                "user": "Permissions granted upto project owner"
             }
         }
     }
