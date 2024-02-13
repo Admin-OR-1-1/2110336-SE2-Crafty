@@ -32,7 +32,7 @@ func NewUserHandler(svc *service.ServiceRegistry) IUserHandler {
 // @Router /user [get]
 func (h *UserHandler) GetUserInfo(c *fiber.Ctx) error {
 
-	userid := c.Locals("user").(string)
+	userid := c.Locals("uid").(string)
 
 	user, err := h.s.UserService.GetUserById(userid)
 	if err != nil {
@@ -55,7 +55,7 @@ func (h *UserHandler) GetUserInfo(c *fiber.Ctx) error {
 // @Failure  500 {object} UpdateUserResponse "Update User Failed"
 // @Router /user [put]
 func (h *UserHandler) UpdateUser(c *fiber.Ctx) error {
-	uid := c.Locals("user").(string)
+	uid := c.Locals("uid").(string)
 	req := new(UpdateUserRequest)
 	if err := c.BodyParser(req); err != nil {
 		return c.Status(400).JSON(UpdateUserResponse{Error: err.Error()})
@@ -82,7 +82,7 @@ func (h *UserHandler) UpdateUser(c *fiber.Ctx) error {
 // @Router /user [delete]
 func (h *UserHandler) DeleteUser(c *fiber.Ctx) error {
 
-	uid := c.Locals("user").(string)
+	uid := c.Locals("uid").(string)
 
 	err := h.s.UserService.DeleteUser(uid)
 	if err != nil {

@@ -30,23 +30,24 @@ func NewPostHandler(svc *service.ServiceRegistry) IPostHandler {
 // @Failure 401 {object} authMiddleware.ErrorResponse "Invalid Token"
 // @Failure 403 {object} authMiddleware.ErrorResponse "No Permissions"
 // @Failure 500 {string} authMiddleware.ErrorResponse message
-// @Router /post [get]
+// @Router /post/list [get]
 func (h *PostHandler) ListPost(c *fiber.Ctx) error {
 	posts, err := h.s.PostService.GetPostById("")
 	return c.Status(200).JSON(GetPostByIDResponse{Post: posts, Error: err})
 }
+
 // GetUserInfo
 // @Description Get User's Info
 // @Tags Post
 // @Security Firebase
 // @Accept json
 // @Produce json
-// @Param PostID path string true "ProjectID"
+// @Param PostID path string true "PostID"
 // @Success 200 {array} GetPostByIDResponse
 // @Failure 401 {object} authMiddleware.ErrorResponse "Invalid Token"
 // @Failure 403 {object} authMiddleware.ErrorResponse "No Permissions"
 // @Failure 500 {string} authMiddleware.ErrorResponse message
-// @Router /post/[id] [get]
+// @Router /post/{PostID} [get]
 func (h *PostHandler) GetPostInfo(c *fiber.Ctx) error {
 
 	postid := c.Params("postId")

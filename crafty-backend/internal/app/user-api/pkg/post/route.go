@@ -16,7 +16,8 @@ func NewPostRouter(svc *service.ServiceRegistry) *PostRouter {
 
 func (api *PostRouter) SetupRoute(ro fiber.Router) {
 	handler := NewPostHandler(api.s)
-	ro.Get("/", handler.GetPostInfo)
+	ro.Get("/:postId", handler.GetPostInfo)
 	ro.Put("/", handler.UpdatePost)
 	ro.Delete("/", handler.DeletePost)
+	ro.Get("/list", handler.ListPost)
 }
