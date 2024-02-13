@@ -3,3 +3,5 @@
 !.example.env
 *.exe 
 *.bin
+
+.DS_Store
