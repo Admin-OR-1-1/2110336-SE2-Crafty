@@ -171,7 +171,8 @@ definitions:
     type: object
   userAPI.GetUserByIDResponse:
     properties:
-      error: {}
+      message:
+        type: string
       user:
         $ref: '#/definitions/model.TUser'
     type: object
@@ -416,10 +417,6 @@ paths:
             type: array
         "401":
           description: Invalid Token
-          schema:
-            $ref: '#/definitions/authMiddleware.ErrorResponse'
-        "403":
-          description: No Permissions
           schema:
             $ref: '#/definitions/authMiddleware.ErrorResponse'
         "500":

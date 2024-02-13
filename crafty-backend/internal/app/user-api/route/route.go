@@ -25,8 +25,8 @@ func SetupUserAPI(svc *service.ServiceRegistry, r *repository.Repositories) *Use
 func (api *UserAPI) SetupRoute(ro fiber.Router) error {
 
 	ro.Use(cors.New(cors.Config{
-		AllowOrigins: "http://127.0.0.1:8000, https://crafty.kuranasaki.work",
-		AllowHeaders: "Origin, Content-Type, Accept",
+		AllowOrigins: "http://127.0.0.1:8000, https://crafty.kuranasaki.work, http://localhost:3000",
+		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
 	}))
 
 	authMW := authMiddleware.NewAuthMiddleware(api.r)

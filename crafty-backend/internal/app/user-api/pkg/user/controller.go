@@ -27,7 +27,6 @@ func NewUserHandler(svc *service.ServiceRegistry) IUserHandler {
 // @Produce json
 // @Success 200 {array} GetUserByIDResponse
 // @Failure 401 {object} authMiddleware.ErrorResponse "Invalid Token"
-// @Failure 403 {object} authMiddleware.ErrorResponse "No Permissions"
 // @Failure 500 {string} authMiddleware.ErrorResponse message
 // @Router /user [get]
 func (h *UserHandler) GetUserInfo(c *fiber.Ctx) error {
@@ -36,10 +35,10 @@ func (h *UserHandler) GetUserInfo(c *fiber.Ctx) error {
 
 	user, err := h.s.UserService.GetUserById(userid)
 	if err != nil {
-		return c.Status(404).JSON(GetUserByIDResponse{Error: err})
+		return c.Status(404).JSON(GetUserByIDResponse{Message: "Not registered"})
 	}
 
-	return c.Status(200).JSON(GetUserByIDResponse{User: user})
+	return c.Status(200).JSON(GetUserByIDResponse{Message: "Registered", User: user})
 }
 
 // UpdateUser
