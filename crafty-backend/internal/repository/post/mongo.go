@@ -6,7 +6,9 @@ import (
 
 	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/model"
 	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/pkg/infrastructure"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type TMongoThumbnail struct {
@@ -155,4 +157,54 @@ func (post TMongoPost) ToPost() model.TPost {
 	}
 }
 
+func (post MongoPostRepository) GetPost(lowerfilter model.TPost, upperratingstar float32, upperprice float64, limit int) ([]model.TPost, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
+	var results []TMongoPost
+	filterQuery := bson.M{} // Initialize an empty filter query
+
+	// Add filtering conditions based on the provided filter model.TPost if needed
+	// For example, if filter has a Name field:
+	if lowerfilter.Name != "" {
+		filterQuery["name"] = bson.M{"$regex": lowerfilter.Name, "$options": "i"} // Case-insensitive partial match
+	}
+	// If filter has a Detail field:
+	if lowerfilter.Detail != "" {
+		filterQuery["detail"] = bson.M{"$regex": lowerfilter.Detail, "$options": "i"} // Case-insensitive partial match
+	}
+	// If filter has a Content field:
+	if lowerfilter.Content != "" {
+		filterQuery["content"] = bson.M{"$regex": lowerfilter.Content, "$options": "i"} // Case-insensitive partial match
+	}
+	// If filter has a CrafterID field:
+	if lowerfilter.CrafterID != "" {
+		filterQuery["crafterid"] = lowerfilter.CrafterID
+	}
+
+	// Perform the find operation with the filter and limit
+	cursor, err := post.db.Find(ctx, filterQuery, options.Find().SetLimit(int64(limit)))
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	// Iterate through the cursor and decode results into TMongoPost structs
+	for cursor.Next(ctx) {
+		var result TMongoPost
+		if err := cursor.Decode(&result); err != nil {
+			return nil, err
+		}
+		results = append(results, result)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	// Convert TMongoPost structs to model.TPost and return
+	var filteredPosts []model.TPost
+	for _, mongoPost := range results {
+		filteredPosts = append(filteredPosts, mongoPost.ToPost())
+	}
+	return filteredPosts, nil
+}

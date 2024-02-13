@@ -90,10 +90,39 @@ func (s *PostService) GetPostById(ID string) (model.TPost, error) {
 	return post, err
 }
 
-func (s *PostService) ListAllPost() ([]model.TPost, error) {
-	posts, err := s.r.PostRepository.GetPost(model.TPost{})
-	if err != nil {
-		return []model.TPost{}, err // Return error if GetPost fails
+func IsValidFilter(Post model.TPost) bool {
+	if Post.ID != "" {
+		return true
 	}
-	return posts, err
+	if Post.Name != "" {
+		return true
+	}
+	if Post.Detail != "" {
+		return true
+	}
+	if Post.Content != "" {
+		return true
+	}
+	if Post.CrafterID != "" {
+		return true
+	}
+	if Post.Thumbnail.ThumbnailUrl != "" {
+		return true
+	}
+	if Post.Thumbnail.ThumbnailType != "" {
+		return true
+	}
+	return false
+}
+
+func (s *PostService) GetPost(lowerfilter model.TPost, upperratingstar float32, upperprice float64, limit int) ([]model.TPost, error) {
+	if limit >= 0 {
+		posts, err := s.r.PostRepository.GetPost(lowerfilter, upperratingstar, upperprice, limit)
+		if err != nil {
+			return []model.TPost{}, err
+		}
+		return posts, err
+	} else {
+		return []model.TPost{}, fmt.Errorf("Invalid Limit")
+	}
 }
