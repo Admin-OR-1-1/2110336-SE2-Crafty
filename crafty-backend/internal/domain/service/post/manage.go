@@ -43,7 +43,7 @@ func IsValidPost(Post model.TPost) bool {
 
 func (s *PostService) CreatePost(Post model.TPost) error {
 	
-	if IsValidUser(Post) {
+	if IsValidPost(Post) {
 		err := s.r.PostRepository.CreatePost(Post)
 		return err
 	} else {
