@@ -8,6 +8,7 @@ import (
 	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/service"
 	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/repository"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 type UserAPI struct {
@@ -22,6 +23,11 @@ func SetupUserAPI(svc *service.ServiceRegistry, r *repository.Repositories) *Use
 }
 
 func (api *UserAPI) SetupRoute(ro fiber.Router) error {
+
+	ro.Use(cors.New(cors.Config{
+		AllowOrigins: "http://127.0.0.1:8000, https://crafty.kuranasaki.work",
+		AllowHeaders: "Origin, Content-Type, Accept",
+	}))
 
 	authMW := authMiddleware.NewAuthMiddleware(api.r)
 	userRouter := userRoute.NewUserRouter(api.s)
