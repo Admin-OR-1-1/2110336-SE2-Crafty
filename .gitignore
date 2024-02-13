@@ -1,2 +1,7 @@
 **/tmp/*
 crafty-backend/.local.env
+*/*.env
+!.example.env
+*.exe 
+*.bin
+deployment/kube/secret.yaml
