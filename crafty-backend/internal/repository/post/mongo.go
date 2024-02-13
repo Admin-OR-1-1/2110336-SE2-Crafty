@@ -50,37 +50,37 @@ func (post MongoPostRepository) InsertPost(Post model.TPost) error {
 	return err
 }
 
-func (user MongoPostRepository) DeletePost(UID string) error {
+func (post MongoPostRepository) DeletePost(UID string) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	_, err := user.db.DeleteOne(ctx, UID)
+	_, err := post.db.DeleteOne(ctx, UID)
 	return err
 }
 
-func (user MongoPostRepository) GetPostById(UID string) (model.TPost, error) {
+func (post MongoPostRepository) GetPostById(UID string) (model.TPost, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	var result TMongoPost
-	err := user.db.FindOne(ctx, UID).Decode(&result)
+	err := post.db.FindOne(ctx, UID).Decode(&result)
 	if err != nil {
 		return model.TPost{}, err
 	}
 	return result.ToPost(), nil
 }
 
-func (user MongoPostRepository) UpdatePost(Post model.TPost) error {
+func (post MongoPostRepository) UpdatePost(Post model.TPost) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	_, err := user.db.ReplaceOne(ctx, Post.ID, ConvertToMongoPost(Post))
+	_, err := post.db.ReplaceOne(ctx, Post.ID, ConvertToMongoPost(Post))
 	return err
 }
 
-func (user MongoPostRepository) CreatePost(Post model.TPost) error {
+func (post MongoPostRepository) CreatePost(Post model.TPost) error {
 	return nil
 }
 
 func ConvertToMongoPost(post model.TPost) TMongoPost {
 	return TMongoPost{
-		ID:          post.ID,
-		Thumbnail:   TMongoThumbnail{
+		ID: post.ID,
+		Thumbnail: TMongoThumbnail{
 			ThumbnailUrl:  post.Thumbnail.ThumbnailUrl,
 			ThumbnailType: post.Thumbnail.ThumbnailType,
 		},
@@ -150,4 +150,3 @@ func (post TMongoPost) ToPost() model.TPost {
 		CrafterID:   post.CrafterID,
 	}
 }
-
