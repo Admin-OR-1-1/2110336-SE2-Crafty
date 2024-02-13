@@ -20,6 +20,19 @@ func NewUploadHandler(repos *repository.Repositories) IUploadHandler {
   return &UploadHandler{repos: repos}
 }
 
+
+// Upload file
+// @Description Upload file
+// @Tags Upload
+// @Security Firebase
+// @Accept mpfd
+// @Produce json
+// @Param file formData file true "File to upload"
+// @Failure 401 {object} authMiddleware.ErrorResponse "Invalid Token"
+// @Failure 403 {object} authMiddleware.ErrorResponse "No Permissions"
+// @Success 200 {object} UploadSuccessResponse "Update User Success"
+// @Failure  500 {object} UploadErrorResponse "Update User Failed"
+// @Router /upload [post]
 func (h *UploadHandler) Upload(c *fiber.Ctx) error {
   isPublic := c.Query("public")
   userid := c.Locals("uid").(string)

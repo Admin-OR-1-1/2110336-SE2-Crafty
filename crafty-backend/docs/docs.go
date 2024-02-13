@@ -23,6 +23,60 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/upload": {
+            "post": {
+                "security": [
+                    {
+                        "Firebase": []
+                    }
+                ],
+                "description": "Upload file",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Upload"
+                ],
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "File to upload",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Update User Success",
+                        "schema": {
+                            "$ref": "#/definitions/uploadAPI.UploadSuccessResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "$ref": "#/definitions/authMiddleware.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "No Permissions",
+                        "schema": {
+                            "$ref": "#/definitions/authMiddleware.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Update User Failed",
+                        "schema": {
+                            "$ref": "#/definitions/uploadAPI.UploadErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/user": {
             "get": {
                 "security": [
@@ -218,6 +272,28 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "uploadAPI.UploadErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "uploadAPI.UploadSuccessResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "url": {
                     "type": "string"
                 }
             }

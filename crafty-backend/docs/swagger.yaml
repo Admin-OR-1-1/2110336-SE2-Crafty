@@ -34,6 +34,20 @@ definitions:
       username:
         type: string
     type: object
+  uploadAPI.UploadErrorResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+    type: object
+  uploadAPI.UploadSuccessResponse:
+    properties:
+      message:
+        type: string
+      url:
+        type: string
+    type: object
   userAPI.Address:
     properties:
       address_1:
@@ -91,6 +105,40 @@ info:
   title: CraftyUserAPI Documents
   version: 1.0.0
 paths:
+  /upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload file
+      parameters:
+      - description: File to upload
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Update User Success
+          schema:
+            $ref: '#/definitions/uploadAPI.UploadSuccessResponse'
+        "401":
+          description: Invalid Token
+          schema:
+            $ref: '#/definitions/authMiddleware.ErrorResponse'
+        "403":
+          description: No Permissions
+          schema:
+            $ref: '#/definitions/authMiddleware.ErrorResponse'
+        "500":
+          description: Update User Failed
+          schema:
+            $ref: '#/definitions/uploadAPI.UploadErrorResponse'
+      security:
+      - Firebase: []
+      tags:
+      - Upload
   /user:
     delete:
       consumes:
