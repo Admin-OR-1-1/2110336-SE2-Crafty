@@ -2,63 +2,47 @@ import React, { FC, use, useEffect, useState } from 'react';
 import { Button, TextInput } from '@/app/_components/ui/input';
 import { useFirebaseAuthContext } from '@/contexts/firebaseAuthContext';
 
-const PersonalInfomationPage: FC = () => {
-  const [name, setName] = useState<string>('');
-  const [phone, setPhone] = useState<string>('');
-  const [address, setAddress] = useState<string>('');
-  const [road, setRoad] = useState<string>('');
-  const [subDistrict, setSubDistrict] = useState<string>('');
-  const [district, setDistrict] = useState<string>('');
-  const [province, setProvince] = useState<string>('');
-  const [postalCode, setPostalCode] = useState<string>('');
+interface PersonalInfomationProps {
+  name: string;
+  nameHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  phone: string;
+  phoneHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  address: string;
+  addressHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  road: string;
+  roadHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  subDistrict: string;
+  subDistrictHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  district: string;
+  districtHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  province: string;
+  provinceHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  postalCode: string;
+  postalCodeHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  canEditPhone: boolean;
+  registerUser: () => void;
+}
 
-  const [canEditPhone, setCanEditPhone] = useState<boolean>(true);
-
-  const { user } = useFirebaseAuthContext();
-
-  useEffect(() => {
-    if (!user) return;
-
-    if (user.phoneNumber) {
-      setPhone('0' + user.phoneNumber.slice(3));
-      setCanEditPhone(false);
-    }
-  }, [user]);
-
-  const nameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
-
-  const phoneHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (canEditPhone) {
-      setPhone(e.target.value);
-    }
-  };
-
-  const addressHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAddress(e.target.value);
-  };
-
-  const roadHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRoad(e.target.value);
-  };
-
-  const subDistrictHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSubDistrict(e.target.value);
-  };
-
-  const districtHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDistrict(e.target.value);
-  };
-
-  const provinceHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setProvince(e.target.value);
-  };
-
-  const postalCodeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPostalCode(e.target.value);
-  };
-
+const PersonalInfomationPage: FC<PersonalInfomationProps> = ({
+  name,
+  nameHandler,
+  phone,
+  phoneHandler,
+  address,
+  addressHandler,
+  road,
+  roadHandler,
+  subDistrict,
+  subDistrictHandler,
+  district,
+  districtHandler,
+  province,
+  provinceHandler,
+  postalCode,
+  postalCodeHandler,
+  canEditPhone,
+  registerUser,
+}) => {
   const isDisabled = () => {
     return (
       name === '' ||
@@ -145,7 +129,9 @@ const PersonalInfomationPage: FC = () => {
         </div>
       </div>
 
-      <Button disabled={isDisabled()}>ต่อไป</Button>
+      <Button disabled={isDisabled()} onClick={registerUser}>
+        ต่อไป
+      </Button>
     </div>
   );
 };

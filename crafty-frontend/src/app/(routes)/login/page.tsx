@@ -14,15 +14,27 @@ import { auth } from '@/configs/firebaseConfig';
 
 import LogoLeftSide from '@/app/_components/ui/logoLeftSide';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
+import { apiClient } from '@/configs/axiosConfig';
+import { useFirebaseAuthContext } from '@/contexts/firebaseAuthContext';
 
 const Page = () => {
   const router = useRouter();
+  const { user } = useFirebaseAuthContext();
 
   const [state, setState] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [otp, setOtp] = useState<string>('');
   const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult>();
+
+  const [name, setName] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
+  const [road, setRoad] = useState<string>('');
+  const [subDistrict, setSubDistrict] = useState<string>('');
+  const [district, setDistrict] = useState<string>('');
+  const [province, setProvince] = useState<string>('');
+  const [postalCode, setPostalCode] = useState<string>('');
+  const [canEditPhone, setCanEditPhone] = useState<boolean>(true);
 
   useEffect(() => {
     (window as any).recaptchaVerifier = new RecaptchaVerifier(auth, 'sign-in-button', {
@@ -143,31 +155,99 @@ const Page = () => {
 
   const checkUserValid = async () => {
     if (auth) {
-      const token = await auth.currentUser?.getIdToken();
-      console.log('token', token);
-      const apiUrl = process.env.NEXT_PUBLIC_API_ENDPOINT || 'http://localhost:3000';
-      console.log(apiUrl);
-      const isValid = await axios
-        .get(apiUrl + '/user', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        })
+      const isValid = apiClient
+        .get('/user')
         .then((response) => {
           console.log(response.status);
           console.log(response.data);
           const data = response.data;
-          if (data.Message === 'Not registered') return { error: false, valid: false };
-          // else
-          return { error: false, valid: true };
+          if (data.message === 'Registered') return { error: false, valid: true };
+          return { error: true, valid: false };
         })
         .catch((error) => {
+          if (error.response) {
+            if (error.response.data.message === 'Not registered')
+              return { error: false, valid: false };
+            console.log(error.response);
+          }
           console.log("GET request didn't work:", error);
           return { error: true, valid: false };
         });
       return isValid;
     } else return { error: true, valid: false };
+  };
+
+  useEffect(() => {
+    if (!user) return;
+
+    if (user.phoneNumber) {
+      setPhone('0' + user.phoneNumber.slice(3));
+      setCanEditPhone(false);
+    }
+  }, [user]);
+
+  const nameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.target.value);
+  };
+
+  const phoneHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (canEditPhone) {
+      setPhone(e.target.value);
+    }
+  };
+
+  const addressHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddress(e.target.value);
+  };
+
+  const roadHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRoad(e.target.value);
+  };
+
+  const subDistrictHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSubDistrict(e.target.value);
+  };
+
+  const districtHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDistrict(e.target.value);
+  };
+
+  const provinceHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setProvince(e.target.value);
+  };
+
+  const postalCodeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPostalCode(e.target.value);
+  };
+
+  const registerUser = async (): Promise<void> => {
+    if (!user) return;
+
+    apiClient
+      .put('/user', {
+        user: {
+          address: {
+            address_1: address,
+            street: road,
+            tambon: subDistrict,
+            amphoe: district,
+            province: province,
+            postal_code: postalCode,
+          },
+          phone: phone,
+          picture_url: `https://picsum.photos/seed/${await user.uid}/400/400`,
+          username: name,
+        },
+      })
+      .then(() => {
+        // Update successful
+        console.log("Created user's data successfully");
+        router.push('/');
+      })
+      .catch((error) => {
+        // An error occurred
+        console.log('An error occurred', error);
+      });
   };
 
   return (
@@ -189,7 +269,28 @@ const Page = () => {
       {state === 1 && (
         <OtpPage otp={otp} setOtp={setOtp} otpSubmit={onSubmitOtp} reSendOtp={onSubmitOtp} />
       )}
-      {state === 2 && <PersonalInfomationPage />}
+      {state === 2 && (
+        <PersonalInfomationPage
+          name={name}
+          nameHandler={nameHandler}
+          phone={phone}
+          phoneHandler={phoneHandler}
+          address={address}
+          addressHandler={addressHandler}
+          road={road}
+          roadHandler={roadHandler}
+          subDistrict={subDistrict}
+          subDistrictHandler={subDistrictHandler}
+          district={district}
+          districtHandler={districtHandler}
+          province={province}
+          provinceHandler={provinceHandler}
+          postalCode={postalCode}
+          postalCodeHandler={postalCodeHandler}
+          registerUser={registerUser}
+          canEditPhone={canEditPhone}
+        />
+      )}
     </LogoLeftSide>
   );
 };
