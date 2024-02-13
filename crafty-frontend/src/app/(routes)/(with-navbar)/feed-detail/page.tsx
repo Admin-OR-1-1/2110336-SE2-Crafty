@@ -7,16 +7,30 @@ const FeedDetailPage: FC = () => {
       <div className="mx-auto grid h-fit w-full max-w-[1300px] grid-cols-2 rounded-xl bg-white max-md:grid-cols-1">
         {/* image */}
         <div className="flex h-full w-full p-10 pr-5 max-md:mx-auto max-md:max-w-[400px]">
-          <Image
-            src={`https://picsum.photos/seed/${Math.random() * 1000}/1000/1000`}
-            className="h-fit w-full overflow-hidden rounded-xl object-contain"
-            placeholder="blur"
-            blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-            width={5000}
-            height={5000}
-            alt={`Image`}
-            loading="lazy"
-          />
+          <div className="carousel w-full overflow-hidden rounded-xl">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={`slide ${i}`} id={`slide${i}`} className="carousel-item relative w-full">
+                <Image
+                  src={`https://picsum.photos/seed/${Math.random() * 1000}/1000/1000`}
+                  className="h-fit w-full object-contain"
+                  placeholder="blur"
+                  blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                  width={5000}
+                  height={5000}
+                  alt={`Image`}
+                  loading="lazy"
+                />
+                <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
+                  <a href={`#slide${i - 1}`} className="btn btn-circle opacity-60">
+                    ❮
+                  </a>
+                  <a href={`#slide${i + 1}`} className="btn btn-circle opacity-60">
+                    ❯
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* detail */}
