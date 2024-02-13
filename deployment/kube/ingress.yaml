@@ -3,8 +3,6 @@ kind: Ingress
 metadata:
   name: crafty-ingress
   namespace: crafty
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
   - host: crafty.kuranasaki.work 

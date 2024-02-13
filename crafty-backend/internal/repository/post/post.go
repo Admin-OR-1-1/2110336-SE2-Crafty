@@ -7,4 +7,5 @@ type IPostRepo interface {
 	UpdatePost(Post model.TPost) error
 	DeletePost(ID string) error
 	GetPostById(ID string) (model.TPost, error)
+	GetPost(filer model.TPost) ([]model.TPost, error)
 }

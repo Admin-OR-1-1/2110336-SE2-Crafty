@@ -28,6 +28,6 @@ func (api *UserAPI) SetupRoute(ro fiber.Router) error {
 	uploadRouter.SetupRoute(ro.Group("/upload", authMW.VerifyToken))
 
 	postRouter := postRoute.NewPostRouter(api.r)
-	postRouter.SetupRoute(ro.Group("/post", authMW.VerifyToken))
+	postRouter.SetupRoute(ro.Group("/post/:postId", authMW.VerifyToken))
 	return nil
 }
