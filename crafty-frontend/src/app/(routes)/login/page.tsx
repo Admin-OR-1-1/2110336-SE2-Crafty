@@ -138,7 +138,7 @@ const Page = () => {
   };
 
   const checkUserValid = (): boolean => {
-    if (auth.currentUser) return Math.random() > 0.5;
+    if (auth.currentUser) return Math.random() > 0.9;
     return false;
   };
 
@@ -259,6 +259,7 @@ const Page = () => {
           postalCode={postalCode}
           postalCodeHandler={postalCodeHandler}
           registerUser={registerUser}
+          canEditPhone={canEditPhone}
         />
       )}
     </LogoLeftSide>
