@@ -69,6 +69,10 @@ const FeedEditPage: FC = () => {
               />
             </div>
           </div>
+
+          <button className="btn ml-auto w-fit bg-ct_brown-500 text-lg text-white hover:bg-ct_brown-300">
+            บันทึก
+          </button>
         </div>
       </div>
     </div>
