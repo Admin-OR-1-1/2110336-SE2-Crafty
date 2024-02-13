@@ -115,15 +115,14 @@ func IsValidFilter(Post model.TPost) bool {
 	return false
 }
 
-func (s *PostService) GetPost(filter model.TPost, limit int) ([]model.TPost, error) {
-	if IsValidFilter(filter) && limit > 0 {
-		err := s.r.PostRepository.(filter)
-		return err
-	} else {
-		if limit <= 0 {
-			return fmt.Errorf("Invalid limit")
-		} else {
-			return fmt.Errorf("Invalid filter")
+func (s *PostService) GetPost(lowerfilter model.TPost, upperratingstar float32, upperprice float64, limit int) ([]model.TPost, error) {
+	if limit >= 0 {
+		posts, err := s.r.PostRepository.GetPost(lowerfilter, upperratingstar, upperprice, limit)
+		if err != nil {
+			return []model.TPost{}, err
 		}
+		return posts, err
+	} else {
+		return []model.TPost{}, fmt.Errorf("Invalid Limit")
 	}
 }
