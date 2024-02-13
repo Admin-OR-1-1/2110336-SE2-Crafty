@@ -6,7 +6,7 @@ const FeedDetailPage: FC = () => {
     <div className="bg-red flex w-full flex-col gap-2 p-8">
       <div className="mx-auto grid h-fit w-full max-w-[1300px] grid-cols-2 rounded-xl bg-white max-md:grid-cols-1">
         {/* image */}
-        <div className="flex h-full w-full p-10 pr-5 max-md:mx-auto max-md:max-w-[400px]">
+        <div className="flex h-full w-full p-10 pr-10 max-md:mx-auto max-md:max-w-[400px] md:pr-5">
           <div className="carousel w-full overflow-hidden rounded-xl">
             {Array.from({ length: 5 }).map((_, i) => (
               <div key={`slide ${i}`} id={`slide${i}`} className="carousel-item relative w-full">
@@ -34,7 +34,7 @@ const FeedDetailPage: FC = () => {
         </div>
 
         {/* detail */}
-        <div className="flex h-full w-full flex-col gap-8 p-10 pl-5">
+        <div className="flex h-full w-full flex-col gap-8 p-10 pl-10 md:pl-5">
           <div className="flex flex-row gap-4">
             {/* user avatar */}
             <svg
