@@ -61,7 +61,7 @@ func (h *PostHandler) UpdatePost(c *fiber.Ctx) error {
 		return c.Status(400).JSON(UpdatePostResponse{Error: err.Error()})
 	}
 
-	err := h.repos.PostRepository.InsertPost(req.Post.ToModel(uid))
+	err := h.repos.PostRepository.CreatePost(req.Post.ToModel(uid))
 	if err != nil {
 		return c.Status(400).JSON(UpdatePostResponse{Error: err.Error()})
 	}
