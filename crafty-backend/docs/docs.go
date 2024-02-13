@@ -314,12 +314,6 @@ const docTemplate = `{
                             "$ref": "#/definitions/authMiddleware.ErrorResponse"
                         }
                     },
-                    "403": {
-                        "description": "No Permissions",
-                        "schema": {
-                            "$ref": "#/definitions/authMiddleware.ErrorResponse"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -692,7 +686,9 @@ const docTemplate = `{
         "userAPI.GetUserByIDResponse": {
             "type": "object",
             "properties": {
-                "error": {},
+                "message": {
+                    "type": "string"
+                },
                 "user": {
                     "$ref": "#/definitions/model.TUser"
                 }
