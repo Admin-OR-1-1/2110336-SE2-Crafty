@@ -1,7 +1,6 @@
 package post
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/model"
@@ -16,64 +15,77 @@ import (
 	}
 */
 
-// not have list now
-func HaveNil(Post model.TPost) bool {
+func IsValidPost(Post model.TPost) bool {
 	if Post.ID == "" {
-		return true
+		return false
 	}
 	if Post.Name == "" {
-		return true
+		return false
 	}
 	if Post.Detail == "" {
-		return true
+		return false
 	}
 	if Post.Content == "" {
-		return true
+		return false
 	}
 	if Post.CrafterID == "" {
-		return true
+		return false
 	}
 	if Post.Thumbnail.ThumbnailUrl == "" {
-		return true
+		return false
 	}
 	if Post.Thumbnail.ThumbnailType == "" {
-		return true
+		return false
 	}
-	return false
+	return true
 }
 
 func (s *PostService) CreatePost(Post model.TPost) error {
-	if HaveNil(Post) {
-		return fmt.Errorf("FailedToCreatePost")
+
+	if IsValidPost(Post) {
+		err := s.r.PostRepository.CreatePost(Post)
+		return err
 	} else {
-		s.r.PostRepository.CreatePost(Post)
-		return nil
+		return fmt.Errorf("Invalid Post")
 	}
 }
 
-// Jinny
 func (s *PostService) UpdatePost(Post model.TPost) error {
-	return nil
+	_, err := s.r.PostRepository.GetPostById(Post.ID)
+	if err != nil {
+		return err // Return error if GetPostById fails
+	}
+
+	err = s.r.PostRepository.UpdatePost(Post)
+	if err != nil {
+		return err // Return error if the update operation fails
+	}
+
+	return nil // Return nil if the update operation is successful
 }
 
-// Jinny
 func (s *PostService) DeletePost(ID string) error {
 	post, err := s.r.PostRepository.GetPostById(ID)
 	if err != nil {
 		return err // Return error if GetPostById fails
 	}
 
-	// Check if the post exists
 	if post.ID != "" {
 		// Perform deletion operation in the database
-		// DeletePostFromDatabase(ID)
+		err := s.r.PostRepository.DeletePost(ID)
+		if err != nil {
+			return err // Return error if deletion operation fails
+		}
 		return nil // Return nil if deletion is successful
 	}
 
-	// Return error if the post does not exist
-	return errors.New("post not found")
+	return fmt.Errorf("Post Not Found")
 }
 
 func (s *PostService) GetPostById(ID string) (model.TPost, error) {
-	return model.TPost{}, nil
+	post, err := s.r.PostRepository.GetPostById(ID)
+	if err != nil {
+		return model.TPost{}, err // Return error if GetPostById fails
+	}
+	return post, err
 }
