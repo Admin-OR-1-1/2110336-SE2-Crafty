@@ -256,6 +256,74 @@ const docTemplate = `{
                 }
             }
         },
+        "model.TPackage": {
+            "type": "object",
+            "properties": {
+                "price": {
+                    "type": "number"
+                }
+            }
+        },
+        "model.TPost": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "crafterID": {
+                    "type": "string"
+                },
+                "detail": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "packageList": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.TPackage"
+                    }
+                },
+                "reviewList": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.TReview"
+                    }
+                },
+                "thumbnail": {
+                    "$ref": "#/definitions/model.TThumbnail"
+                }
+            }
+        },
+        "model.TReview": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "type": "string"
+                },
+                "ratingStar": {
+                    "type": "number"
+                },
+                "uid": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.TThumbnail": {
+            "type": "object",
+            "properties": {
+                "thumbnailType": {
+                    "type": "string"
+                },
+                "thumbnailUrl": {
+                    "type": "string"
+                }
+            }
+        },
         "model.TUser": {
             "type": "object",
             "properties": {
@@ -272,6 +340,102 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "postAPI.GetPostByIDResponse": {
+            "type": "object",
+            "properties": {
+                "error": {},
+                "post": {
+                    "$ref": "#/definitions/model.TPost"
+                }
+            }
+        },
+        "postAPI.Package": {
+            "type": "object",
+            "properties": {
+                "price": {
+                    "type": "number"
+                }
+            }
+        },
+        "postAPI.Post": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "crafterID": {
+                    "type": "string"
+                },
+                "detail": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "packageList": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/postAPI.Package"
+                    }
+                },
+                "reviewList": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/postAPI.Review"
+                    }
+                },
+                "thumbnail": {
+                    "$ref": "#/definitions/postAPI.Thumbnail"
+                }
+            }
+        },
+        "postAPI.Review": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "type": "string"
+                },
+                "ratingStar": {
+                    "type": "number"
+                },
+                "uid": {
+                    "type": "string"
+                }
+            }
+        },
+        "postAPI.Thumbnail": {
+            "type": "object",
+            "properties": {
+                "thumbnailType": {
+                    "type": "string"
+                },
+                "thumbnailUrl": {
+                    "type": "string"
+                }
+            }
+        },
+        "postAPI.UpdatePostRequest": {
+            "type": "object",
+            "properties": {
+                "post": {
+                    "$ref": "#/definitions/postAPI.Post"
+                }
+            }
+        },
+        "postAPI.UpdatePostResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "message": {
                     "type": "string"
                 }
             }

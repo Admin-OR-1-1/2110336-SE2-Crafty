@@ -25,7 +25,7 @@ func NewPostHandler(repository *repository.Repositories) IPostHandler {
 // @Security Firebase
 // @Accept json
 // @Produce json
-// @Success 200 {array} GetUserByIDResponse
+// @Success 200 {array} GetPostByIDResponse
 // @Failure 401 {object} authMiddleware.ErrorResponse "Invalid Token"
 // @Failure 403 {object} authMiddleware.ErrorResponse "No Permissions"
 // @Failure 500 {string} authMiddleware.ErrorResponse message
@@ -48,11 +48,11 @@ func (h *PostHandler) GetPostInfo(c *fiber.Ctx) error {
 // @Security Firebase
 // @Accept json
 // @Produce json
-// @Param UpdateUser body UpdateUserRequest true "UpdateUser"
+// @Param UpdateUser body UpdatePostRequest true "UpdateUser"
 // @Failure 401 {object} authMiddleware.ErrorResponse "Invalid Token"
 // @Failure 403 {object} authMiddleware.ErrorResponse "No Permissions"
-// @Success 201 {object} UpdateUserResponse "Update User Success"
-// @Failure  500 {object} UpdateUserResponse "Update User Failed"
+// @Success 201 {object} UpdatePostResponse "Update User Success"
+// @Failure  500 {object} UpdatePostResponse "Update User Failed"
 // @Router /user [put]
 func (h *PostHandler) UpdatePost(c *fiber.Ctx) error {
 	uid := c.Locals("post").(string)
@@ -77,8 +77,8 @@ func (h *PostHandler) UpdatePost(c *fiber.Ctx) error {
 // @Produce json
 // @Failure 401 {object} authMiddleware.ErrorResponse "Invalid Token"
 // @Failure 403 {object} authMiddleware.ErrorResponse "No Permissions"
-// @Success 201 {object} UpdateUserResponse "Delete User Success"
-// @Failure  500 {object} UpdateUserResponse "Delete User Failed"
+// @Success 201 {object} UpdatePostResponse "Delete User Success"
+// @Failure  500 {object} UpdatePostResponse "Delete User Failed"
 // @Router /user [delete]
 func (h *PostHandler) DeletePost(c *fiber.Ctx) error {
 
