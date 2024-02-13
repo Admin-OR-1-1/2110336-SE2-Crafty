@@ -3,6 +3,7 @@ package main
 import (
 	_ "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/docs"
 	userAPI "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/app/user-api/route"
+	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/service"
 	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/repository"
 	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/pkg/infrastructure"
 	"github.com/gofiber/fiber/v2"
@@ -41,6 +42,7 @@ func main() {
 	godotenv.Load(".local.env")
 	infra := infrastructure.NewInfrastructure()
 	repos := repository.NewRepositories(infra)
+	svcs := service.NewServiceRegistry(repos)
 	app := fiber.New(fiber.Config{
     BodyLimit: 100 * 1024 * 1024, //100MB
     StreamRequestBody:            true,
@@ -48,7 +50,7 @@ func main() {
 
 	v1 := app.Group("/api/v1")
 
-	usrApi := userAPI.SetupUserAPI(repos)
+	usrApi := userAPI.SetupUserAPI(svcs, repos)
 	usrApi.SetupRoute(v1)
 	v1.Get("/docs/*", fiberSwagger.WrapHandler)
 	app.Listen(":8000")

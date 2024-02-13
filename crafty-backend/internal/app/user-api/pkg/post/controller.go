@@ -1,12 +1,12 @@
 package postAPI
 
 import (
-	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/repository"
+	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/service"
 	"github.com/gofiber/fiber/v2"
 )
 
 type PostHandler struct {
-	repos *repository.Repositories
+	s *service.ServiceRegistry
 }
 
 type IPostHandler interface {
@@ -16,8 +16,8 @@ type IPostHandler interface {
 	DeletePost(*fiber.Ctx) error
 }
 
-func NewPostHandler(repository *repository.Repositories) IPostHandler {
-	return &PostHandler{repos: repository}
+func NewPostHandler(svc *service.ServiceRegistry) IPostHandler {
+	return &PostHandler{s: svc}
 }
 
 // ListPost
@@ -32,7 +32,7 @@ func NewPostHandler(repository *repository.Repositories) IPostHandler {
 // @Failure 500 {string} authMiddleware.ErrorResponse message
 // @Router /post [get]
 func (h *PostHandler) ListPost(c *fiber.Ctx) error {
-	posts, err := h.repos.PostRepository.GetPostById("")
+	posts, err := h.s.PostService.GetPostById("")
 	return c.Status(200).JSON(GetPostByIDResponse{Post: posts, Error: err})
 }
 // GetUserInfo
@@ -50,7 +50,7 @@ func (h *PostHandler) ListPost(c *fiber.Ctx) error {
 func (h *PostHandler) GetPostInfo(c *fiber.Ctx) error {
 
 	postid := c.Params("postId")
-	post, err := h.repos.PostRepository.GetPostById(postid)
+	post, err := h.s.PostService.GetPostById(postid)
 	if err != nil {
 		return c.Status(404).JSON(GetPostByIDResponse{Error: err})
 	}
@@ -77,7 +77,7 @@ func (h *PostHandler) UpdatePost(c *fiber.Ctx) error {
 		return c.Status(400).JSON(UpdatePostResponse{Error: err.Error()})
 	}
 
-	err := h.repos.PostRepository.CreatePost(req.Post.ToModel(uid))
+	err := h.s.PostService.CreatePost(req.Post.ToModel(uid))
 	if err != nil {
 		return c.Status(400).JSON(UpdatePostResponse{Error: err.Error()})
 	}
@@ -100,7 +100,7 @@ func (h *PostHandler) DeletePost(c *fiber.Ctx) error {
 
 	uid := c.Locals("post").(string)
 
-	err := h.repos.PostRepository.DeletePost(uid)
+	err := h.s.PostService.DeletePost(uid)
 	if err != nil {
 		return c.Status(400).JSON(UpdatePostResponse{Error: err.Error()})
 	}

@@ -1,12 +1,12 @@
 package userAPI
 
 import (
-	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/repository"
+	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/service"
 	"github.com/gofiber/fiber/v2"
 )
 
 type UserHandler struct {
-	repos *repository.Repositories
+	s *service.ServiceRegistry
 }
 
 type IUserHandler interface {
@@ -15,8 +15,8 @@ type IUserHandler interface {
 	DeleteUser(*fiber.Ctx) error
 }
 
-func NewUserHandler(repository *repository.Repositories) IUserHandler {
-	return &UserHandler{repos: repository}
+func NewUserHandler(svc *service.ServiceRegistry) IUserHandler {
+	return &UserHandler{s: svc}
 }
 
 // GetUserInfo
@@ -34,7 +34,7 @@ func (h *UserHandler) GetUserInfo(c *fiber.Ctx) error {
 
 	userid := c.Locals("user").(string)
 
-	user, err := h.repos.UserRepository.GetUserById(userid)
+	user, err := h.s.UserService.GetUserById(userid)
 	if err != nil {
 		return c.Status(404).JSON(GetUserByIDResponse{Error: err})
 	}
@@ -61,7 +61,7 @@ func (h *UserHandler) UpdateUser(c *fiber.Ctx) error {
 		return c.Status(400).JSON(UpdateUserResponse{Error: err.Error()})
 	}
 
-	err := h.repos.UserRepository.InsertUser(req.User.ToModel(uid))
+	err := h.s.UserService.UpdateUser(req.User.ToModel(uid))
 	if err != nil {
 		return c.Status(400).JSON(UpdateUserResponse{Error: err.Error()})
 	}
@@ -84,7 +84,7 @@ func (h *UserHandler) DeleteUser(c *fiber.Ctx) error {
 
 	uid := c.Locals("user").(string)
 
-	err := h.repos.UserRepository.DeleteUser(uid)
+	err := h.s.UserService.DeleteUser(uid)
 	if err != nil {
 		return c.Status(400).JSON(UpdateUserResponse{Error: err.Error()})
 	}

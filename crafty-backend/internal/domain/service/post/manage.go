@@ -89,3 +89,11 @@ func (s *PostService) GetPostById(ID string) (model.TPost, error) {
 	}
 	return post, err
 }
+
+func (s *PostService) ListAllPost() ([]model.TPost, error) {
+	posts, err := s.r.PostRepository.GetPost(model.TPost{})
+	if err != nil {
+		return []model.TPost{}, err // Return error if GetPost fails
+	}
+	return posts, err
+}
