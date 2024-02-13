@@ -16,42 +16,41 @@ import (
 	}
 */
 
-// not have list now
-func HaveNil(Post model.TPost) bool {
+func IsValidUser(Post model.TPost) bool {
 	if Post.ID == "" {
-		return true
+		return false
 	}
 	if Post.Name == "" {
-		return true
+		return false
 	}
 	if Post.Detail == "" {
-		return true
+		return false
 	}
 	if Post.Content == "" {
-		return true
+		return false
 	}
 	if Post.CrafterID == "" {
-		return true
+		return false
 	}
 	if Post.Thumbnail.ThumbnailUrl == "" {
-		return true
+		return false
 	}
 	if Post.Thumbnail.ThumbnailType == "" {
-		return true
+		return false
 	}
-	return false
+	return true
 }
 
 func (s *PostService) CreatePost(Post model.TPost) error {
-	if HaveNil(Post) {
-		return fmt.Errorf("FailedToCreatePost")
+	
+	if IsValidUser(Post) {
+		err := s.r.PostRepository.CreatePost(Post)
+		return err
 	} else {
-		s.r.PostRepository.CreatePost(Post)
-		return nil
+		return fmt.Errorf("Invalid Post")
 	}
 }
 
-// Jinny
 func (s *PostService) UpdatePost(Post model.TPost) error {
 	return nil
 }

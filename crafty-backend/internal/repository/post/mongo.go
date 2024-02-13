@@ -9,103 +9,145 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type TMongoAddress struct {
-	Address_1   string `bson:"address_1"`
-	Street      string `bson:"street"`
-	Tambon      string `bson:"tambon"`
-	Amphoe      string `bson:"amphoe"`
-	Province    string `bson:"province"`
-	Postal_code string `bson:"postal_code"`
+type TMongoThumbnail struct {
+	ThumbnailUrl  string `bson:"thumbnail_url"`
+	ThumbnailType string `bson:"thumbnail_type"`
 }
 
-type TMongoUser struct {
-	UID          string        `bson:"uid"`
-	Username     string        `bson:"username"`
-	Phone_number string        `bson:"phone_number"`
-	Address      TMongoAddress `bson:"address"`
-	PictureUrl   string        `bson:"picture_url"`
+type TMongoReview struct {
+	RatingStar float32 `bson:"rating_star"`
+	Comment    string  `bson:"comment"`
+	UID        string  `bson:"uid"`
 }
 
-type MongoUserRepository struct {
+type TMongoPackage struct {
+	Price float64 `bson:"price"`
+}
+
+type TMongoPost struct {
+	ID          string          `bson:"id"`
+	Thumbnail   TMongoThumbnail `bson:"thumbnail"`
+	Name        string          `bson:"name"`
+	ReviewList  []TMongoReview  `bson:"review_list"`
+	PackageList []TMongoPackage `bson:"package_list"`
+	Detail      string          `bson:"detail"`
+	Content     string          `bson:"content"`
+	CrafterID   string          `bson:"crafter_id"`
+}
+
+type MongoPostRepository struct {
 	db *mongo.Collection
 }
 
-func NewMongoUserRepository(i *infrastructure.Infrastructure) IUserRepo {
-	col := i.Database.NewMongodbCollection("user")
-	return &MongoUserRepository{db: col}
+func NewMongoPostRepository(i *infrastructure.Infrastructure) IPostRepo {
+	col := i.Database.NewMongodbCollection("post")
+	return &MongoPostRepository{db: col}
 }
 
-func (user MongoUserRepository) InsertUser(User model.TUser) error {
+func (post MongoPostRepository) InsertPost(Post model.TPost) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	_, err := user.db.InsertOne(ctx, ConvertToMongoUser(User))
+	_, err := post.db.InsertOne(ctx, ConvertToMongoPost(Post))
 	return err
 }
 
-func (user MongoUserRepository) DeleteUser(UID string) error {
+func (user MongoPostRepository) DeletePost(UID string) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	_, err := user.db.DeleteOne(ctx, UID)
 	return err
 }
 
-func (user MongoUserRepository) GetUserById(UID string) (model.TUser, error) {
+func (user MongoPostRepository) GetPostById(UID string) (model.TPost, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	var result TMongoUser
+	var result TMongoPost
 	err := user.db.FindOne(ctx, UID).Decode(&result)
 	if err != nil {
-		return model.TUser{}, err
+		return model.TPost{}, err
 	}
-	return result.ToUser(), nil
+	return result.ToPost(), nil
 }
 
-func (user MongoUserRepository) UpdateUser(User model.TUser) error {
+func (user MongoPostRepository) UpdatePost(Post model.TPost) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	_, err := user.db.ReplaceOne(ctx, User.UID, ConvertToMongoUser(User))
+	_, err := user.db.ReplaceOne(ctx, Post.ID, ConvertToMongoPost(Post))
 	return err
 }
 
-func (user MongoUserRepository) CreateUser(User model.TUser) error {
+func (user MongoPostRepository) CreatePost(Post model.TPost) error {
 	return nil
 }
 
-func ConvertToMongoUser(user model.TUser) TMongoUser {
-	return TMongoUser{
-		UID:          user.UID,
-		Username:     user.Username,
-		Phone_number: user.Phone_number,
-		Address:      ConvertToMongoAddress(user.Address),
-		PictureUrl:   user.PictureUrl,
+func ConvertToMongoPost(post model.TPost) TMongoPost {
+	return TMongoPost{
+		ID:          post.ID,
+		Thumbnail:   TMongoThumbnail{
+			ThumbnailUrl:  post.Thumbnail.ThumbnailUrl,
+			ThumbnailType: post.Thumbnail.ThumbnailType,
+		},
+		Name:        post.Name,
+		ReviewList:  convertToMongoReviews(post.ReviewList),
+		PackageList: convertToMongoPackages(post.PackageList),
+		Detail:      post.Detail,
+		Content:     post.Content,
+		CrafterID:   post.CrafterID,
 	}
 }
 
-func ConvertToMongoAddress(address model.TAddress) TMongoAddress {
-	return TMongoAddress{
-		Address_1:   address.Address_1,
-		Street:      address.Street,
-		Tambon:      address.Tambon,
-		Amphoe:      address.Amphoe,
-		Province:    address.Province,
-		Postal_code: address.Postal_code,
+func convertToMongoReviews(reviews []model.TReview) []TMongoReview {
+	var mongoReviews []TMongoReview
+	for _, review := range reviews {
+		mongoReviews = append(mongoReviews, TMongoReview{
+			RatingStar: review.RatingStar,
+			Comment:    review.Comment,
+			UID:        review.UID,
+		})
+	}
+	return mongoReviews
+}
+
+func convertToMongoPackages(packages []model.TPackage) []TMongoPackage {
+	var mongoPackages []TMongoPackage
+	for _, pkg := range packages {
+		mongoPackages = append(mongoPackages, TMongoPackage{
+			Price: pkg.Price,
+		})
+	}
+	return mongoPackages
+}
+
+func (thumbnail TMongoThumbnail) ToThumbnail() model.TThumbnail {
+	return model.TThumbnail{
+		ThumbnailUrl:  thumbnail.ThumbnailUrl,
+		ThumbnailType: thumbnail.ThumbnailType,
 	}
 }
 
-func (address TMongoAddress) ToAddress() model.TAddress {
-	return model.TAddress{
-		Address_1:   address.Address_1,
-		Street:      address.Street,
-		Tambon:      address.Tambon,
-		Amphoe:      address.Amphoe,
-		Province:    address.Province,
-		Postal_code: address.Postal_code,
+func (post TMongoPost) ToPost() model.TPost {
+	reviewList := make([]model.TReview, len(post.ReviewList))
+	for i, review := range post.ReviewList {
+		reviewList[i] = model.TReview{
+			RatingStar: review.RatingStar,
+			Comment:    review.Comment,
+			UID:        review.UID,
+		}
+	}
+
+	packageList := make([]model.TPackage, len(post.PackageList))
+	for i, pkg := range post.PackageList {
+		packageList[i] = model.TPackage{
+			Price: pkg.Price,
+		}
+	}
+
+	return model.TPost{
+		ID:          post.ID,
+		Thumbnail:   post.Thumbnail.ToThumbnail(),
+		Name:        post.Name,
+		ReviewList:  reviewList,
+		PackageList: packageList,
+		Detail:      post.Detail,
+		Content:     post.Content,
+		CrafterID:   post.CrafterID,
 	}
 }
 
-func (user TMongoUser) ToUser() model.TUser {
-	return model.TUser{
-		UID:          user.UID,
-		Username:     user.Username,
-		Phone_number: user.Phone_number,
-		Address:      user.Address.ToAddress(),
-		PictureUrl:   user.PictureUrl,
-	}
-}
