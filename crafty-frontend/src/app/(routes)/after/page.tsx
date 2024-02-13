@@ -9,7 +9,7 @@ const Page = () => {
     <>
       {user && (
         <div>
-          <div>{user.email}</div>
+          <div>{user.phoneNumber}</div>
           <div>{user.uid}</div>
         </div>
       )}

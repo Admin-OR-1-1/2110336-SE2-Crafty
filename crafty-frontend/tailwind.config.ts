@@ -16,6 +16,7 @@ const config: Config = {
         300: '#C8AE7D',
         400: '#765827',
         500: '#65451F',
+        600: '#513719',
       },
       ct_gray: {
         100: '#EEEEEE',
@@ -23,6 +24,7 @@ const config: Config = {
         300: '#CCCCCC',
         400: '#BBBBBB',
         500: '#9A9A9A',
+        600: '#5C5C5C',
       },
     },
     extend: {
