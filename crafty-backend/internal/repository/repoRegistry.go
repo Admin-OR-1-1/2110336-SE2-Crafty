@@ -17,5 +17,6 @@ func NewRepositories(i *infrastructure.Infrastructure) *Repositories {
 	return &Repositories{
 		UserRepository: userRepo.NewMongoUserRepository(i),
 		AuthRepository: authRepo.NewAuthRepository(i),
+		PostRepository: postRepo.NewMongoPostRepository(i),
 	}
 }
