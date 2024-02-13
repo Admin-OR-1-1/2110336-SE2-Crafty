@@ -33,7 +33,7 @@ func NewPostHandler(svc *service.ServiceRegistry) IPostHandler {
 // @Failure 500 {string} authMiddleware.ErrorResponse message
 // @Router /post [get]
 func (h *PostHandler) ListPost(c *fiber.Ctx) error {
-	posts, err := h.s.PostService.GetPost(model.TPost{}, nil, nil, 100)
+	posts, err := h.s.PostService.GetPost(model.TPost{}, -1, -1, 100)
 	return c.Status(200).JSON(ListPostResponse{Post: posts, Error: err})
 }
 

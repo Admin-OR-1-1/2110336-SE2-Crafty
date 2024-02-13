@@ -14,7 +14,7 @@ type IPostService interface {
 	DeletePost(ID string) error
 	GetPostById(ID string) (model.TPost, error)
 	ListAllPost() ([]model.TPost, error)
-	GetPost(Filter model.TPost, limit int) ([]model.TPost, error)
+	GetPost(lowerfilter model.TPost, upperratingstar float32, upperprice float64, limit int) ([]model.TPost, error)
 }
 
 func NewPostService(repository *repository.Repositories) IPostService {
