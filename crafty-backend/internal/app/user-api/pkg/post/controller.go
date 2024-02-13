@@ -34,6 +34,9 @@ func NewPostHandler(svc *service.ServiceRegistry) IPostHandler {
 // @Router /post [get]
 func (h *PostHandler) ListPost(c *fiber.Ctx) error {
 	posts, err := h.s.PostService.GetPost(model.TPost{}, -1, -1, 100)
+	if err != nil {
+		return c.Status(404).JSON(GetPostByIDResponse{Error: err})
+	}
 	return c.Status(200).JSON(ListPostResponse{Post: posts, Error: err})
 }
 
