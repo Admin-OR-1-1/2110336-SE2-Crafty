@@ -89,3 +89,41 @@ func (s *PostService) GetPostById(ID string) (model.TPost, error) {
 	}
 	return post, err
 }
+
+func IsValidFilter(Post model.TPost) bool {
+	if Post.ID != "" {
+		return true
+	}
+	if Post.Name != "" {
+		return true
+	}
+	if Post.Detail != "" {
+		return true
+	}
+	if Post.Content != "" {
+		return true
+	}
+	if Post.CrafterID != "" {
+		return true
+	}
+	if Post.Thumbnail.ThumbnailUrl != "" {
+		return true
+	}
+	if Post.Thumbnail.ThumbnailType != "" {
+		return true
+	}
+	return false
+}
+
+func (s *PostService) GetPost(filter model.TPost, limit int) ([]model.TPost, error) {
+	if IsValidFilter(filter) && limit > 0 {
+		err := s.r.PostRepository.(filter)
+		return err
+	} else {
+		if limit <= 0 {
+			return fmt.Errorf("Invalid limit")
+		} else {
+			return fmt.Errorf("Invalid filter")
+		}
+	}
+}

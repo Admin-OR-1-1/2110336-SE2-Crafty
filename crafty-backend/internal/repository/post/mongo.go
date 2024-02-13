@@ -50,17 +50,17 @@ func (post MongoPostRepository) InsertPost(Post model.TPost) error {
 	return err
 }
 
-func (post MongoPostRepository) DeletePost(UID string) error {
+func (post MongoPostRepository) DeletePost(ID string) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	_, err := post.db.DeleteOne(ctx, UID)
+	_, err := post.db.DeleteOne(ctx, ID)
 	return err
 }
 
-func (post MongoPostRepository) GetPostById(UID string) (model.TPost, error) {
+func (post MongoPostRepository) GetPostById(ID string) (model.TPost, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	var result TMongoPost
-	err := post.db.FindOne(ctx, UID).Decode(&result)
+	err := post.db.FindOne(ctx, ID).Decode(&result)
 	if err != nil {
 		return model.TPost{}, err
 	}
@@ -71,6 +71,12 @@ func (post MongoPostRepository) UpdatePost(Post model.TPost) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	_, err := post.db.ReplaceOne(ctx, Post.ID, ConvertToMongoPost(Post))
 	return err
+}
+
+func (post MongoPostRepository) GetPost(filter model.TPost, limit int) ([]model.TPost, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	var results []TMongoPost
 }
 
 func (post MongoPostRepository) CreatePost(Post model.TPost) error {
