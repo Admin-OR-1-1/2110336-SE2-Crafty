@@ -16,7 +16,7 @@ import (
 	}
 */
 
-func IsValidUser(Post model.TPost) bool {
+func IsValidPost(Post model.TPost) bool {
 	if Post.ID == "" {
 		return false
 	}
