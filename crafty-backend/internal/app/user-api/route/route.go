@@ -2,6 +2,7 @@ package route
 
 import (
 	authMiddleware "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/app/user-api/middleware/auth"
+	postRoute "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/app/user-api/pkg/post"
 	uploadRoute "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/app/user-api/pkg/upload"
 	userRoute "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/app/user-api/pkg/user"
 	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/repository"
@@ -25,5 +26,8 @@ func (api *UserAPI) SetupRoute(ro fiber.Router) error {
 	userRouter.SetupRoute(ro.Group("/user", authMW.VerifyToken))
 	uploadRouter := uploadRoute.NewUploadRouter(api.r)
 	uploadRouter.SetupRoute(ro.Group("/upload", authMW.VerifyToken))
+
+	postRouter := postRoute.NewPostRouter(api.r)
+	postRouter.SetupRoute(ro.Group("/post", authMW.VerifyToken))
 	return nil
 }

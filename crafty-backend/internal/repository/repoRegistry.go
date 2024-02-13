@@ -9,16 +9,17 @@ import (
 )
 
 type Repositories struct {
-	UserRepository userRepo.IUserRepo
-	AuthRepository authRepo.IAuthRepo
-	PostRepository postRepo.IPostRepo
+	UserRepository    userRepo.IUserRepo
+	AuthRepository    authRepo.IAuthRepo
+	PostRepository    postRepo.IPostRepo
 	StorageRepository storageRepo.IStorageRepo
 }
 
 func NewRepositories(i *infrastructure.Infrastructure) *Repositories {
 	return &Repositories{
-		UserRepository: userRepo.NewMongoUserRepository(i),
-		AuthRepository: authRepo.NewAuthRepository(i),
+		UserRepository:    userRepo.NewMongoUserRepository(i),
+		AuthRepository:    authRepo.NewAuthRepository(i),
 		StorageRepository: storageRepo.NewR2StorageRepo(i),
+		PostRepository:    postRepo.NewMongoPostRepository(i),
 	}
 }
