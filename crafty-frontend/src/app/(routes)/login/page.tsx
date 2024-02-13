@@ -14,6 +14,7 @@ import { auth } from '@/configs/firebaseConfig';
 
 import LogoLeftSide from '@/app/_components/ui/logoLeftSide';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 const Page = () => {
   const router = useRouter();
@@ -29,57 +30,73 @@ const Page = () => {
     });
   }, []);
 
-  const handleSignInWithGoogle = () => {
+  const handleSignInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        // This gives you a Google Access Token. You can use it to access Google APIs.
-        // const credential = GoogleAuthProvider.credentialFromResult(result);
-        console.log(result.user.email);
-        if (checkUserValid()) router.push('/');
-        else setState(2);
-        // if(credential === null) return;
-        // const token = credential.accessToken;
-        // // The signed-in user info.
-        // const user = result.user;
-        // ...
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
-      });
+
+    try {
+      const result = await signInWithPopup(auth, provider);
+
+      // This gives you a Google Access Token. You can use it to access Google APIs.
+      // const credential = GoogleAuthProvider.credentialFromResult(result);
+      console.log(result.user.email);
+
+      const isValid = await checkUserValid();
+      if (isValid.error) return;
+      if (isValid.valid) {
+        router.push('/');
+      } else {
+        setState(2);
+      }
+
+      // if (credential === null) return;
+      // const token = credential.accessToken;
+      // The signed-in user info.
+      // const user = result.user;
+      // ...
+    } catch (error) {
+      // Handle Errors here.
+      // const errorCode = error.code;
+      // const errorMessage = error.message;
+      // The email of the user's account used.
+      // const email = error.email;
+      // The AuthCredential type that was used.
+      // const credential = GoogleAuthProvider.credentialFromError(error);
+      console.log(error);
+      // ...
+    }
   };
 
-  const handleSignInWithFacebook = () => {
+  const handleSignInWithFacebook = async () => {
     const provider = new FacebookAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-        // const credential = FacebookAuthProvider.credentialFromResult(result);
-        // const token = credential.accessToken;
-        // The signed-in user info.
-        // const user = result.user;
-        console.log(result.user.email);
-        if (checkUserValid()) router.push('/');
-        else setState(2);
-        // ...
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.email;
-        // The AuthCredential type that was used.
-        const credential = FacebookAuthProvider.credentialFromError(error);
-        // ...
-      });
+
+    try {
+      const result = await signInWithPopup(auth, provider);
+
+      // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+      // const credential = FacebookAuthProvider.credentialFromResult(result);
+      // const token = credential.accessToken;
+      // The signed-in user info.
+      console.log(result.user.email);
+
+      const isValid = await checkUserValid();
+      if (isValid.error) return;
+      if (isValid.valid) {
+        router.push('/');
+      } else {
+        setState(2);
+      }
+      // ...
+    } catch (error) {
+      // Handle Errors here.
+      // const errorCode = error.code;
+      // const errorMessage = error.message;
+      // The email of the user's account used.
+      // const email = error.email;
+      // The AuthCredential type that was used.
+      // const credential = FacebookAuthProvider.credentialFromError(error);
+      // ...
+      console.log(error);
+    }
   };
 
   const onSubmitPhoneNumber = async () => {
@@ -107,26 +124,50 @@ const Page = () => {
       });
   };
 
-  const onSubmitOtp = (): boolean => {
-    if (confirmationResult && otp.length == 6) {
-      confirmationResult
-        .confirm(otp)
-        .then(() => {
-          if (checkUserValid()) router.push('/');
-          else setState(2);
-          return true;
-        })
-        .catch((error) => {
-          console.error(error);
-          return false;
-        });
+  const onSubmitOtp = async () => {
+    if (confirmationResult && otp.length === 6) {
+      try {
+        await confirmationResult.confirm(otp);
+        const isValid = await checkUserValid();
+        if (isValid.error) return;
+        if (isValid.valid) {
+          router.push('/');
+        } else {
+          setState(2);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
-    return false;
   };
 
-  const checkUserValid = (): boolean => {
-    if (auth.currentUser) return Math.random() > 0.5;
-    return false;
+  const checkUserValid = async () => {
+    if (auth) {
+      const token = await auth.currentUser?.getIdToken();
+      console.log('token', token);
+      const apiUrl = process.env.NEXT_PUBLIC_API_ENDPOINT || 'http://localhost:3000';
+      console.log(apiUrl);
+      const isValid = await axios
+        .get(apiUrl + '/user', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((response) => {
+          console.log(response.status);
+          console.log(response.data);
+          const data = response.data;
+          if (data.Message === 'Not registered') return { error: false, valid: false };
+          // else
+          return { error: false, valid: true };
+        })
+        .catch((error) => {
+          console.log("GET request didn't work:", error);
+          return { error: true, valid: false };
+        });
+      return isValid;
+    } else return { error: true, valid: false };
   };
 
   return (
@@ -146,13 +187,7 @@ const Page = () => {
         />
       )}
       {state === 1 && (
-        <OtpPage
-          otp={otp}
-          setOtp={setOtp}
-          otpSubmit={onSubmitOtp}
-          checkUserValid={checkUserValid}
-          reSendOtp={onSubmitOtp}
-        />
+        <OtpPage otp={otp} setOtp={setOtp} otpSubmit={onSubmitOtp} reSendOtp={onSubmitOtp} />
       )}
       {state === 2 && <PersonalInfomationPage />}
     </LogoLeftSide>
