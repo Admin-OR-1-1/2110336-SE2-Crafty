@@ -19,18 +19,17 @@ func NewUserHandler(repository *repository.Repositories) IUserHandler {
 	return &UserHandler{repos: repository}
 }
 
-// CreateProject
-// @Description CreateProject
-// @Tags Project
+// GetUserInfo
+// @Description Get User's Info
+// @Tags User
 // @Security Firebase
 // @Accept json
 // @Produce json
-// @Param CreateProject body models.CreateProject true "CreateProject"
-// @Failure 401 {object} models.ErrorResponse "Invalid Token"
-// @Failure 403 {object} models.ErrorResponse "No Permissions"
-// @Success 201 {object} models.CreateProjectResponse "Create Project Success"
-// @Failure 500 {object} models.CreateProjectResponse "Create Project Failed"
-// @Router /projects [post]
+// @Success 200 {array} GetUserByIDResponse
+// @Failure 401 {object} authMiddleware.ErrorResponse "Invalid Token"
+// @Failure 403 {object} authMiddleware.ErrorResponse "No Permissions"
+// @Failure 500 {string} authMiddleware.ErrorResponse message
+// @Router /user [get]
 func (h *UserHandler) GetUserInfo(c *fiber.Ctx) error {
 
 	userid := c.Locals("user").(string)
@@ -43,6 +42,18 @@ func (h *UserHandler) GetUserInfo(c *fiber.Ctx) error {
 	return c.Status(200).JSON(GetUserByIDResponse{User: user})
 }
 
+// UpdateUser
+// @Description UpdateUser
+// @Tags User
+// @Security Firebase
+// @Accept json
+// @Produce json
+// @Param UpdateUser body UpdateUserRequest true "UpdateUser"
+// @Failure 401 {object} authMiddleware.ErrorResponse "Invalid Token"
+// @Failure 403 {object} authMiddleware.ErrorResponse "No Permissions"
+// @Success 201 {object} UpdateUserResponse "Update User Success"
+// @Failure  500 {object} UpdateUserResponse "Update User Failed"
+// @Router /user [put]
 func (h *UserHandler) UpdateUser(c *fiber.Ctx) error {
 	uid := c.Locals("user").(string)
 	req := new(UpdateUserRequest)
@@ -58,6 +69,17 @@ func (h *UserHandler) UpdateUser(c *fiber.Ctx) error {
 	return c.Status(201).JSON(UpdateUserResponse{Message: "User updated successfully"})
 }
 
+// DeleteUser
+// @Description DeleteUser
+// @Tags User
+// @Security Firebase
+// @Accept json
+// @Produce json
+// @Failure 401 {object} authMiddleware.ErrorResponse "Invalid Token"
+// @Failure 403 {object} authMiddleware.ErrorResponse "No Permissions"
+// @Success 201 {object} UpdateUserResponse "Delete User Success"
+// @Failure  500 {object} UpdateUserResponse "Delete User Failed"
+// @Router /user [delete]
 func (h *UserHandler) DeleteUser(c *fiber.Ctx) error {
 
 	uid := c.Locals("user").(string)

@@ -15,7 +15,7 @@ spec:
       containers:
         - name: frontend
           imagePullPolicy: Always
-          image: kuranasaki/crafty-frontend
+          image: kuranasaki/crafty-frontend:latest
           resources:
             limits:
               cpu: 1000m
@@ -45,7 +45,7 @@ spec:
               value: "G-NGYDT9MKKY"
         - name: backend
           imagePullPolicy: Always
-          image: kuranasaki/crafty-backend
+          image: kuranasaki/crafty-backend:latest
           resources:
             limits:
               cpu: 1000m
