@@ -75,3 +75,8 @@ type UpdatePostResponse struct {
 	Message string `json:"message"`
 	Error   string `json:"error"`
 }
+
+type ListPostResponse struct {
+	Post  []model.TPost `json:"post"`
+	Error error         `json:"error"`
+}

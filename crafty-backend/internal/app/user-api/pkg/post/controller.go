@@ -1,6 +1,7 @@
 package postAPI
 
 import (
+	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/model"
 	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/service"
 	"github.com/gofiber/fiber/v2"
 )
@@ -32,9 +33,10 @@ func NewPostHandler(svc *service.ServiceRegistry) IPostHandler {
 // @Failure 500 {string} authMiddleware.ErrorResponse message
 // @Router /post [get]
 func (h *PostHandler) ListPost(c *fiber.Ctx) error {
-	posts, err := h.s.PostService.GetPostById("")
-	return c.Status(200).JSON(GetPostByIDResponse{Post: posts, Error: err})
+	posts, err := h.s.PostService.GetPost(model.TPost{}, nil, nil, 100)
+	return c.Status(200).JSON(ListPostResponse{Post: posts, Error: err})
 }
+
 // GetUserInfo
 // @Description Get User's Info
 // @Tags Post
