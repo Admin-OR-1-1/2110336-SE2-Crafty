@@ -198,7 +198,7 @@ definitions:
       username:
         type: string
     type: object
-host: https://crafty.kuranasaki.work
+host: crafty.kuranasaki.work
 info:
   contact:
     email: kongphop.c@kuranasaki.work

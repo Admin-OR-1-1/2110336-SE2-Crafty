@@ -46,10 +46,6 @@ func NewMongoPostRepository(i *infrastructure.Infrastructure) IPostRepo {
 	return &MongoPostRepository{db: col}
 }
 
-func (post MongoPostRepository) GetPost(filter model.TPost) ([]model.TPost, error) {
-	return nil, nil
-}
-
 func (post MongoPostRepository) InsertPost(Post model.TPost) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	_, err := post.db.InsertOne(ctx, ConvertToMongoPost(Post))

@@ -21,7 +21,7 @@ import (
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
 // @schemes https
-// @host https://crafty.kuranasaki.work
+// @host crafty.kuranasaki.work
 // @BasePath /api/v1
 
 // FOR LOCAL //schemes http
