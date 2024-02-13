@@ -3,7 +3,7 @@ import { FC } from 'react';
 
 const FeedDetailPage: FC = () => {
   return (
-    <div className="bg-red flex w-full flex-col gap-2 p-8">
+    <div className="flex w-full flex-col gap-2 p-8">
       <div className="mx-auto grid h-fit w-full max-w-[1300px] grid-cols-2 rounded-xl bg-white max-md:grid-cols-1">
         {/* image */}
         <div className="flex h-full w-full p-10 pr-10 max-md:mx-auto max-md:max-w-[400px] md:pr-5">
