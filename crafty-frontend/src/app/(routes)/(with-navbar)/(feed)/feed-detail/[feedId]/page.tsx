@@ -1,7 +1,30 @@
+'use client';
+
+import { Post } from '@/common/interface/post';
+import { apiClient } from '@/configs/axiosConfig';
+import { useFirebaseAuthContext } from '@/contexts/firebaseAuthContext';
 import Image from 'next/image';
-import { FC } from 'react';
+import { useParams } from 'next/navigation';
+import { FC, useEffect, useState } from 'react';
 
 const FeedDetailPage: FC = () => {
+  const param = useParams();
+  const feedId = param.feedId;
+
+  const user = useFirebaseAuthContext();
+
+  const [post, setPost] = useState<Post | null>(null);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const response = await apiClient.get(`/post/${feedId}`);
+      if (response?.data?.post && response?.data?.post.length > 0) {
+        setPost(response.data.post);
+      }
+    };
+    if (user) fetchPosts();
+  }, [feedId, user]);
+
   return (
     <div className="flex w-full flex-col gap-2 p-8">
       <div className="mx-auto grid h-fit w-full max-w-[1300px] grid-cols-2 rounded-xl bg-white max-md:grid-cols-1">
