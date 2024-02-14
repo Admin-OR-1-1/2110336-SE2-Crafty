@@ -8,12 +8,13 @@ import (
 type PostService struct {
 	r *repository.Repositories
 }
+
 type IPostService interface {
 	CreatePost(Post model.TPost) error
 	UpdatePost(Post model.TPost) error
 	DeletePost(ID string) error
 	GetPostById(ID string) (model.TPost, error)
-	ListAllPost() ([]model.TPost, error)
+	// ListAllPost() ([]model.TPost, error)
 	GetPost(lowerfilter model.TPost, upperratingstar float32, upperprice float64, limit int) ([]model.TPost, error)
 }
 

@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"testing"
 
-	model "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/pkg/model"
+	model "github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/model"
 	"github.com/go-playground/assert"
 )
 
