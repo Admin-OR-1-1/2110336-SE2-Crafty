@@ -16,14 +16,16 @@ const WaterfallContainer: FC = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        setInit(false);
         const response = await apiClient.get('/post/list');
         if (response?.data?.post && response?.data?.post.length > 0) {
           setPosts(response.data.post);
         }
-      } catch (e) {
-        console.error(e);
+        setInit(true);
+      } catch (error) {
+        console.log(error);
+        setInit(true);
       }
-      setInit(true);
     };
 
     if (user) fetchPosts();
@@ -36,7 +38,7 @@ const WaterfallContainer: FC = () => {
       </div>
     );
 
-  if (posts.length === 0)
+  if (init && posts.length === 0)
     return (
       <div className="flex h-fit w-full flex-col items-center justify-center pt-[50px]">
         <span className="text-3xl text-ct_brown-500">ไม่พบผลลัพธ์</span>
