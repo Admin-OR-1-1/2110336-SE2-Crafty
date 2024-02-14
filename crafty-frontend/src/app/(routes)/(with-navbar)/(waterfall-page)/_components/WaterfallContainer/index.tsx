@@ -15,9 +15,13 @@ const WaterfallContainer: FC = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await apiClient.get('/post/list');
-      if (response?.data?.post && response?.data?.post.length > 0) {
-        setPosts(response.data.post);
+      try {
+        const response = await apiClient.get('/post/list');
+        if (response?.data?.post && response?.data?.post.length > 0) {
+          setPosts(response.data.post);
+        }
+      } catch (e) {
+        console.error(e);
       }
       setInit(true);
     };
@@ -60,10 +64,14 @@ const WaterfallContainer: FC = () => {
             />
           </defs>
         </svg>
-        <span className="text-xl text-ct_brown-500">
-          ไม่พบสินค้าที่คุณกำลังค้นหา
+        <span className="flex flex-col gap-2 text-center text-xl text-ct_brown-500">
+          <span>กรุณาเข้าสู่ระบบเพื่อดูสินค้า</span>
+          <a href="/login" className="text-ct_blue-600 underline">
+            เข้าสู่ระบบ
+          </a>
+          {/* ไม่พบสินค้าที่คุณกำลังค้นหา
           <br />
-          ลองใช้คำอื่น ๆ ในการค้นหา
+          ลองใช้คำอื่น ๆ ในการค้นหา */}
         </span>
       </div>
     );
