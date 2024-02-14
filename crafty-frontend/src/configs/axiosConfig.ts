@@ -22,7 +22,7 @@ const getFirebaseAccessToken = async () => {
 
 export const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_ENDPOINT || '',
-  timeout: 3000,
+  timeout: 80000,
 });
 
 // Interceptor to add Authorization header with Firebase access token to all requests
