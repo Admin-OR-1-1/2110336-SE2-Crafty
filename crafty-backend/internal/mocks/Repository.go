@@ -24,7 +24,7 @@ import (
 
 func NewRepositories() *repository.Repositories {
 	return &repository.Repositories{
-		UserRepository:    nil,
+		UserRepository:    NewUserRepository(),
 		AuthRepository:    nil,
 		StorageRepository: nil,
 		PostRepository:    NewPostRepository(),
@@ -33,6 +33,10 @@ func NewRepositories() *repository.Repositories {
 
 func GetPostById(ctx context.Context, ID string) (*model.TPost, error) {
 	return &model.TPost{}, nil
+}
+
+func GetUserById(ctx context.Context, ID string) (*model.TUser, error) {
+	return &model.TUser{}, nil
 }
 
 // func (_m *Repository) UpdatePost
