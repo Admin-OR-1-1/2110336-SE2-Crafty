@@ -67,6 +67,17 @@ type GetPostByIDResponse struct {
 	Error error       `json:"error"`
 }
 
+type CreatePostRequest struct {
+	Post Post `json:"post"`
+}
+
+type CreatePostResponse struct {
+	Message string `json:"message"`
+	Post Post `json:"post"`
+	Error   string `json:"error"`
+}
+
+
 type UpdatePostRequest struct {
 	Post Post `json:"post"`
 }

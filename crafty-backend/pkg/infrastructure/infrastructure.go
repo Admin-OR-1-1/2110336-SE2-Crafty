@@ -15,7 +15,7 @@ type Infrastructure struct {
 }
 
 func NewInfrastructure() *Infrastructure {
-	database := database.NewMongoInstance(os.Getenv("MONGODB_URI"), os.Getenv("crafty-dev"))
+	database := database.NewMongoInstance(os.Getenv("MONGODB_URI"), "crafty-dev")
 	firebase := firebase.NewFirebaseInstance()
   storage := storage.NewS3Uploader(os.Getenv("R2_TOKEN"),os.Getenv("R2_ACCESS_KEY_ID"), os.Getenv("R2_SECRET_ACCESS_KEY"), os.Getenv("R2_REGION"), os.Getenv("R2_BUCKET"))
 	return &Infrastructure{

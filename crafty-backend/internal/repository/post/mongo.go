@@ -3,6 +3,7 @@ package postRepo
 import (
 	"context"
 	"time"
+	"fmt"
 
 	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/model"
 	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/pkg/infrastructure"
@@ -76,7 +77,9 @@ func (post MongoPostRepository) UpdatePost(Post model.TPost) error {
 }
 
 func (post MongoPostRepository) CreatePost(Post model.TPost) error {
-	return nil
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	_, err := post.db.InsertOne(ctx, ConvertToMongoPost(Post))
+	return err
 }
 
 func ConvertToMongoPost(post model.TPost) TMongoPost {
@@ -189,11 +192,13 @@ func (post MongoPostRepository) GetPost(lowerfilter model.TPost, upperratingstar
 	for cursor.Next(ctx) {
 		var result TMongoPost
 		if err := cursor.Decode(&result); err != nil {
+			fmt.Println("error 1")
 			return nil, err
 		}
 		results = append(results, result)
 	}
 	if err := cursor.Err(); err != nil {
+		fmt.Println("error 2")
 		return nil, err
 	}
 

@@ -1,6 +1,7 @@
 package postAPI
 
 import (
+	"fmt"
 	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/model"
 	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/service"
 	"github.com/gofiber/fiber/v2"
@@ -13,6 +14,7 @@ type PostHandler struct {
 type IPostHandler interface {
 	ListPost(*fiber.Ctx) error
 	GetPostInfo(*fiber.Ctx) error
+	CreatePost(*fiber.Ctx) error
 	UpdatePost(*fiber.Ctx) error
 	DeletePost(*fiber.Ctx) error
 }
@@ -63,7 +65,34 @@ func (h *PostHandler) GetPostInfo(c *fiber.Ctx) error {
 	return c.Status(200).JSON(GetPostByIDResponse{Post: post})
 }
 
-// UpdateUser
+// CreatePost
+// @Description Create new post
+// @Tags Post
+// @Security Firebase
+// @Accept json
+// @Produce json
+// @Param UpdateUser body CreatePostRequest true "UpdateUser"
+// @Failure 401 {object} authMiddleware.ErrorResponse "Invalid Token"
+// @Failure 403 {object} authMiddleware.ErrorResponse "No Permissions"
+// @Success 201 {object} UpdatePostResponse "Update User Success"
+// @Failure  500 {object} UpdatePostResponse "Update User Failed"
+// @Router /post [post]
+func (h *PostHandler) CreatePost(c *fiber.Ctx) error {
+	req := new(CreatePostRequest)
+	if err := c.BodyParser(req); err != nil {
+		return c.Status(400).JSON(CreatePostResponse{Error: err.Error()})
+	}
+
+	err := h.s.PostService.CreatePost(req.Post.ToModel(req.Post.ID))
+	if err != nil {
+		return c.Status(400).JSON(CreatePostResponse{Error: err.Error()})
+	}
+
+	return c.Status(201).JSON(CreatePostResponse{Message: "Post updated successfully"})
+}
+
+
+// UpdateUser 
 // @Description UpdateUser
 // @Tags Post
 // @Security Firebase
@@ -76,13 +105,12 @@ func (h *PostHandler) GetPostInfo(c *fiber.Ctx) error {
 // @Failure  500 {object} UpdatePostResponse "Update User Failed"
 // @Router /post [put]
 func (h *PostHandler) UpdatePost(c *fiber.Ctx) error {
-	uid := c.Locals("post").(string)
 	req := new(UpdatePostRequest)
 	if err := c.BodyParser(req); err != nil {
 		return c.Status(400).JSON(UpdatePostResponse{Error: err.Error()})
 	}
 
-	err := h.s.PostService.CreatePost(req.Post.ToModel(uid))
+	err := h.s.PostService.CreatePost(req.Post.ToModel(req.Post.ID))
 	if err != nil {
 		return c.Status(400).JSON(UpdatePostResponse{Error: err.Error()})
 	}
@@ -102,10 +130,9 @@ func (h *PostHandler) UpdatePost(c *fiber.Ctx) error {
 // @Failure  500 {object} UpdatePostResponse "Delete User Failed"
 // @Router /post [delete]
 func (h *PostHandler) DeletePost(c *fiber.Ctx) error {
+	postId := c.Params("postid") 
 
-	uid := c.Locals("post").(string)
-
-	err := h.s.PostService.DeletePost(uid)
+	err := h.s.PostService.DeletePost(postId)
 	if err != nil {
 		return c.Status(400).JSON(UpdatePostResponse{Error: err.Error()})
 	}

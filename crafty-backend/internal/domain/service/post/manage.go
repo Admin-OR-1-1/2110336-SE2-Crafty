@@ -119,6 +119,7 @@ func (s *PostService) GetPost(lowerfilter model.TPost, upperratingstar float32, 
 	if limit >= 0 {
 		posts, err := s.r.PostRepository.GetPost(lowerfilter, upperratingstar, upperprice, limit)
 		if err != nil {
+			fmt.Println("error 1")
 			return []model.TPost{}, err
 		}
 		return posts, err

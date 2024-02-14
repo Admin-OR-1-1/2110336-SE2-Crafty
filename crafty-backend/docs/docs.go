@@ -78,6 +78,60 @@ const docTemplate = `{
                     }
                 }
             },
+            "post": {
+                "security": [
+                    {
+                        "Firebase": []
+                    }
+                ],
+                "description": "Create new post",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Post"
+                ],
+                "parameters": [
+                    {
+                        "description": "UpdateUser",
+                        "name": "UpdateUser",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/postAPI.CreatePostRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Update User Success",
+                        "schema": {
+                            "$ref": "#/definitions/postAPI.UpdatePostResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid Token",
+                        "schema": {
+                            "$ref": "#/definitions/authMiddleware.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "No Permissions",
+                        "schema": {
+                            "$ref": "#/definitions/authMiddleware.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Update User Failed",
+                        "schema": {
+                            "$ref": "#/definitions/postAPI.UpdatePostResponse"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "security": [
                     {
@@ -542,6 +596,14 @@ const docTemplate = `{
                 }
             }
         },
+        "postAPI.CreatePostRequest": {
+            "type": "object",
+            "properties": {
+                "post": {
+                    "$ref": "#/definitions/postAPI.Post"
+                }
+            }
+        },
         "postAPI.GetPostByIDResponse": {
             "type": "object",
             "properties": {
@@ -742,9 +804,9 @@ const docTemplate = `{
             "flow": "password",
             "tokenUrl": "https://crafty.kuranasaki.work/api/v1/auth/oauth/token",
             "scopes": {
-                "admin": "All Permissions Granted",
-                "mod": "All Permissions Except adding MOD",
-                "user": "Permissions granted upto project owner"
+                "admin": "  All Permissions Granted",
+                "mod": " All Permissions Except adding MOD",
+                "user": " Permissions granted upto project owner"
             }
         }
     }
@@ -753,9 +815,9 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0.0",
-	Host:             "crafty.kuranasaki.work",
+	Host:             "localhost:8000",
 	BasePath:         "/api/v1",
-	Schemes:          []string{"https"},
+	Schemes:          []string{"http"},
 	Title:            "CraftyUserAPI Documents",
 	Description:      "This is an auto-generated API Docs.",
 	InfoInstanceName: "swagger",
