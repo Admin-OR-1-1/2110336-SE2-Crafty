@@ -6,12 +6,11 @@ import Link from 'next/link';
 interface OTPFormProps {
   otp: string;
   setOtp: Dispatch<SetStateAction<string>>;
-  otpSubmit: () => boolean;
-  checkUserValid: () => boolean;
+  otpSubmit: () => void;
   reSendOtp: () => void;
 }
 
-const OTPForm: FC<OTPFormProps> = ({ otp, setOtp, otpSubmit, checkUserValid, reSendOtp }) => {
+const OTPForm: FC<OTPFormProps> = ({ otp, setOtp, otpSubmit, reSendOtp }) => {
   const inputsRef = useRef<HTMLInputElement[]>([]);
   const [isOtpValid, setOtpValid] = useState(true);
 
@@ -126,12 +125,9 @@ const OTPForm: FC<OTPFormProps> = ({ otp, setOtp, otpSubmit, checkUserValid, reS
       </div>
       <div className="sticky bottom-2 col-span-8 mb-3 flex max-h-[720px] items-center justify-end border-0 border-t-[1px] border-zinc-200 bg-transparent py-0 md:m-0 md:border-solid md:py-8">
         <button
-          className="hover:bg-ct_brown-600 right-0 m-0 inline-flex min-h-[3rem] w-full min-w-[150px] cursor-pointer appearance-none items-center justify-center rounded-xl border-0 bg-ct_brown-500 px-6 py-2 text-center text-base font-medium leading-normal tracking-wide text-white no-underline md:h-14 md:w-auto"
+          className="right-0 m-0 inline-flex min-h-[3rem] w-full min-w-[150px] cursor-pointer appearance-none items-center justify-center rounded-xl border-0 bg-ct_brown-500 px-6 py-2 text-center text-base font-medium leading-normal tracking-wide text-white no-underline hover:bg-ct_brown-600 md:h-14 md:w-auto"
           type="submit"
-          onClick={() => {
-            if (otpSubmit()) checkUserValid();
-            else setOtpValid(false);
-          }}>
+          onClick={otpSubmit}>
           ยืนยัน
         </button>
       </div>

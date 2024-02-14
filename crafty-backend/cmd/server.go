@@ -23,7 +23,7 @@ func StartServerWithGracefulShutdown(app *fiber.App, port string) {
 
 		}
 		close(idleConnectClosed)
-	}()
+	}() 
 
 	<-idleConnectClosed
 
