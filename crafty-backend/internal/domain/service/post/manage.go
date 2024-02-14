@@ -31,10 +31,7 @@ func IsValidPost(Post model.TPost) bool {
 	if Post.CrafterID == "" {
 		return false
 	}
-	if Post.Thumbnail.ThumbnailUrl == "" {
-		return false
-	}
-	if Post.Thumbnail.ThumbnailType == "" {
+	if Post.Price <= 0 {
 		return false
 	}
 	return true
@@ -106,23 +103,20 @@ func IsValidFilter(Post model.TPost) bool {
 	if Post.CrafterID != "" {
 		return true
 	}
-	if Post.Thumbnail.ThumbnailUrl != "" {
-		return true
-	}
-	if Post.Thumbnail.ThumbnailType != "" {
+	if Post.Price > 0 {
 		return true
 	}
 	return false
 }
 
 func (s *PostService) GetPost(lowerfilter model.TPost, upperratingstar float32, upperprice float64, limit int) ([]model.TPost, error) {
-	if limit >= 0 {
+	if limit >= 0 && upperprice >= 0 && upperratingstar >= 0 {
 		posts, err := s.r.PostRepository.GetPost(lowerfilter, upperratingstar, upperprice, limit)
 		if err != nil {
 			return []model.TPost{}, err
 		}
 		return posts, err
 	} else {
-		return []model.TPost{}, fmt.Errorf("Invalid Limit")
+		return []model.TPost{}, fmt.Errorf("Negative Limit, RatingStar or Price is not allowed")
 	}
 }
