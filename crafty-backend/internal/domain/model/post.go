@@ -11,17 +11,13 @@ type TReview struct {
 	UID        string
 }
 
-type TPackage struct {
-	Price float64
-}
-
 type TPost struct {
-	ID          string
-	Thumbnail   TThumbnail
-	Name        string
-	ReviewList  []TReview
-	PackageList []TPackage
-	Detail      string
-	Content     string
-	CrafterID   string
+	ID         string
+	Thumbnails []TThumbnail
+	Name       string
+	ReviewList []TReview
+	Price      float64
+	Detail     string
+	Content    string
+	CrafterID  string
 }

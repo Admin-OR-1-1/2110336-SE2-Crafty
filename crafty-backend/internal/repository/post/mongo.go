@@ -22,19 +22,15 @@ type TMongoReview struct {
 	UID        string  `bson:"uid"`
 }
 
-type TMongoPackage struct {
-	Price float64 `bson:"price"`
-}
-
 type TMongoPost struct {
-	ID          string          `bson:"id"`
-	Thumbnail   TMongoThumbnail `bson:"thumbnail"`
-	Name        string          `bson:"name"`
-	ReviewList  []TMongoReview  `bson:"review_list"`
-	PackageList []TMongoPackage `bson:"package_list"`
-	Detail      string          `bson:"detail"`
-	Content     string          `bson:"content"`
-	CrafterID   string          `bson:"crafter_id"`
+	ID         string            `bson:"id"`
+	Thumbnails []TMongoThumbnail `bson:"thumbnails"`
+	Name       string            `bson:"name"`
+	ReviewList []TMongoReview    `bson:"review_list"`
+	Price      float64           `bson:"price"`
+	Detail     string            `bson:"detail"`
+	Content    string            `bson:"content"`
+	CrafterID  string            `bson:"crafter_id"`
 }
 
 type MongoPostRepository struct {
@@ -81,18 +77,26 @@ func (post MongoPostRepository) CreatePost(Post model.TPost) error {
 
 func ConvertToMongoPost(post model.TPost) TMongoPost {
 	return TMongoPost{
-		ID: post.ID,
-		Thumbnail: TMongoThumbnail{
-			ThumbnailUrl:  post.Thumbnail.ThumbnailUrl,
-			ThumbnailType: post.Thumbnail.ThumbnailType,
-		},
-		Name:        post.Name,
-		ReviewList:  convertToMongoReviews(post.ReviewList),
-		PackageList: convertToMongoPackages(post.PackageList),
-		Detail:      post.Detail,
-		Content:     post.Content,
-		CrafterID:   post.CrafterID,
+		ID:         post.ID,
+		Thumbnails: convertToMongoThumbnails(post.Thumbnails),
+		Name:       post.Name,
+		ReviewList: convertToMongoReviews(post.ReviewList),
+		Price:      post.Price,
+		Detail:     post.Detail,
+		Content:    post.Content,
+		CrafterID:  post.CrafterID,
 	}
+}
+
+func convertToMongoThumbnails(thumbnails []model.TThumbnail) []TMongoThumbnail {
+	var mongoThumbnails []TMongoThumbnail
+	for _, thumbnail := range thumbnails {
+		mongoThumbnails = append(mongoThumbnails, TMongoThumbnail{
+			ThumbnailUrl:  thumbnail.ThumbnailUrl,
+			ThumbnailType: thumbnail.ThumbnailType,
+		})
+	}
+	return mongoThumbnails
 }
 
 func convertToMongoReviews(reviews []model.TReview) []TMongoReview {
@@ -105,16 +109,6 @@ func convertToMongoReviews(reviews []model.TReview) []TMongoReview {
 		})
 	}
 	return mongoReviews
-}
-
-func convertToMongoPackages(packages []model.TPackage) []TMongoPackage {
-	var mongoPackages []TMongoPackage
-	for _, pkg := range packages {
-		mongoPackages = append(mongoPackages, TMongoPackage{
-			Price: pkg.Price,
-		})
-	}
-	return mongoPackages
 }
 
 func (thumbnail TMongoThumbnail) ToThumbnail() model.TThumbnail {
@@ -134,22 +128,23 @@ func (post TMongoPost) ToPost() model.TPost {
 		}
 	}
 
-	packageList := make([]model.TPackage, len(post.PackageList))
-	for i, pkg := range post.PackageList {
-		packageList[i] = model.TPackage{
-			Price: pkg.Price,
+	thumbnails := make([]model.TThumbnail, len(post.Thumbnails))
+	for i, thumbnail := range post.Thumbnails {
+		thumbnails[i] = model.TThumbnail{
+			ThumbnailUrl:  thumbnail.ThumbnailUrl,
+			ThumbnailType: thumbnail.ThumbnailType,
 		}
 	}
 
 	return model.TPost{
-		ID:          post.ID,
-		Thumbnail:   post.Thumbnail.ToThumbnail(),
-		Name:        post.Name,
-		ReviewList:  reviewList,
-		PackageList: packageList,
-		Detail:      post.Detail,
-		Content:     post.Content,
-		CrafterID:   post.CrafterID,
+		ID:         post.ID,
+		Thumbnails: thumbnails,
+		Name:       post.Name,
+		ReviewList: reviewList,
+		Price:      post.Price,
+		Detail:     post.Detail,
+		Content:    post.Content,
+		CrafterID:  post.CrafterID,
 	}
 }
 
@@ -165,18 +160,13 @@ func (post MongoPostRepository) GetPost(lowerfilter model.TPost, upperratingstar
 	if lowerfilter.Name != "" {
 		filterQuery["name"] = bson.M{"$regex": lowerfilter.Name, "$options": "i"} // Case-insensitive partial match
 	}
-	// If filter has a Detail field:
-	if lowerfilter.Detail != "" {
-		filterQuery["detail"] = bson.M{"$regex": lowerfilter.Detail, "$options": "i"} // Case-insensitive partial match
-	}
-	// If filter has a Content field:
-	if lowerfilter.Content != "" {
-		filterQuery["content"] = bson.M{"$regex": lowerfilter.Content, "$options": "i"} // Case-insensitive partial match
-	}
 	// If filter has a CrafterID field:
 	if lowerfilter.CrafterID != "" {
 		filterQuery["crafterid"] = lowerfilter.CrafterID
 	}
+
+	// Add filtering conditions for price within the range
+	filterQuery["price"] = bson.M{"$gte": lowerfilter.Price, "$lte": upperprice}
 
 	// Perform the find operation with the filter and limit
 	cursor, err := post.db.Find(ctx, filterQuery, options.Find().SetLimit(int64(limit)))
