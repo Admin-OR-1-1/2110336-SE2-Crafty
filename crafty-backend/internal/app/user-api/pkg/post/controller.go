@@ -1,7 +1,6 @@
 package postAPI
 
 import (
-	"fmt"
 	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/model"
 	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/service"
 	"github.com/gofiber/fiber/v2"
