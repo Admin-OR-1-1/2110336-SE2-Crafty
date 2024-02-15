@@ -42,6 +42,7 @@ type GetUserByIDRequest struct {
 type GetUserByIDResponse struct {
 	Message string		 	`json:"message"`
 	User  	model.TUser `json:"user"`
+	Error  string 		`json:"error"`
 }
 
 type UpdateUserRequest struct {

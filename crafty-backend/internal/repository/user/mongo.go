@@ -53,7 +53,7 @@ func (user MongoUserRepository) GetUserById(UID string) (model.TUser, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	var result TMongoUser
-	err := user.db.FindOne(ctx, UID).Decode(&result)
+	err := user.db.FindOne(ctx, bson.D{{"uid",UID}}).Decode(&result)
 	if err != nil {
 		return model.TUser{}, err
 	}
@@ -63,7 +63,7 @@ func (user MongoUserRepository) GetUserById(UID string) (model.TUser, error) {
 func (user MongoUserRepository) UpdateUser(User model.TUser) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	opts := options.Update().SetUpsert(true)
-	_, err := user.db.UpdateOne(ctx,bson.D{{"user", User.UID,}} , bson.D{{"$set",ConvertToMongoUser(User)}}, opts)
+	_, err := user.db.UpdateOne(ctx,bson.D{{"uid", User.UID,}} , bson.D{{"$set",ConvertToMongoUser(User)}}, opts)
 	return err
 }
 

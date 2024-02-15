@@ -1,6 +1,8 @@
 package userAPI
 
 import (
+	"fmt"
+
 	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/service"
 	"github.com/gofiber/fiber/v2"
 )
@@ -35,7 +37,9 @@ func (h *UserHandler) GetUserInfo(c *fiber.Ctx) error {
 
 	user, err := h.s.UserService.GetUserById(userid)
 	if err != nil {
-		return c.Status(404).JSON(GetUserByIDResponse{Message: "Not registered"})
+		fmt.Println(err.Error())
+		fmt.Println(userid)
+		return c.Status(404).JSON(GetUserByIDResponse{Message: "Not registered",Error: err.Error()})
 	}
 
 	return c.Status(200).JSON(GetUserByIDResponse{Message: "Registered", User: user})
