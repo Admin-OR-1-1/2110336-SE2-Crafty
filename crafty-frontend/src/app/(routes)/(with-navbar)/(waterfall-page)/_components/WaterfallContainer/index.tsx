@@ -79,7 +79,7 @@ const WaterfallContainer: FC = () => {
     );
 
   return (
-    <div className="mx-auto grid w-full max-w-[1200px] grid-cols-3 gap-x-2 gap-y-2 p-4 lg:gap-x-4 lg:gap-y-4">
+    <div className="mx-auto grid w-full max-w-[1200px] grid-cols-3 gap-x-2 p-4 max-lg:px-2 lg:gap-x-4 lg:gap-y-4">
       {Array.from({ length: 3 }).map((_, i) => {
         let currentPosts = [];
         for (let j = i; j < posts.length; j += 3) {
@@ -87,7 +87,7 @@ const WaterfallContainer: FC = () => {
         }
 
         return (
-          <div className="flex flex-col gap-4" key={i}>
+          <div className="flex flex-col  gap-y-2 lg:gap-4" key={i}>
             {currentPosts.map((post) => (
               <FeedCard key={post.ID} post={post} />
             ))}
