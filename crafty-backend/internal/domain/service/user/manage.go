@@ -67,12 +67,13 @@ func (s *UserService) GetUserById(UID string) (model.TUser, error) {
 }
 
 func (s *UserService) UpdateUser(User model.TUser) error {
-	_,err := s.r.UserRepository.GetUserById(User.UID)
-	if err!= nil {
-        return err
-    }
+	// _,err := s.r.UserRepository.GetUserById(User.UID)
+	// if err!= nil {
 
-	err = s.r.UserRepository.UpdateUser(User)
+  //       return err
+  //   }
+
+	err := s.r.UserRepository.UpdateUser(User)
 	if err!= nil {
         return err
     }

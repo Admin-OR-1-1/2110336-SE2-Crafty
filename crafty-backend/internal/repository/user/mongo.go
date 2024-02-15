@@ -6,7 +6,9 @@ import (
 
 	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/internal/domain/model"
 	"github.com/Admin-OR-1-1/2110336-SE2-Crafty/crafty-backend/pkg/infrastructure"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type TMongoAddress struct {
@@ -60,7 +62,8 @@ func (user MongoUserRepository) GetUserById(UID string) (model.TUser, error) {
 
 func (user MongoUserRepository) UpdateUser(User model.TUser) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	_, err := user.db.ReplaceOne(ctx, User.UID, ConvertToMongoUser(User))
+	opts := options.Update().SetUpsert(true)
+	_, err := user.db.UpdateOne(ctx,bson.D{{"user", User.UID,}} , bson.D{{"$set",ConvertToMongoUser(User)}}, opts)
 	return err
 }
 
