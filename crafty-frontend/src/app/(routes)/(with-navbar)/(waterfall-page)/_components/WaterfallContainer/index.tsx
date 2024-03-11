@@ -24,7 +24,6 @@ const WaterfallContainer: FC = () => {
         setInit(true);
       } catch (error) {
         console.log(error);
-        setInit(true);
       }
     };
 
