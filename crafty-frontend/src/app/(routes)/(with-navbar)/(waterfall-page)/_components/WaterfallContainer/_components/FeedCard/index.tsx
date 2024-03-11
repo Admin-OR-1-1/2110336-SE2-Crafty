@@ -1,4 +1,4 @@
-import { Post } from '@/common/interface/post';
+import { Post } from '@/app/_common/interface/post';
 import Image from 'next/image';
 import { FC } from 'react';
 
