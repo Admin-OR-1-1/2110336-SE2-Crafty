@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { FC } from 'react';
-import useFeedDetail from './_hooks/feedDetail';
+import useFeedDetail from '../../../_hooks/feedDetail';
 import LoadingPage from '@/app/_components/common-component/loading';
 import { getAvgRatingFromReviewList } from '@/app/_common/utils/rating';
 

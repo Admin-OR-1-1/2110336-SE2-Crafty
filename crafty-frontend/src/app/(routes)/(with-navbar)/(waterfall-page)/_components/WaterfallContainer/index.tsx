@@ -8,8 +8,6 @@ import LoadingPage from '@/app/_components/common-component/loading';
 const WaterfallContainer: FC = () => {
   const { init, posts } = useFeedList();
 
-  console.log('posts', posts);
-
   if (!init) return <LoadingPage />;
 
   return (
