@@ -29,4 +29,11 @@ export class CreatePostDto implements Partial<Post> {
     example: 100,
   })
   price: number
+
+  @ApiProperty({
+    description: 'The priority of the post',
+    type: Number,
+    example: 0,
+  })
+  priority: number
 }

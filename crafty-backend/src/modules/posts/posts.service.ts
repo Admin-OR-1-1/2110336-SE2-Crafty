@@ -33,7 +33,13 @@ export class PostsService {
   }
 
   async findAll() {
-    return await this.prisma.post.findMany()
+    return await this.prisma.post.findMany({  
+      orderBy: [
+      {
+        priority: 'desc',
+      },
+    ],
+    })
   }
 
   async findOne(id: string) {
@@ -54,4 +60,14 @@ export class PostsService {
       where: { id },
     })
   }
+
+  async boosting(id: string) {
+    return await this.prisma.post.update({
+      where: { id },
+      data: {
+        priority: { increment : 1}
+      },
+    })
+  }
+  
 }
