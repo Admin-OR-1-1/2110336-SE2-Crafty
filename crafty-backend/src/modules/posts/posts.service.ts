@@ -26,7 +26,7 @@ export class PostsService {
     })
   }
 
-  async addFavorite(userId: string, postId: string){
+  async addFavorite(userId: string, postId: string) {
     return await this.prisma.post.update({
       where: {
         id: postId,
@@ -41,7 +41,7 @@ export class PostsService {
     })
   }
 
-  async unFavorite(userId: string, postId: string){
+  async unFavorite(userId: string, postId: string) {
     return await this.prisma.post.update({
       where: {
         id: postId,
@@ -68,6 +68,11 @@ export class PostsService {
         reviews: true,
         userFavorite: true,
       },
+      orderBy: [
+        {
+          priority: 'desc',
+        },
+      ],
     })
   }
 
@@ -87,6 +92,24 @@ export class PostsService {
   async remove(id: string) {
     return await this.prisma.post.delete({
       where: { id },
+    })
+  }
+
+  async boosting(id: string) {
+    return await this.prisma.post.update({
+      where: { id },
+      data: {
+        priority: { increment: 1 },
+      },
+    })
+  }
+
+  async unboosting(id: string) {
+    return await this.prisma.post.update({
+      where: { id },
+      data: {
+        priority: { decrement: 1 },
+      },
     })
   }
 }

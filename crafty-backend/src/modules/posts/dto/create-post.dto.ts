@@ -36,4 +36,11 @@ export class CreatePostDto implements Omit<Omit<Post, 'id'>, 'priority'> {
     example: 'https://picsum.photos/200/300',
   })
   photoUrl: string
+
+  @ApiProperty({
+    description: 'The priority of the post',
+    type: Number,
+    example: 0,
+  })
+  priority: number
 }
