@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt'
 import { jwtConstants } from './modules/auth/common/jwt-const'
 import { PostsModule } from './modules/posts/posts.module'
 import { ProductsModule } from './modules/products/products.module'
+import { ChatsModule } from './modules/chats/chats.module'
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ProductsModule } from './modules/products/products.module'
     AuthModule,
     PostsModule,
     ProductsModule,
+    ChatsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
