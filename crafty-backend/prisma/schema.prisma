@@ -26,6 +26,8 @@ model User {
   username  String @unique
   hashedPwd String
   role      Role   @default(USER)
+  chatrooms1 Chatroom[] @relation("User1Chatroom")
+  chatrooms2 Chatroom[] @relation("User2Chatroom")
 }
 
 model Post {
@@ -54,12 +56,14 @@ model Message {
   isRead       Boolean     @default(false)
   date         DateTime    @default(now())
   chatRoomId   String
-  chatRoom     ChatRoom    @relation(fields: [chatRoomId], references: [id])
+  chatRoom     Chatroom    @relation(fields: [chatRoomId], references: [id])
 }
 
-model ChatRoom {
+model Chatroom {
   id          String   @id @default(uuid())
   messages    Message[]
   user1Id     String
+  user1       User     @relation("User1Chatroom", fields: [user1Id], references: [id])
   user2Id     String
+  user2       User     @relation("User2Chatroom", fields: [user2Id], references: [id])
 }
