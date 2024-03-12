@@ -6,7 +6,7 @@ export class UserEntity implements Partial<User> {
     example: 1,
     description: 'The unique identifier of the user.',
   })
-  id: number
+  id: string
 
   @ApiProperty({
     example: 'john_doe',
