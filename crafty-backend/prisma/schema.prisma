@@ -20,14 +20,8 @@ model User {
   username  String @unique
   hashedPwd String
   role      Role   @default(USER)
-}
 
-model Post {
-  id      String @id @default(cuid())
-  title   String
-  detail  String
-  content String
-  price   Float
+  favoritePost Post[]
 }
 
 model Product {
@@ -38,4 +32,28 @@ model Product {
   deadline String
   status   String
   note     String
+}
+
+model Post {
+  id      String @id @default(cuid())
+  title   String
+  detail  String
+  content String
+  price   Float
+
+  priority Float @default(0)
+
+  reviews Review[]
+
+  userFavorite User[]
+}
+
+model Review {
+  id     String @id @default(cuid())
+  desc   String
+  sender String
+  rate   Int
+
+  post   Post   @relation(fields: [postId], references: [id])
+  postId String
 }

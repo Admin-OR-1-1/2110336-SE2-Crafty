@@ -7,6 +7,25 @@ import { PrismaService } from 'src/prisma/prisma.service'
 export class PostsService {
   constructor(private prisma: PrismaService) {}
 
+  async addReview(postId: string, desc: string, rate: number, sender: string) {
+    return await this.prisma.review.create({
+      data: {
+        desc,
+        rate,
+        sender,
+        postId,
+      },
+    })
+  }
+
+  async getReviews(postId: string) {
+    return await this.prisma.review.findMany({
+      where: {
+        postId: postId,
+      },
+    })
+  }
+
   async create(createPostDto: CreatePostDto) {
     return await this.prisma.post.create({
       data: createPostDto,

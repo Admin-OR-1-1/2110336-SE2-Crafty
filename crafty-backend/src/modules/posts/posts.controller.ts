@@ -11,11 +11,30 @@ import { PostsService } from './posts.service'
 import { CreatePostDto } from './dto/create-post.dto'
 import { UpdatePostDto } from './dto/update-post.dto'
 import { ApiTags } from '@nestjs/swagger'
+import { CreateReviewDto } from './dto/create-review'
 
 @ApiTags('posts')
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
+
+  @Post(':id/reviews')
+  addReview(
+    @Param('id') postId: string,
+    @Body() createReviewDto: CreateReviewDto,
+  ) {
+    return this.postsService.addReview(
+      postId,
+      createReviewDto.desc,
+      createReviewDto.rate,
+      createReviewDto.sender,
+    )
+  }
+
+  @Get(':id/reviews')
+  getReviews(@Param('id') postId: string) {
+    return this.postsService.getReviews(postId)
+  }
 
   @Post()
   create(@Body() createPostDto: CreatePostDto) {
