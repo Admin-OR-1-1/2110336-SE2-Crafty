@@ -15,6 +15,12 @@ enum Role {
   USER
 }
 
+enum MessageType {
+  TEXT
+  IMAGE
+  COMPONENT
+}
+
 model User {
   id        String @id @default(cuid())
   username  String @unique
@@ -38,4 +44,22 @@ model Product {
   deadline String
   status   String
   note     String
+}
+
+model Message {
+  id           String      @id @default(uuid())
+  senderId     String
+  content      String
+  messageType  MessageType
+  isRead       Boolean     @default(false)
+  date         DateTime    @default(now())
+  chatRoomId   String
+  chatRoom     ChatRoom    @relation(fields: [chatRoomId], references: [id])
+}
+
+model ChatRoom {
+  id          String   @id @default(uuid())
+  messages    Message[]
+  user1Id     String
+  user2Id     String
 }
