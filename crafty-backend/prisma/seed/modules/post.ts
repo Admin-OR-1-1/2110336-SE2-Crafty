@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 export const postSeed = async () => {
   const prisma = new PrismaClient()
 
-  Array.from({ length: 30 }).forEach(async (_, i) => {
+  Array.from({ length: 20 }).forEach(async (_, i) => {
     await prisma.post.create({
       data: {
         title: `The title of the post ${i}`,
