@@ -12,6 +12,7 @@ import { CreatePostDto } from './dto/create-post.dto'
 import { UpdatePostDto } from './dto/update-post.dto'
 import { ApiTags } from '@nestjs/swagger'
 import { CreateReviewDto } from './dto/create-review'
+import { AddFavoriteDto } from './dto/add-favorite.dto'
 
 @ApiTags('posts')
 @Controller('posts')
