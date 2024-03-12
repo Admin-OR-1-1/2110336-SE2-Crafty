@@ -13,9 +13,9 @@ export const postSeed = async () => {
         photoUrl: `https://picsum.photos/seed/${Math.random()
           .toString(36)
           .substring(2, 15)}/${
-          // random Int between 3 to 15
-          Math.floor(Math.random() * 12) + 3
-        }00/500`,
+          // random Int between 6 to 30
+          Math.floor(Math.random() * (30 - 6 + 1)) + 6
+        }00/1000`,
         reviews: {
           create: {
             desc: `The review of the post ${i}`,
