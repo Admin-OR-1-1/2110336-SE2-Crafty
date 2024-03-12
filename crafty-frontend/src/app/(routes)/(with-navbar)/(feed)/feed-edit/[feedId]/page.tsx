@@ -24,11 +24,7 @@ const FeedEditPage: FC = () => {
   useEffect(() => {
     if (post) {
       reset({
-        Name: post.Name,
-        Detail: post.Detail,
-        Content: post.Content,
-        Price: post.PackageList[0].Price,
-        Thumbnail: post.Thumbnail.ThumbnailUrl,
+        ...post,
       });
     }
   }, [post, reset]);
@@ -41,11 +37,11 @@ const FeedEditPage: FC = () => {
         <div className="mx-auto grid h-fit w-full max-w-[1300px] grid-cols-2 rounded-xl bg-white max-md:grid-cols-1">
           {/* image */}
           <div className="flex h-full w-full flex-col gap-8 p-10 pr-10 max-md:mx-auto max-md:max-w-[400px] md:pr-5">
-            {post?.Thumbnail.ThumbnailUrl && (
+            {post?.photoUrl && (
               <div className="carousel w-full overflow-hidden rounded-xl">
                 <div className="carousel-item relative w-full">
                   <Image
-                    src={post?.Thumbnail.ThumbnailUrl}
+                    src={post?.photoUrl}
                     className="h-fit w-full object-contain"
                     placeholder="blur"
                     blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
@@ -79,7 +75,7 @@ const FeedEditPage: FC = () => {
               <input
                 className="input w-full text-xl"
                 placeholder="ชื่อสินค้า"
-                {...register('Name', { required: true })}
+                {...register('title', { required: true })}
               />
             </div>
 
@@ -89,7 +85,7 @@ const FeedEditPage: FC = () => {
                 className="input w-full text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 type="number"
                 placeholder="ราคาสินค้า"
-                {...register('Price', { required: true })}
+                {...register('price', { required: true })}
               />
             </div>
             <div className="flex flex-col gap-4">
@@ -98,7 +94,7 @@ const FeedEditPage: FC = () => {
                 <textarea
                   className="textarea textarea-bordered rounded-md"
                   placeholder="รายละเอียดสินค้า"
-                  {...register('Detail', { required: true })}
+                  {...register('detail', { required: true })}
                 />
               </div>
               <div className="flex flex-col gap-1">
@@ -106,7 +102,7 @@ const FeedEditPage: FC = () => {
                 <textarea
                   className="textarea textarea-bordered rounded-md"
                   placeholder="สิ่งที่ Custom ได้"
-                  {...register('Content', { required: true })}
+                  {...register('content', { required: true })}
                 />
               </div>
             </div>

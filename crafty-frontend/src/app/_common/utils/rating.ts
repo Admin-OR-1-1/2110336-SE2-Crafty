@@ -3,7 +3,7 @@ import { Review } from '../interface/post';
 export const getAvgRatingFromReviewList = (reviewList: Review[]): number => {
   let rating = 0;
   reviewList.forEach((review) => {
-    rating += review.RatingStar;
+    rating += review.rate;
   });
-  return Math.floor(rating / reviewList.length);
+  return rating === 0 ? 0 : Math.floor(rating / reviewList.length);
 };

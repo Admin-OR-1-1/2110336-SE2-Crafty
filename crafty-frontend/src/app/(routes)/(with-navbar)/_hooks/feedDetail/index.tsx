@@ -1,12 +1,9 @@
 import { Post } from '@/app/_common/interface/post';
 import { apiClient } from '@/configs/axiosConfig';
-import { useFirebaseAuthContext } from '@/contexts/firebaseAuthContext';
 import { useState, useEffect } from 'react';
 
 const useFeedDetail = (feedId: string) => {
-  const user = useFirebaseAuthContext();
-
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [post, setPost] = useState<Post>();
 
   const [init, setInit] = useState<boolean>(false);
 
@@ -14,9 +11,9 @@ const useFeedDetail = (feedId: string) => {
     const fetchPosts = async () => {
       try {
         setInit(false);
-        const response = await apiClient.get('/post/list');
-        if (response?.data?.post && response?.data?.post.length > 0) {
-          setPosts(response.data.post);
+        const response = await apiClient.get(`/posts/${feedId}`);
+        if (response?.data) {
+          setPost(response.data);
         }
         setInit(true);
       } catch (error) {
@@ -24,10 +21,10 @@ const useFeedDetail = (feedId: string) => {
       }
     };
 
-    if (user) fetchPosts();
-  }, [user]);
+    fetchPosts();
+  }, []);
 
-  return { post: posts.find((post) => post.ID === feedId), init };
+  return { post, init };
 };
 
 export default useFeedDetail;

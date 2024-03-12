@@ -1,7 +1,7 @@
 export type PostForm = {
-  Name: string;
-  Detail: string;
-  Content: string;
-  Price: number;
-  Thumbnail: string;
+  title: string;
+  detail: string;
+  content: string;
+  price: number;
+  photoUrl: string;
 };

@@ -15,20 +15,22 @@ const FeedDetailPage: FC = () => {
 
   if (!init) return <LoadingPage />;
 
-  const avgRating = getAvgRatingFromReviewList(post?.ReviewList || []);
+  const avgRating = getAvgRatingFromReviewList(post?.reviews || []);
+
+  console.log(avgRating);
 
   return (
     <div className="flex w-full flex-col gap-2 p-8">
       <div className="mx-auto grid h-fit w-full max-w-[1300px] grid-cols-2 rounded-xl bg-white max-md:grid-cols-1">
         {/* image */}
-        {post?.Thumbnail.ThumbnailUrl && (
+        {post?.photoUrl && (
           <div className="flex h-full w-full p-10 pr-10 max-md:mx-auto max-md:max-w-[400px] md:pr-5">
             <div className="carousel w-full overflow-hidden rounded-xl">
               <div
                 // key={`slide ${i}`} id={`slide${i}`}
                 className="carousel-item relative w-full">
                 <Image
-                  src={post?.Thumbnail.ThumbnailUrl}
+                  src={post?.photoUrl}
                   className="h-fit w-full object-contain"
                   placeholder="blur"
                   blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
@@ -74,7 +76,7 @@ const FeedDetailPage: FC = () => {
                 />
               </defs>
             </svg>
-            <span className="text-xl">{post?.Name}</span>
+            <span className="text-xl">{post?.title}</span>
           </div>
 
           <div className="flex w-full items-center justify-between">
@@ -114,7 +116,7 @@ const FeedDetailPage: FC = () => {
                   </svg>
                 ))}
               </div>
-              <span className="text-base">{post?.ReviewList.length ?? 0} รีวิว</span>
+              <span className="text-base">{post?.reviews?.length ?? 0} รีวิว</span>
             </div>
 
             {/* heart */}
@@ -141,9 +143,7 @@ const FeedDetailPage: FC = () => {
           <div className="flex flex-col gap-2">
             <span className="text-xl">เริ่มต้นที่</span>
             <span className="text-5xl font-bold">
-              ฿
-              {post?.PackageList[0].Price.toLocaleString(undefined, { minimumFractionDigits: 2 }) ??
-                0}
+              ฿{post?.price.toLocaleString(undefined, { minimumFractionDigits: 2 }) ?? 0}
             </span>
           </div>
 
@@ -155,7 +155,7 @@ const FeedDetailPage: FC = () => {
             <div className="flex flex-col gap-1">
               {' '}
               <span className="text-lg">รายละเอียดสินค้า</span>
-              {post?.Detail.split('\n').map((text, i) => (
+              {post?.detail.split('\n').map((text, i) => (
                 <span key={`detail ${i}`} className="text-lg">
                   · {text}
                 </span>
@@ -172,7 +172,7 @@ const FeedDetailPage: FC = () => {
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-lg">สิ่งที่ Custom ได้</span>
-              {post?.Content.split('\n').map((text, i) => (
+              {post?.content.split('\n').map((text, i) => (
                 <span key={`custom ${i}`} className="text-lg">
                   · {text}
                 </span>
