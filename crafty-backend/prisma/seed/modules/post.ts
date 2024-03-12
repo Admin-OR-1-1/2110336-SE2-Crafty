@@ -14,7 +14,7 @@ export const postSeed = async () => {
           .toString(36)
           .substring(2, 15)}/1000/${
           // random Int between 8 to 30
-          Math.floor(Math.random() * (30 - 8 + 1)) + 8
+          Math.floor(Math.random() * (18 - 8 + 1)) + 8
         }00`,
         reviews: {
           create: {
