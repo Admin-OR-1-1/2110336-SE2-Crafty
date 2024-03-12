@@ -1,60 +1,54 @@
 'use client';
 
-import { Post } from '@/common/interface/post';
-import { apiClient } from '@/configs/axiosConfig';
-import { useFirebaseAuthContext } from '@/contexts/firebaseAuthContext';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
+import useFeedDetail from '../../../_hooks/feedDetail';
+import LoadingPage from '@/app/_components/common-component/loading';
+import { getAvgRatingFromReviewList } from '@/app/_common/utils/rating';
 
 const FeedDetailPage: FC = () => {
   const param = useParams();
   const feedId = param.feedId;
 
-  const user = useFirebaseAuthContext();
+  const { init, post } = useFeedDetail(String(feedId));
 
-  const [post, setPost] = useState<Post | null>(null);
+  if (!init) return <LoadingPage />;
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const response = await apiClient.get(`/post/${feedId}`);
-      if (response?.data?.post && response?.data?.post.length > 0) {
-        setPost(response.data.post);
-      }
-    };
-    if (user) fetchPosts();
-  }, [feedId, user]);
+  const avgRating = getAvgRatingFromReviewList(post?.ReviewList || []);
 
   return (
     <div className="flex w-full flex-col gap-2 p-8">
       <div className="mx-auto grid h-fit w-full max-w-[1300px] grid-cols-2 rounded-xl bg-white max-md:grid-cols-1">
         {/* image */}
-        <div className="flex h-full w-full p-10 pr-10 max-md:mx-auto max-md:max-w-[400px] md:pr-5">
-          <div className="carousel w-full overflow-hidden rounded-xl">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <div key={`slide ${i}`} id={`slide${i}`} className="carousel-item relative w-full">
+        {post?.Thumbnail.ThumbnailUrl && (
+          <div className="flex h-full w-full p-10 pr-10 max-md:mx-auto max-md:max-w-[400px] md:pr-5">
+            <div className="carousel w-full overflow-hidden rounded-xl">
+              <div
+                // key={`slide ${i}`} id={`slide${i}`}
+                className="carousel-item relative w-full">
                 <Image
-                  src={`https://picsum.photos/seed/${Math.random() * 1000}/1000/1000`}
+                  src={post?.Thumbnail.ThumbnailUrl}
                   className="h-fit w-full object-contain"
                   placeholder="blur"
                   blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                  width={5000}
-                  height={5000}
+                  width={50000}
+                  height={50000}
                   alt={`Image`}
                   loading="lazy"
                 />
-                <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-                  <a href={`#slide${i - 1}`} className="btn btn-circle opacity-60">
-                    ❮
-                  </a>
-                  <a href={`#slide${i + 1}`} className="btn btn-circle opacity-60">
-                    ❯
-                  </a>
-                </div>
+                {/* <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
+                <a href={`#slide${i - 1}`} className="btn btn-circle opacity-60">
+                  ❮
+                </a>
+                <a href={`#slide${i + 1}`} className="btn btn-circle opacity-60">
+                  ❯
+                </a>
+              </div> */}
               </div>
-            ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* detail */}
         <div className="flex h-full w-full flex-col gap-8 p-10 pl-10 md:pl-5">
@@ -80,17 +74,15 @@ const FeedDetailPage: FC = () => {
                 />
               </defs>
             </svg>
-            <span className="text-xl">
-              The First Edition-กระเป๋าผ้าใส่เงิน (Hand Craft) ลาย, สี, ขนาด Custom
-            </span>
+            <span className="text-xl">{post?.Name}</span>
           </div>
 
           <div className="flex w-full items-center justify-between">
             <div className="flex flex-row items-center gap-4">
               <div className="flex flex-row items-center gap-2">
                 {
-                  // create 5 stars
-                  Array.from({ length: 5 }).map((_, i) => (
+                  // create rating star
+                  Array.from({ length: avgRating }).map((_, i) => (
                     /* star */
                     <svg
                       key={`start ${i}`}
@@ -106,12 +98,27 @@ const FeedDetailPage: FC = () => {
                     </svg>
                   ))
                 }
+                {Array.from({ length: 5 - avgRating }).map((_, i) => (
+                  /* star */
+                  <svg
+                    key={`start ${i}`}
+                    width="27"
+                    height="26"
+                    viewBox="0 0 27 26"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M26.3254 11.8432L20.8929 16.5816L22.5203 23.6361C22.6064 24.0049 22.5818 24.3909 22.4496 24.7458C22.3174 25.1007 22.0835 25.4088 21.7771 25.6315C21.4706 25.8543 21.1053 25.9818 20.7267 25.9982C20.3482 26.0146 19.9732 25.919 19.6486 25.7236L13.4922 21.9916L7.34897 25.7236C7.02443 25.919 6.64944 26.0146 6.27087 25.9982C5.89231 25.9818 5.52697 25.8543 5.22053 25.6315C4.9141 25.4088 4.68016 25.1007 4.54798 24.7458C4.41579 24.3909 4.39122 24.0049 4.47733 23.6361L6.10227 16.5888L0.668551 11.8432C0.381156 11.5955 0.17334 11.2685 0.0711625 10.9032C-0.0310148 10.5379 -0.0230046 10.1506 0.0941887 9.78982C0.211382 9.42906 0.432541 9.11091 0.729933 8.87527C1.02732 8.63962 1.38771 8.49698 1.76589 8.46522L8.92814 7.84523L11.7239 1.18073C11.8699 0.831036 12.1162 0.532327 12.4317 0.322219C12.7472 0.112112 13.1178 0 13.497 0C13.8761 0 14.2468 0.112112 14.5623 0.322219C14.8778 0.532327 15.1241 0.831036 15.2701 1.18073L18.0743 7.84523L25.2341 8.46522C25.6123 8.49698 25.9727 8.63962 26.2701 8.87527C26.5675 9.11091 26.7886 9.42906 26.9058 9.78982C27.023 10.1506 27.031 10.5379 26.9288 10.9032C26.8267 11.2685 26.6188 11.5955 26.3314 11.8432H26.3254Z"
+                      fill="#767676"
+                    />
+                  </svg>
+                ))}
               </div>
-              <span className="text-base">52 รีวิว</span>
+              <span className="text-base">{post?.ReviewList.length ?? 0} รีวิว</span>
             </div>
 
             {/* heart */}
-            <svg
+            {/* <svg
               width="27"
               height="25"
               viewBox="0 0 27 25"
@@ -129,11 +136,15 @@ const FeedDetailPage: FC = () => {
                   <rect width="27" height="25" fill="white" />
                 </clipPath>
               </defs>
-            </svg>
+            </svg> */}
           </div>
           <div className="flex flex-col gap-2">
             <span className="text-xl">เริ่มต้นที่</span>
-            <span className="text-5xl font-bold">฿299.00</span>
+            <span className="text-5xl font-bold">
+              ฿
+              {post?.PackageList[0].Price.toLocaleString(undefined, { minimumFractionDigits: 2 }) ??
+                0}
+            </span>
           </div>
 
           <button className="btn w-full rounded-lg bg-ct_brown-500 text-base text-white hover:bg-ct_brown-300">
@@ -142,7 +153,14 @@ const FeedDetailPage: FC = () => {
 
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
+              {' '}
               <span className="text-lg">รายละเอียดสินค้า</span>
+              {post?.Detail.split('\n').map((text, i) => (
+                <span key={`detail ${i}`} className="text-lg">
+                  · {text}
+                </span>
+              ))}
+              {/* <span className="text-lg">รายละเอียดสินค้า</span>
               <span className="text-base">
                 วัสดุ: ใช้ผ้าหลายชนิดที่มีคุณภาพสูง
                 <br />
@@ -150,15 +168,20 @@ const FeedDetailPage: FC = () => {
                 <br />
                 ออกแบบ: ลายที่สวยงามและสไตล์ที่ทันสมัย <br />
                 ความทนทาน: สามารถใช้งานได้นานช่องใส่บัตร 6 ช่อง
-              </span>
+              </span> */}
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-lg">สิ่งที่ Custom ได้</span>
-              <span className="text-base">
+              {post?.Content.split('\n').map((text, i) => (
+                <span key={`custom ${i}`} className="text-lg">
+                  · {text}
+                </span>
+              ))}
+              {/* <span className="text-base">
                 ลายกระเป๋า: สามารถออกแบบเอง หรือให้ฉันสุ่มให้ได้ <br />
                 สี: สามารถเลือกเฉดสี/โทนสี/palette เองได้ <br />
                 ขนาด: สามารถเลือกขนาด รวมถึงจำนวนช่องของกระเป๋าได้
-              </span>
+              </span> */}
             </div>
           </div>
         </div>
