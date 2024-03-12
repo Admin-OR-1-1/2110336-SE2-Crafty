@@ -32,6 +32,6 @@ apiClient.interceptors.request.use(async (config) => {
     config.headers.Authorization = `Bearer ${accessToken}`;
     return config;
   } catch (error) {
-    return Promise.reject(error);
+    return Promise.resolve(config);
   }
 });

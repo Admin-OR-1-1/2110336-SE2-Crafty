@@ -1,12 +1,12 @@
 export interface Post {
-  Content: string;
-  CrafterID: string;
-  Detail: string;
-  ID: string;
-  Name: string;
-  PackageList: Package[];
-  ReviewList: Review[];
-  Thumbnail: Thumbnail;
+  id: string;
+  title: string;
+  detail: string;
+  content: string;
+  price: number;
+  photoUrl: string;
+  priority: number;
+  reviews: Review[];
 }
 
 export interface Package {
@@ -14,9 +14,11 @@ export interface Package {
 }
 
 export interface Review {
-  RatingStar: number;
-  Comment: string;
-  UID: string;
+  id: string;
+  desc: string;
+  sender: string;
+  rate: number;
+  postId: string;
 }
 
 export interface Thumbnail {

@@ -1,11 +1,8 @@
 import { Post } from '@/app/_common/interface/post';
 import { apiClient } from '@/configs/axiosConfig';
-import { useFirebaseAuthContext } from '@/contexts/firebaseAuthContext';
 import { useState, useEffect } from 'react';
 
 const useFeedList = () => {
-  const user = useFirebaseAuthContext();
-
   const [posts, setPosts] = useState<Post[]>([]);
 
   const [init, setInit] = useState<boolean>(false);
@@ -14,9 +11,9 @@ const useFeedList = () => {
     const fetchPosts = async () => {
       try {
         setInit(false);
-        const response = await apiClient.get('/post/list');
-        if (response?.data?.post && response?.data?.post.length > 0) {
-          setPosts(response.data.post);
+        const response = await apiClient.get('/posts');
+        if (response?.data && response?.data?.length > 0) {
+          setPosts(response.data);
         }
         setInit(true);
       } catch (error) {
@@ -24,8 +21,8 @@ const useFeedList = () => {
       }
     };
 
-    if (user) fetchPosts();
-  }, [user]);
+    fetchPosts();
+  }, []);
 
   return { posts, init };
 };
