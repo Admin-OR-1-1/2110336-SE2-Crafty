@@ -40,7 +40,22 @@ export class PostsService {
       },
     })
   }
-  
+
+  async unFavorite(userId: string, postId: string){
+    return await this.prisma.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        userFavorite: {
+          disconnect: {
+            id: userId,
+          },
+        },
+      },
+    })
+  }
+
   async create(createPostDto: CreatePostDto) {
     return await this.prisma.post.create({
       data: createPostDto,
