@@ -26,6 +26,36 @@ export class PostsService {
     })
   }
 
+  async addFavorite(userId: string, postId: string) {
+    return await this.prisma.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        userFavorite: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
+    })
+  }
+
+  async unFavorite(userId: string, postId: string) {
+    return await this.prisma.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        userFavorite: {
+          disconnect: {
+            id: userId,
+          },
+        },
+      },
+    })
+  }
+
   async create(createPostDto: CreatePostDto) {
     return await this.prisma.post.create({
       data: createPostDto,
@@ -33,12 +63,16 @@ export class PostsService {
   }
 
   async findAll() {
-    return await this.prisma.post.findMany({  
-      orderBy: [
-      {
-        priority: 'desc',
+    return await this.prisma.post.findMany({
+      include: {
+        reviews: true,
+        userFavorite: true,
       },
-    ],
+      orderBy: [
+        {
+          priority: 'desc',
+        },
+      ],
     })
   }
 
@@ -65,16 +99,16 @@ export class PostsService {
     return await this.prisma.post.update({
       where: { id },
       data: {
-        priority: { increment : 1}
+        priority: { increment: 1 },
       },
     })
   }
-  
+
   async unboosting(id: string) {
     return await this.prisma.post.update({
       where: { id },
       data: {
-        priority: { decrement : 1}
+        priority: { decrement: 1 },
       },
     })
   }
