@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 
 
-export class AddFavoriteDto {
+export class FavoriteDto {
   @ApiProperty(
     {
       description: 'The id of the post',

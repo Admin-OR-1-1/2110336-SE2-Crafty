@@ -12,7 +12,7 @@ import { CreatePostDto } from './dto/create-post.dto'
 import { UpdatePostDto } from './dto/update-post.dto'
 import { ApiTags } from '@nestjs/swagger'
 import { CreateReviewDto } from './dto/create-review'
-import { AddFavoriteDto } from './dto/add-favorite.dto'
+import { FavoriteDto } from './dto/favorite.dto'
 
 @ApiTags('posts')
 @Controller('posts')
@@ -37,12 +37,20 @@ export class PostsController {
     return this.postsService.getReviews(postId)
   }
 
-  @Post(':id/favorites')
+  @Post(':id/addfavorites')
   addFavorite(
     @Param('id') postId : string,
-    @Body() addFavoriteDto: addFavoriteDto,
+    @Body() favoriteDto: FavoriteDto,
   ){
-    return this.postsService.get
+    return this.postsService.addFavorite(favoriteDto.userId, postId)
+  }
+
+  @Post(':id/unfavorites')
+  unFavorite(
+    @Param('id') postId : string,
+    @Body() favoriteDto: FavoriteDto,
+  ){
+    return this.postsService.addFavorite(favoriteDto.userId, postId)
   }
 
   @Post()
