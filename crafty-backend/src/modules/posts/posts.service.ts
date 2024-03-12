@@ -48,7 +48,12 @@ export class PostsService {
   }
 
   async findAll() {
-    return await this.prisma.post.findMany()
+    return await this.prisma.post.findMany({
+      include: {
+        reviews: true,
+        userFavorite: true,
+      },
+    })
   }
 
   async findOne(id: string) {
