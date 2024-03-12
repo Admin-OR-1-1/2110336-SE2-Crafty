@@ -70,4 +70,12 @@ export class PostsService {
     })
   }
   
+  async unboosting(id: string) {
+    return await this.prisma.post.update({
+      where: { id },
+      data: {
+        priority: { decrement : 1}
+      },
+    })
+  }
 }

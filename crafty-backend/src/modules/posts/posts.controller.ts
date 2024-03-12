@@ -65,4 +65,9 @@ export class PostsController {
   boosting(@Param('id') id: string) {
     return this.postsService.boosting(id)
   }
+
+  @Patch(':id/unboosting')
+  unboosting(@Param('id') id: string) {
+    return this.postsService.unboosting(id)
+  }
 }
