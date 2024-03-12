@@ -36,6 +36,14 @@ export class PostsController {
     return this.postsService.getReviews(postId)
   }
 
+  @Post(':id/favorites')
+  addFavorite(
+    @Param('id') postId : string,
+    @Body() addFavoriteDto: addFavoriteDto,
+  ){
+    return this.postsService.get
+  }
+
   @Post()
   create(@Body() createPostDto: CreatePostDto) {
     return this.postsService.create(createPostDto)
