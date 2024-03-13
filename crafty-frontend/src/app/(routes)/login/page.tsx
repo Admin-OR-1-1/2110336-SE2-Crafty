@@ -39,7 +39,6 @@ const Page = () => {
   const [canEditPhone, setCanEditPhone] = useState<boolean>(true);
 
   useEffect(() => {
-    console.log(auth);
     (window as any).recaptchaVerifier = new RecaptchaVerifier(auth, 'sign-in-button', {
       size: 'invisible',
     });
@@ -263,49 +262,47 @@ const Page = () => {
   };
 
   return (
-    <FirebaseAuthProvider>
-      <LogoLeftSide>
-        {/* <button
+    <LogoLeftSide>
+      {/* <button
         className="h-12 w-12 bg-black"
         onClick={() => {
           setState((state + 1) % 3);
         }}></button> */}
-        {state === 0 && (
-          <RegisterPage
-            phoneNumber={phoneNumber}
-            onSubmitPhoneNumber={onSubmitPhoneNumber}
-            setPhoneNumber={setPhoneNumber}
-            handleSignInWithGoogle={handleSignInWithGoogle}
-            handleSignInWithFacebook={handleSignInWithFacebook}
-          />
-        )}
-        {state === 1 && (
-          <OtpPage otp={otp} setOtp={setOtp} otpSubmit={onSubmitOtp} reSendOtp={onSubmitOtp} />
-        )}
-        {state === 2 && (
-          <PersonalInfomationPage
-            name={name}
-            nameHandler={nameHandler}
-            phone={phone}
-            phoneHandler={phoneHandler}
-            address={address}
-            addressHandler={addressHandler}
-            road={road}
-            roadHandler={roadHandler}
-            subDistrict={subDistrict}
-            subDistrictHandler={subDistrictHandler}
-            district={district}
-            districtHandler={districtHandler}
-            province={province}
-            provinceHandler={provinceHandler}
-            postalCode={postalCode}
-            postalCodeHandler={postalCodeHandler}
-            registerUser={registerUser}
-            canEditPhone={canEditPhone}
-          />
-        )}
-      </LogoLeftSide>
-    </FirebaseAuthProvider>
+      {state === 0 && (
+        <RegisterPage
+          phoneNumber={phoneNumber}
+          onSubmitPhoneNumber={onSubmitPhoneNumber}
+          setPhoneNumber={setPhoneNumber}
+          handleSignInWithGoogle={handleSignInWithGoogle}
+          handleSignInWithFacebook={handleSignInWithFacebook}
+        />
+      )}
+      {state === 1 && (
+        <OtpPage otp={otp} setOtp={setOtp} otpSubmit={onSubmitOtp} reSendOtp={onSubmitOtp} />
+      )}
+      {state === 2 && (
+        <PersonalInfomationPage
+          name={name}
+          nameHandler={nameHandler}
+          phone={phone}
+          phoneHandler={phoneHandler}
+          address={address}
+          addressHandler={addressHandler}
+          road={road}
+          roadHandler={roadHandler}
+          subDistrict={subDistrict}
+          subDistrictHandler={subDistrictHandler}
+          district={district}
+          districtHandler={districtHandler}
+          province={province}
+          provinceHandler={provinceHandler}
+          postalCode={postalCode}
+          postalCodeHandler={postalCodeHandler}
+          registerUser={registerUser}
+          canEditPhone={canEditPhone}
+        />
+      )}
+    </LogoLeftSide>
   );
 };
 

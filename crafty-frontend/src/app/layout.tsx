@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, Noto_Sans_Thai } from 'next/font/google';
 import './globals.css';
+import { FirebaseAuthProvider } from '@/contexts/firebaseAuthContext';
 
 const inter = Inter({ subsets: ['latin'] });
 const noto = Noto_Sans_Thai({ subsets: ['thai'] });
@@ -13,7 +14,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" data-theme="cupcake">
-      <body className={noto.className}>{children}</body>
+      <body className={noto.className}>
+        <FirebaseAuthProvider>{children}</FirebaseAuthProvider>
+      </body>
     </html>
   );
 }
