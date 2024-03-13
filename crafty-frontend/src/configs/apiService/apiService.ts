@@ -139,6 +139,21 @@ class ApiService {
     }
   };
 
+  createPost = async (post: Partial<Post>): Promise<ApiResponseType<Post>> => {
+    try {
+      const response = await axios.post('/posts', post);
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to create post',
+      };
+    }
+  };
+
   updatePost = async (id: string, post: Partial<Post>): Promise<ApiResponseType<Post>> => {
     try {
       const response = await apiClient.patch(`/posts/${id}`, post);
