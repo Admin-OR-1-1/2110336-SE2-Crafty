@@ -19,7 +19,7 @@ const FirebaseAuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log('user', user);
+      // console.log('user', user);
       if (user) {
         setUser(user);
       } else {

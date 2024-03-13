@@ -15,7 +15,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" data-theme="cupcake">
       <body className={noto.className}>
-        <FirebaseAuthProvider>{children}</FirebaseAuthProvider>
+        {/* <FirebaseAuthProvider> */}
+        {children}
+        {/* </FirebaseAuthProvider> */}
       </body>
     </html>
   );

@@ -17,8 +17,6 @@ const FeedDetailPage: FC = () => {
 
   const avgRating = getAvgRatingFromReviewList(post?.reviews || []);
 
-  console.log(avgRating);
-
   return (
     <div className="flex w-full flex-col gap-2 p-8">
       <div className="mx-auto grid h-fit w-full max-w-[1300px] grid-cols-2 rounded-xl bg-white max-md:grid-cols-1">
