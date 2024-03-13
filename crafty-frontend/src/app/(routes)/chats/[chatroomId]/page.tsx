@@ -46,6 +46,7 @@ const ChatRoomPage: FC<PageProps> = async ({ params }) => {
             <MessageBubble
               key={message.id}
               message={message.content}
+              messageType={message.messageType}
               isFromCurrentUser={message.senderId === myId}
               date={message.date}
             />

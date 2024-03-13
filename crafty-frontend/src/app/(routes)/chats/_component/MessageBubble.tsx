@@ -5,30 +5,41 @@ interface MessageBubbleProps {
   message: string;
   isFromCurrentUser: boolean;
   date: string;
+  messageType: MessageType | string;
 }
 
-const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isFromCurrentUser, date }) => {
+const MessageBubble: React.FC<MessageBubbleProps> = ({
+  message,
+  isFromCurrentUser,
+  date,
+  messageType,
+}) => {
   const formattedDate = formatDateTime(date);
 
   // return 2 different version based on 'isFromCurrentUser'
-  if (isFromCurrentUser) {
-    // Right side
+  const commonClasses1 = 'flex flex-col px-4';
+  const commonClasses2 = 'flex max-w-[1000px] flex-wrap break-all rounded-md px-4 py-2';
+  const rightSideClasses1 = commonClasses1 + ' pl-10';
+  const rightSideClasses2 = commonClasses2 + ' ml-auto bg-ct_gray-200';
+  const leftSideClasses1 = commonClasses1 + '';
+  const leftSideClasses2 = commonClasses2 + ' mr-auto bg-ct_gray-100';
+  const thisClasses1 = isFromCurrentUser ? rightSideClasses1 : leftSideClasses1;
+  const thisClasses2 = isFromCurrentUser ? rightSideClasses2 : leftSideClasses2;
+
+  if (messageType === 'IMAGE') {
     return (
-      <div className="flex flex-col px-4 pl-10">
-        <div className="ml-auto flex max-w-[1000px] flex-wrap text-wrap break-all rounded-md bg-ct_gray-200 px-4 py-2">
-          {message}
+      <div className={thisClasses1}>
+        <div className={thisClasses2}>
+          <img src={message} className="h-auto max-h-72 max-w-full" />
         </div>
         <div className="ml-auto mr-1 mt-1 flex text-xs">{formattedDate}</div>
       </div>
     );
   } else {
-    // Left side
     return (
-      <div className="flex flex-col px-4">
-        <div className="mr-auto flex max-w-[1000px] flex-wrap break-all rounded-md bg-ct_gray-100 px-4 py-2">
-          {message}
-        </div>
-        <div className="ml-1 mt-1 flex flex-wrap text-xs">{formattedDate}</div>
+      <div className={thisClasses1}>
+        <div className={thisClasses2}>{message}</div>
+        <div className="ml-auto mr-1 mt-1 flex text-xs">{formattedDate}</div>
       </div>
     );
   }
