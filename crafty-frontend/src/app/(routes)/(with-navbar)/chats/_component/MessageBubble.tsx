@@ -32,7 +32,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
     return (
       <div className={thisClasses1}>
         <div className={thisClasses2}>
-          <img src={message} className="h-auto max-h-72 max-w-full" />
+          <img src={message} className="h-auto max-h-72 max-w-full rounded-md" />
         </div>
         <div className={`${thisClasses3} mr-1 mt-1 flex text-xs`}>{formattedDate}</div>
       </div>
