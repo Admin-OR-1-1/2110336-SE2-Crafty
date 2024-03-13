@@ -197,6 +197,21 @@ class ApiService {
       };
     }
   };
+
+  deleteUser = async (userId: string): Promise<ApiResponseType<User>> => {
+    try {
+      const response = await axios.delete(`/users/${userId}`);
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to delete user',
+      };
+    }
+  };
 }
 
 export const apiService = new ApiService();
