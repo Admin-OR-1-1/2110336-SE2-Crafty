@@ -1,10 +1,28 @@
 import { Post } from '@/app/_common/interface/post';
+import { apiService } from '@/configs/apiService/apiService';
+import { ApiStatus } from '@/configs/apiService/types';
 import Image from 'next/image';
+import useFeedList from '../../../../_hooks/allFeed';
+import { useEffect, useState } from 'react';
 
 interface FeedPreviewCardProps {
   post: Post;
 }
 const FeedPreviewCard = ({ post }: FeedPreviewCardProps) => {
+  const [priority, setPriority] = useState<number>(post.priority);
+
+  useEffect(() => {
+    setPriority(post.priority);
+  }, [post.priority]);
+
+  const { updateLocalPost } = useFeedList();
+  const boostPost = async () => {
+    const response = await apiService.boostPost(post.id);
+    if (response.status === ApiStatus.SUCCESS) {
+      updateLocalPost(response.data);
+      setPriority(response.data.priority);
+    }
+  };
   return (
     <div className="flex h-fit w-full flex-row items-center gap-4 rounded-lg bg-white p-4 px-6">
       {/* image */}
@@ -78,6 +96,10 @@ const FeedPreviewCard = ({ post }: FeedPreviewCardProps) => {
           </svg>
           <span className="text-xl">7</span>
         </div> */}
+
+        <button className="hover:underline" onClick={boostPost}>
+          boost {priority}
+        </button>
 
         {/* view button */}
         <a

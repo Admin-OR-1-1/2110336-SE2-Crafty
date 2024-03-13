@@ -37,6 +37,10 @@ class ApiService {
     try {
       const response = await axios.post('/auth/login', { uid });
       this.setToken(response.data.token);
+
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('token', response.data.token);
+
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -105,6 +109,21 @@ class ApiService {
       return {
         status: ApiStatus.ERROR,
         errorMessage: 'Failed to update post',
+      };
+    }
+  };
+
+  boostPost = async (id: string): Promise<ApiResponseType<Post>> => {
+    try {
+      const response = await axios.patch(`/posts/${id}/boosting`);
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to boost post',
       };
     }
   };

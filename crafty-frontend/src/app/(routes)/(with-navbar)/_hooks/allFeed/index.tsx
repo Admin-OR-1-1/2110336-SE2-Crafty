@@ -26,7 +26,12 @@ const useFeedList = () => {
     fetchPosts();
   }, []);
 
-  return { posts, init };
+  const updateLocalPost = (post: Post) => {
+    const newPosts = posts.map((p) => (p.id === post.id ? post : p));
+    setPosts(newPosts);
+  };
+
+  return { posts, init, updateLocalPost };
 };
 
 export default useFeedList;

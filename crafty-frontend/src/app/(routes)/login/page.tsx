@@ -15,7 +15,7 @@ import { auth } from '@/configs/firebaseConfig';
 import LogoLeftSide from '@/app/_components/ui/logoLeftSide';
 import { useRouter } from 'next/navigation';
 import { apiClient } from '@/configs/axiosConfig';
-import { useFirebaseAuthContext } from '@/contexts/firebaseAuthContext';
+import { FirebaseAuthProvider, useFirebaseAuthContext } from '@/contexts/firebaseAuthContext';
 
 const Page = () => {
   const router = useRouter();
@@ -251,47 +251,49 @@ const Page = () => {
   };
 
   return (
-    <LogoLeftSide>
-      {/* <button
+    <FirebaseAuthProvider>
+      <LogoLeftSide>
+        {/* <button
         className="h-12 w-12 bg-black"
         onClick={() => {
           setState((state + 1) % 3);
         }}></button> */}
-      {state === 0 && (
-        <RegisterPage
-          phoneNumber={phoneNumber}
-          onSubmitPhoneNumber={onSubmitPhoneNumber}
-          setPhoneNumber={setPhoneNumber}
-          handleSignInWithGoogle={handleSignInWithGoogle}
-          handleSignInWithFacebook={handleSignInWithFacebook}
-        />
-      )}
-      {state === 1 && (
-        <OtpPage otp={otp} setOtp={setOtp} otpSubmit={onSubmitOtp} reSendOtp={onSubmitOtp} />
-      )}
-      {state === 2 && (
-        <PersonalInfomationPage
-          name={name}
-          nameHandler={nameHandler}
-          phone={phone}
-          phoneHandler={phoneHandler}
-          address={address}
-          addressHandler={addressHandler}
-          road={road}
-          roadHandler={roadHandler}
-          subDistrict={subDistrict}
-          subDistrictHandler={subDistrictHandler}
-          district={district}
-          districtHandler={districtHandler}
-          province={province}
-          provinceHandler={provinceHandler}
-          postalCode={postalCode}
-          postalCodeHandler={postalCodeHandler}
-          registerUser={registerUser}
-          canEditPhone={canEditPhone}
-        />
-      )}
-    </LogoLeftSide>
+        {state === 0 && (
+          <RegisterPage
+            phoneNumber={phoneNumber}
+            onSubmitPhoneNumber={onSubmitPhoneNumber}
+            setPhoneNumber={setPhoneNumber}
+            handleSignInWithGoogle={handleSignInWithGoogle}
+            handleSignInWithFacebook={handleSignInWithFacebook}
+          />
+        )}
+        {state === 1 && (
+          <OtpPage otp={otp} setOtp={setOtp} otpSubmit={onSubmitOtp} reSendOtp={onSubmitOtp} />
+        )}
+        {state === 2 && (
+          <PersonalInfomationPage
+            name={name}
+            nameHandler={nameHandler}
+            phone={phone}
+            phoneHandler={phoneHandler}
+            address={address}
+            addressHandler={addressHandler}
+            road={road}
+            roadHandler={roadHandler}
+            subDistrict={subDistrict}
+            subDistrictHandler={subDistrictHandler}
+            district={district}
+            districtHandler={districtHandler}
+            province={province}
+            provinceHandler={provinceHandler}
+            postalCode={postalCode}
+            postalCodeHandler={postalCodeHandler}
+            registerUser={registerUser}
+            canEditPhone={canEditPhone}
+          />
+        )}
+      </LogoLeftSide>
+    </FirebaseAuthProvider>
   );
 };
 
