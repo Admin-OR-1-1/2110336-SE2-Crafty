@@ -60,6 +60,7 @@ export class PostsService {
     return await this.prisma.post.create({
       data: {
         ...createPostDto,
+        price: Number(createPostDto.price),
         owner: {
           connect: {
             id: userId,
