@@ -1,5 +1,6 @@
 import { Post } from '@/app/_common/interface/post';
-import { apiClient } from '@/configs/axiosConfig';
+import { apiService } from '@/configs/apiService/apiService';
+import { ApiStatus } from '@/configs/apiService/types';
 import { useState, useEffect } from 'react';
 
 const useFeedDetail = (feedId: string) => {
@@ -11,10 +12,12 @@ const useFeedDetail = (feedId: string) => {
     const fetchPosts = async () => {
       try {
         setInit(false);
-        const response = await apiClient.get(`/posts/${feedId}`);
-        if (response?.data) {
+
+        const response = await apiService.getPost(feedId);
+        if (response.status === ApiStatus.SUCCESS) {
           setPost(response.data);
         }
+
         setInit(true);
       } catch (error) {
         console.log(error);
@@ -22,7 +25,7 @@ const useFeedDetail = (feedId: string) => {
     };
 
     fetchPosts();
-  }, []);
+  }, [feedId]);
 
   return { post, init };
 };

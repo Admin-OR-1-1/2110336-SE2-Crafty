@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { LoginResponse } from './interface';
 import { ApiResponseType, ApiStatus } from './types';
+import { Post } from '@/app/_common/interface/post';
 
 class ApiService {
   constructor() {
@@ -43,6 +44,36 @@ class ApiService {
       return {
         status: ApiStatus.ERROR,
         errorMessage: 'Invalid uid',
+      };
+    }
+  };
+
+  getPosts = async (): Promise<ApiResponseType<Post[]>> => {
+    try {
+      const response = await axios.get('/posts');
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to fetch posts',
+      };
+    }
+  };
+
+  getPost = async (id: string): Promise<ApiResponseType<Post>> => {
+    try {
+      const response = await axios.get(`/posts/${id}`);
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to fetch post',
       };
     }
   };

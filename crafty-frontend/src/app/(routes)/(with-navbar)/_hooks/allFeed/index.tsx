@@ -1,4 +1,6 @@
 import { Post } from '@/app/_common/interface/post';
+import { apiService } from '@/configs/apiService/apiService';
+import { ApiStatus } from '@/configs/apiService/types';
 import { apiClient } from '@/configs/axiosConfig';
 import { useState, useEffect } from 'react';
 
@@ -11,9 +13,9 @@ const useFeedList = () => {
     const fetchPosts = async () => {
       try {
         setInit(false);
-        const response = await apiClient.get('/posts');
-        if (response?.data && response?.data?.length > 0) {
-          setPosts(response.data);
+        const response = await apiService.getPosts();
+        if (response.status === ApiStatus.SUCCESS) {
+          setPosts(response.data ?? []);
         }
         setInit(true);
       } catch (error) {
