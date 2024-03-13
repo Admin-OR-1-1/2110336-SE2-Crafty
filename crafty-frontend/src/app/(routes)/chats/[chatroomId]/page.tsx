@@ -1,4 +1,3 @@
-'use client';
 import axios from 'axios';
 import { FC } from 'react';
 import MessageBubble from '../_component/MessageBubble';
