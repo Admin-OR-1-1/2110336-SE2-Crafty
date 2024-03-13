@@ -228,6 +228,21 @@ class ApiService {
       };
     }
   };
+
+  getmyName = async (): Promise<ApiResponseType<String>> => {
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/me`);
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data.username,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to fetch user',
+      };
+    }
+  };
 }
 
 export const apiService = new ApiService();

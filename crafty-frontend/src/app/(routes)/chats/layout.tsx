@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import SidebarBubble from './_component/SidebarBubble';
 import { apiPath, getMyName, getMyToken } from '@/app/_common/utils/chatting';
+import { apiService } from '@/configs/apiService/apiService';
+import { ApiStatus } from '@/configs/apiService/types';
 
 type ChatLayoutProps = {
   children: React.ReactNode;
@@ -28,7 +30,11 @@ const getSidebarData = async (): Promise<SidebarData[]> => {
   console.log('Sidebar reload!');
 
   const chatrooms = await getAllChatrooms();
-  const myName = await getMyName(token);
+  const response = await apiService.getmyName();
+  let myName: String = '';
+  if (response.status === ApiStatus.SUCCESS) {
+    myName = response.data;
+  }
 
   const talkersWithLastChatTime = chatrooms.map((chatroom: ReadChatroom) => {
     return {
