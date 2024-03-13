@@ -30,27 +30,27 @@ import { FirebaseTokenDto } from './dto/firebase-token.dto'
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('firebase-register')
-  @ApiCreatedResponse({ type: UserEntity })
-  async firebaseRegister(
-    @Body() firebaseRegisterUserDto: FirebaseRegisterUserDto,
-  ) {
-    return new UserEntity(
-      await this.authService.fireBaseRegister(firebaseRegisterUserDto),
-    )
-  }
-
   @Post('login')
   @ApiCreatedResponse({ type: AuthEntity })
   async login(@Body() loginDto: AuthDto) {
     return new AuthEntity(await this.authService.login(loginDto))
   }
 
-  @Post('get-user-from-token')
+  @Post('login/firebase')
   @ApiCreatedResponse({ type: AuthEntity })
   async loginByToken(@Body() firebaseTokenDto: FirebaseTokenDto) {
     return new AuthEntity(
       await this.authService.loginByToken(firebaseTokenDto.token),
+    )
+  }
+
+  @Post('register/firebase')
+  @ApiCreatedResponse({ type: UserEntity })
+  async firebaseRegister(
+    @Body() firebaseRegisterUserDto: FirebaseRegisterUserDto,
+  ) {
+    return new UserEntity(
+      await this.authService.fireBaseRegister(firebaseRegisterUserDto),
     )
   }
 
