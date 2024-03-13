@@ -46,15 +46,6 @@ const userStore = create<IUserStore>((set) => ({
     localStorage.setItem('token', response.data.token);
     return true;
   },
-
-  loginWithId: async (id: string) => {
-    const response = await apiService.loginWithId(id);
-    if (response.status === ApiStatus.ERROR) return false;
-    set({ isAuth: true, user: response.data.user });
-    localStorage.setItem('user', JSON.stringify(response.data.user));
-    localStorage.setItem('token', response.data.token);
-    return true;
-  },
 }));
 
 export default userStore;
