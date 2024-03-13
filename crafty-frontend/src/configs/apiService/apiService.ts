@@ -123,6 +123,21 @@ class ApiService {
     }
   };
 
+  getMyPosts = async (): Promise<ApiResponseType<Post[]>> => {
+    try {
+      const response = await axios.get('/posts/me');
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to fetch posts',
+      };
+    }
+  };
+
   updatePost = async (id: string, post: Partial<Post>): Promise<ApiResponseType<Post>> => {
     try {
       const response = await axios.patch(`/posts/${id}`, post);
@@ -149,6 +164,51 @@ class ApiService {
       return {
         status: ApiStatus.ERROR,
         errorMessage: 'Failed to boost post',
+      };
+    }
+  };
+
+  favoritePost = async (feedId: string, userId: string): Promise<ApiResponseType<Post>> => {
+    try {
+      const response = await axios.post(`/posts/${feedId}/addfavorites`, { userId });
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to favorite post',
+      };
+    }
+  };
+
+  unfavoritePost = async (feedId: string, userId: string): Promise<ApiResponseType<Post>> => {
+    try {
+      const response = await axios.post(`/posts/${feedId}/unfavorites`, { userId });
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to unfavorite post',
+      };
+    }
+  };
+
+  deleteUser = async (userId: string): Promise<ApiResponseType<User>> => {
+    try {
+      const response = await axios.delete(`/users/${userId}`);
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to delete user',
       };
     }
   };

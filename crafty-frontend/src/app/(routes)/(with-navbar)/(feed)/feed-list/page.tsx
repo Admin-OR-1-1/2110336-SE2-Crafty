@@ -2,11 +2,11 @@
 
 import { FC } from 'react';
 import FeedPreviewCard from './_components/FeedPreviewCard';
-import useFeedList from '../../_hooks/allFeed';
 import LoadingPage from '@/app/_components/common-component/loading';
+import useMyFeed from '../../_hooks/myFeed';
 
 const FeedListPage: FC = () => {
-  const { init, posts } = useFeedList();
+  const { init, posts } = useMyFeed();
 
   if (!init) return <LoadingPage />;
 

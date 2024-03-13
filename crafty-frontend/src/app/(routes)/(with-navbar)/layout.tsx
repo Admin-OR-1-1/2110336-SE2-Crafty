@@ -1,10 +1,30 @@
 'use client';
 
-import useUserStore from '@/app/_common/store/user/hooks/useUserStore';
+import { apiService } from '@/configs/apiService/apiService';
 import Logo from '@assets/svgs/logo.svg';
+import { useState } from 'react';
+import { IoMdPerson } from 'react-icons/io';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/configs/firebaseConfig';
 
 export default function NavbarLayout({ children }: { children: React.ReactNode }) {
-  useUserStore();
+  const [openUserModal, setOpenUserModal] = useState(false);
+  const deleteUserHandler = async () => {
+    const responseUser = await apiService.getMe();
+    console.log(responseUser);
+    // const response = await apiService.deleteUser(responseUser.status);
+  };
+
+  const logoutHandler = async () => {
+    signOut(auth)
+      .then(() => {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="flex min-h-screen w-full flex-col">
@@ -21,8 +41,29 @@ export default function NavbarLayout({ children }: { children: React.ReactNode }
         <a href="/feed-list" className="hover:underline">
           my post
         </a>
-
-        <h1 className="ml-auto cursor-pointer text-red-500 hover:underline">Logout</h1>
+        <div className="relative ml-auto">
+          <div
+            className="cursor-pointer rounded-full bg-ct_brown-100 p-2 hover:bg-ct_gray-200"
+            onClick={() => {
+              setOpenUserModal(!openUserModal);
+            }}>
+            <IoMdPerson className="h-6 w-6 text-ct_brown-500" />
+          </div>
+          {openUserModal && (
+            <div className="absolute right-0 flex w-56 flex-col items-start gap-y-4 rounded-xl bg-white p-4 shadow-xl">
+              <h1
+                className="cursor-pointer text-ct_brown-500 hover:underline"
+                onClick={() => {
+                  deleteUserHandler();
+                }}>
+                Delete this Account
+              </h1>
+              <h1 className="cursor-pointer text-red-500 hover:underline" onClick={logoutHandler}>
+                Logout
+              </h1>
+            </div>
+          )}
+        </div>
       </div>
       <div className="flex-1 bg-ct_brown-100">{children}</div>
     </div>

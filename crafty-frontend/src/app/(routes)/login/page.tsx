@@ -16,6 +16,8 @@ import LogoLeftSide from '@/app/_components/ui/logoLeftSide';
 import { useRouter } from 'next/navigation';
 import { apiClient } from '@/configs/axiosConfig';
 import { FirebaseAuthProvider, useFirebaseAuthContext } from '@/contexts/firebaseAuthContext';
+import { apiService } from '@/configs/apiService/apiService';
+import { ApiStatus } from '@/configs/apiService/types';
 
 const Page = () => {
   const router = useRouter();
@@ -50,14 +52,23 @@ const Page = () => {
 
       // This gives you a Google Access Token. You can use it to access Google APIs.
       // const credential = GoogleAuthProvider.credentialFromResult(result);
-      console.log(result.user.email);
 
-      const isValid = await checkUserValid();
-      if (isValid.error) return;
-      if (isValid.valid) {
-        router.push('/');
+      // const isValid = await checkUserValid();
+      // if (isValid.error) return;
+      // if (isValid.valid) {
+      //   router.push('/');
+      // } else {
+      //   setState(2);
+      // }
+      if (!auth.currentUser) return;
+      const response = await apiService.loginWithFirebaseToken(await result.user.getIdToken());
+      if (response.status === ApiStatus.SUCCESS) {
+        window.location.href = '/';
       } else {
-        setState(2);
+        const responseRegister = await apiService.registerWithFirebaseToken(
+          await result.user.getIdToken()
+        );
+        setState;
       }
 
       // if (credential === null) return;
@@ -251,49 +262,47 @@ const Page = () => {
   };
 
   return (
-    <FirebaseAuthProvider>
-      <LogoLeftSide>
-        {/* <button
+    <LogoLeftSide>
+      {/* <button
         className="h-12 w-12 bg-black"
         onClick={() => {
           setState((state + 1) % 3);
         }}></button> */}
-        {state === 0 && (
-          <RegisterPage
-            phoneNumber={phoneNumber}
-            onSubmitPhoneNumber={onSubmitPhoneNumber}
-            setPhoneNumber={setPhoneNumber}
-            handleSignInWithGoogle={handleSignInWithGoogle}
-            handleSignInWithFacebook={handleSignInWithFacebook}
-          />
-        )}
-        {state === 1 && (
-          <OtpPage otp={otp} setOtp={setOtp} otpSubmit={onSubmitOtp} reSendOtp={onSubmitOtp} />
-        )}
-        {state === 2 && (
-          <PersonalInfomationPage
-            name={name}
-            nameHandler={nameHandler}
-            phone={phone}
-            phoneHandler={phoneHandler}
-            address={address}
-            addressHandler={addressHandler}
-            road={road}
-            roadHandler={roadHandler}
-            subDistrict={subDistrict}
-            subDistrictHandler={subDistrictHandler}
-            district={district}
-            districtHandler={districtHandler}
-            province={province}
-            provinceHandler={provinceHandler}
-            postalCode={postalCode}
-            postalCodeHandler={postalCodeHandler}
-            registerUser={registerUser}
-            canEditPhone={canEditPhone}
-          />
-        )}
-      </LogoLeftSide>
-    </FirebaseAuthProvider>
+      {state === 0 && (
+        <RegisterPage
+          phoneNumber={phoneNumber}
+          onSubmitPhoneNumber={onSubmitPhoneNumber}
+          setPhoneNumber={setPhoneNumber}
+          handleSignInWithGoogle={handleSignInWithGoogle}
+          handleSignInWithFacebook={handleSignInWithFacebook}
+        />
+      )}
+      {state === 1 && (
+        <OtpPage otp={otp} setOtp={setOtp} otpSubmit={onSubmitOtp} reSendOtp={onSubmitOtp} />
+      )}
+      {state === 2 && (
+        <PersonalInfomationPage
+          name={name}
+          nameHandler={nameHandler}
+          phone={phone}
+          phoneHandler={phoneHandler}
+          address={address}
+          addressHandler={addressHandler}
+          road={road}
+          roadHandler={roadHandler}
+          subDistrict={subDistrict}
+          subDistrictHandler={subDistrictHandler}
+          district={district}
+          districtHandler={districtHandler}
+          province={province}
+          provinceHandler={provinceHandler}
+          postalCode={postalCode}
+          postalCodeHandler={postalCodeHandler}
+          registerUser={registerUser}
+          canEditPhone={canEditPhone}
+        />
+      )}
+    </LogoLeftSide>
   );
 };
 
