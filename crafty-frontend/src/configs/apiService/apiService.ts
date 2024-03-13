@@ -32,7 +32,9 @@ class ApiService {
     }
   };
 
-  loginWithFirebaseId = async (firebaseToken: string): Promise<ApiResponseType<LoginResponse>> => {
+  loginWithFirebaseToken = async (
+    firebaseToken: string
+  ): Promise<ApiResponseType<LoginResponse>> => {
     try {
       const response = await axios.post('/auth/login/firebase', { token: firebaseToken });
       this.setToken(response.data.token);
@@ -52,7 +54,7 @@ class ApiService {
     }
   };
 
-  registerWithFirebaseId = async (
+  registerWithFirebaseToken = async (
     firebaseToken: string
     // TODO: add other field here to create user with data
   ): Promise<ApiResponseType<LoginResponse>> => {
