@@ -6,8 +6,11 @@ import { useState } from 'react';
 import { IoMdPerson } from 'react-icons/io';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/configs/firebaseConfig';
+import useUserStore from '@/app/_common/store/user/hooks/useUserStore';
 
 export default function NavbarLayout({ children }: { children: React.ReactNode }) {
+  useUserStore();
+
   const [openUserModal, setOpenUserModal] = useState(false);
   const deleteUserHandler = async () => {
     const responseUser = await apiService.getMe();
