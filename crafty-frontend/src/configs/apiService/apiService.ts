@@ -3,6 +3,7 @@ import { LoginResponse } from './interface';
 import { ApiResponseType, ApiStatus } from './types';
 import { Post } from '@/app/_common/interface/post';
 import { User } from '@/app/_common/interface/user';
+import { apiClient } from '../axiosConfig';
 
 class ApiService {
   constructor() {
@@ -14,7 +15,7 @@ class ApiService {
 
   login = async (username: string, password: string): Promise<ApiResponseType<LoginResponse>> => {
     try {
-      const response = await axios.post('/auth/login', { username, password });
+      const response = await apiClient.post('/auth/login', { username, password });
       this.setToken(response.data.token);
 
       localStorage.setItem('user', JSON.stringify(response.data.user));
@@ -36,7 +37,7 @@ class ApiService {
     firebaseToken: string
   ): Promise<ApiResponseType<LoginResponse>> => {
     try {
-      const response = await axios.post('/auth/login/firebase', { token: firebaseToken });
+      const response = await apiClient.post('/auth/login/firebase', { token: firebaseToken });
       this.setToken(response.data.token);
 
       localStorage.setItem('user', JSON.stringify(response.data.user));
@@ -60,7 +61,7 @@ class ApiService {
   ): Promise<ApiResponseType<LoginResponse>> => {
     try {
       // TODO: add other field here to create user with data
-      const response = await axios.post('/auth/register/firebase', { token: firebaseToken });
+      const response = await apiClient.post('/auth/register/firebase', { token: firebaseToken });
       this.setToken(response.data.token);
 
       localStorage.setItem('user', JSON.stringify(response.data.user));
@@ -80,7 +81,7 @@ class ApiService {
 
   getMe = async (): Promise<ApiResponseType<User>> => {
     try {
-      const response = await axios.get('/auth/me');
+      const response = await apiClient.get('/auth/me');
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -95,7 +96,7 @@ class ApiService {
 
   getPosts = async (): Promise<ApiResponseType<Post[]>> => {
     try {
-      const response = await axios.get('/posts');
+      const response = await apiClient.get('/posts');
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -110,7 +111,7 @@ class ApiService {
 
   getPost = async (id: string): Promise<ApiResponseType<Post>> => {
     try {
-      const response = await axios.get(`/posts/${id}`);
+      const response = await apiClient.get(`/posts/${id}`);
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -125,7 +126,7 @@ class ApiService {
 
   getMyPosts = async (): Promise<ApiResponseType<Post[]>> => {
     try {
-      const response = await axios.get('/posts/me');
+      const response = await apiClient.get('/posts/me');
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -140,7 +141,7 @@ class ApiService {
 
   updatePost = async (id: string, post: Partial<Post>): Promise<ApiResponseType<Post>> => {
     try {
-      const response = await axios.patch(`/posts/${id}`, post);
+      const response = await apiClient.patch(`/posts/${id}`, post);
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -155,7 +156,7 @@ class ApiService {
 
   boostPost = async (id: string): Promise<ApiResponseType<Post>> => {
     try {
-      const response = await axios.patch(`/posts/${id}/boosting`);
+      const response = await apiClient.patch(`/posts/${id}/boosting`);
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -170,7 +171,7 @@ class ApiService {
 
   favoritePost = async (feedId: string, userId: string): Promise<ApiResponseType<Post>> => {
     try {
-      const response = await axios.post(`/posts/${feedId}/addfavorites`, { userId });
+      const response = await apiClient.post(`/posts/${feedId}/addfavorites`, { userId });
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -185,7 +186,7 @@ class ApiService {
 
   unfavoritePost = async (feedId: string, userId: string): Promise<ApiResponseType<Post>> => {
     try {
-      const response = await axios.post(`/posts/${feedId}/unfavorites`, { userId });
+      const response = await apiClient.post(`/posts/${feedId}/unfavorites`, { userId });
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -200,7 +201,7 @@ class ApiService {
 
   deleteUser = async (userId: string): Promise<ApiResponseType<User>> => {
     try {
-      const response = await axios.delete(`/users/${userId}`);
+      const response = await apiClient.delete(`/users/${userId}`);
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
