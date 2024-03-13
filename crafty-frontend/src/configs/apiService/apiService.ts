@@ -4,7 +4,13 @@ import { ApiResponseType, ApiStatus } from './types';
 import { Post } from '@/app/_common/interface/post';
 import { User } from '@/app/_common/interface/user';
 import { apiClient } from '../axiosConfig';
-import { ChatroomDetail, Message, PostMessage, ReadChatroom } from '@/app/_common/interface/chat';
+import {
+  ChatroomDetail,
+  Message,
+  PostChatroom,
+  PostMessage,
+  ReadChatroom,
+} from '@/app/_common/interface/chat';
 
 class ApiService {
   constructor() {
@@ -286,6 +292,23 @@ class ApiService {
       return {
         status: ApiStatus.ERROR,
         errorMessage: 'Failed to create new message',
+      };
+    }
+  };
+
+  createNewChatroom = async (
+    postChatroom: PostChatroom
+  ): Promise<ApiResponseType<ReadChatroom>> => {
+    try {
+      const response = await apiClient.post(`/chats/chatroom`, postChatroom);
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to create new chatroom',
       };
     }
   };
