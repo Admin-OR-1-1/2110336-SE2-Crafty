@@ -48,8 +48,8 @@ model Product {
   status   String
   note     String
 
-  chatRoomId String @unique
-  chatRoom Chatroom  @relation(fields: [chatRoomId], references: [id])
+  chatroomId String @unique
+  chatroom Chatroom  @relation(fields: [chatroomId], references: [id])
 }
 
 model Message {
@@ -60,8 +60,8 @@ model Message {
   isRead       Boolean     @default(false)
   date         DateTime    @default(now())
 
-  chatRoomId   String
-  chatRoom     Chatroom    @relation(fields: [chatRoomId], references: [id])
+  chatroomId   String
+  chatroom     Chatroom    @relation(fields: [chatroomId], references: [id])
 }
 
 model Chatroom {
@@ -72,6 +72,10 @@ model Chatroom {
   crafteeId     String
   craftee       User     @relation("CrafteeRoom", fields: [crafteeId], references: [id])
 
-  productId   String
+  lastChatTime DateTime @default(now())
+  isCrafterRead Boolean  @default(false)
+  isCrafteeRead Boolean  @default(false)
+
+  productId   String?
   product   Product?
 }

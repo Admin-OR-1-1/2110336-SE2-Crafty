@@ -17,4 +17,10 @@ export class CreateChatroomDto {
   @IsUUID()
   @IsNotEmpty()
   user2Id: string
+
+  @ApiProperty({
+    example: 'product001',
+    description: 'id of product from this chatroom.',
+  })
+  productId: string
 }
