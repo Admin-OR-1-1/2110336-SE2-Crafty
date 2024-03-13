@@ -93,6 +93,21 @@ class ApiService {
       };
     }
   };
+
+  updatePost = async (id: string, post: Partial<Post>): Promise<ApiResponseType<Post>> => {
+    try {
+      const response = await axios.patch(`/posts/${id}`, post);
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to update post',
+      };
+    }
+  };
 }
 
 export const apiService = new ApiService();

@@ -1,3 +1,5 @@
+import { User } from './user';
+
 export interface Post {
   id: string;
   title: string;
@@ -7,6 +9,7 @@ export interface Post {
   photoUrl: string;
   priority: number;
   reviews: Review[];
+  userFavorite: User[];
 }
 
 export interface Package {

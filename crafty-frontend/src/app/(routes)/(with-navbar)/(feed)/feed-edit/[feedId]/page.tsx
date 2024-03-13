@@ -3,22 +3,25 @@
 import LoadingPage from '@/app/_components/common-component/loading';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import useFeedDetail from '../../../_hooks/feedDetail';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { PostForm } from './types';
+import editFeedHook from './_hooks';
 
 const FeedEditPage: FC = () => {
   const param = useParams();
-  const feedId = param.feedId;
+  const feedId = String(param.feedId);
 
-  const { init, post } = useFeedDetail(String(feedId));
+  const { init, post } = useFeedDetail(feedId);
 
-  const { register, handleSubmit, reset } = useForm<PostForm>();
+  const { register, handleSubmit, reset, watch } = useForm<PostForm>();
+
+  const { updateFeedByForm } = editFeedHook(feedId);
 
   const onSubmit: SubmitHandler<PostForm> = (data) => {
-    console.log(data);
+    updateFeedByForm(data);
   };
 
   useEffect(() => {
@@ -26,8 +29,11 @@ const FeedEditPage: FC = () => {
       reset({
         ...post,
       });
+      setCurrentPhoto(post.photoUrl);
     }
   }, [post, reset]);
+
+  const [currentPhoto, setCurrentPhoto] = useState('');
 
   if (!init) return <LoadingPage />;
 
@@ -37,11 +43,11 @@ const FeedEditPage: FC = () => {
         <div className="mx-auto grid h-fit w-full max-w-[1300px] grid-cols-2 rounded-xl bg-white max-md:grid-cols-1">
           {/* image */}
           <div className="flex h-full w-full flex-col gap-8 p-10 pr-10 max-md:mx-auto max-md:max-w-[400px] md:pr-5">
-            {post?.photoUrl && (
+            {currentPhoto && (
               <div className="carousel w-full overflow-hidden rounded-xl">
                 <div className="carousel-item relative w-full">
                   <Image
-                    src={post?.photoUrl}
+                    src={currentPhoto}
                     className="h-fit w-full object-contain"
                     placeholder="blur"
                     blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
@@ -64,9 +70,22 @@ const FeedEditPage: FC = () => {
                 </div>
               </div>
             )}
-            <button className="btn btn-circle flex w-full border-[3px] border-ct_brown-500 !bg-white text-xl font-bold">
-              + เปลี่ยนรูปภาพ
-            </button>
+            <div className="flex max-w-full flex-row gap-2">
+              <input
+                className="input text-xl"
+                placeholder="ชื่อสินค้า"
+                {...register('photoUrl', { required: true })}
+              />
+              <button
+                className="btn btn-circle flex flex-1 border-[3px] border-ct_brown-500 !bg-white text-xl font-bold"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setCurrentPhoto(watch('photoUrl'));
+                }}>
+                + เปลี่ยนรูปภาพ
+              </button>
+            </div>
           </div>
 
           {/* detail */}
