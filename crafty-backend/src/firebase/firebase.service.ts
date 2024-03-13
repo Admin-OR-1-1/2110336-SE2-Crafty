@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common'
-import { PrismaClient } from '@prisma/client'
 
 import * as firebase from 'firebase-admin'
 
