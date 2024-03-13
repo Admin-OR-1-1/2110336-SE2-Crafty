@@ -8,6 +8,7 @@ import { MessageEntity } from './entities/message.entity'
 import { ChatroomEntity } from './entities/chatroom.entity'
 import { GetUser } from '../users/get-user.decorator'
 import { stringify } from 'querystring'
+import { User } from '@prisma/client'
 
 @ApiTags('chats')
 @Controller('chats')
@@ -17,39 +18,13 @@ export class ChatsController {
   constructor(private readonly chatsService: ChatsService) {}
 
   @Get('test')
-  async testGetUser(@GetUser() user: string) {
-    return this.chatsService.testGetUser(user)
+  async testGetUser(@GetUser() user: User) {
+    return this.chatsService.testGetUser(user.id)
   }
 
   @Get()
-  @ApiOkResponse({ type: ChatroomEntity, isArray: true })
-  async findAllChatRooms() {
-    console.log('find all!')
-
-    // Assuming the method 'findAllChatRooms' exists and returns all chat room IDs the caller is part of.
-    return this.chatsService.findAllChatrooms()
-  }
-
-  @Get(':chatRoomId')
-  @ApiOkResponse({ type: MessageEntity, isArray: true })
-  async findAllMessages(@Param('chatRoomId') chatRoomId: string) {
-    // Assuming the method 'findAllMessages' checks if the caller is part of the chat room and returns all messages if true.
-    return this.chatsService.findAllMessages(chatRoomId)
-  }
-
-  @Post('message')
-  @ApiOkResponse({ type: MessageEntity })
-  async createMessage(@Body() createMessageDto: CreateMessageDto) {
-    return new MessageEntity(
-      await this.chatsService.createMessage(createMessageDto),
-    )
-  }
-
-  @Post('room')
-  @ApiOkResponse({ type: ChatroomEntity })
-  async createChatRoom(@Body() createChatroomDto: CreateChatroomDto) {
-    return new ChatroomEntity(
-      await this.chatsService.createChatroom(createChatroomDto),
-    )
+  async findAllChatroomsForUser(@GetUser() user: User) {
+    console.log(user)
+    return this.chatsService.findAllChatroomsForUser(user)
   }
 }

@@ -4,40 +4,30 @@ import { CreateMessageDto } from './dto/create-message.dto'
 import { CreateChatroomDto } from './dto/create-chatroom.dto'
 import { MessageEntity } from './entities/message.entity'
 import { ChatroomEntity } from './entities/chatroom.entity'
+import { User } from '@prisma/client'
 
 @Injectable()
 export class ChatsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAllChatrooms() {
-    return 'Find All Chatrooms!'
-    return this.prisma.chatroom.findMany()
-  }
-
-  async findAllMessages(chatRoomId: string) {
-    return 'Find All Messages!'
-    return this.prisma.message.findMany({
+  async findAllChatroomsForUser(user: User) {
+    return await this.prisma.chatroom.findMany({
       where: {
-        chatRoomId,
+        OR: [
+          {
+            crafterId: user.id,
+          },
+          {
+            crafteeId: user.id,
+          },
+        ],
       },
-    })
-  }
-
-  async createMessage(
-    createMessageDto: CreateMessageDto,
-  ): Promise<MessageEntity> {
-    return null
-    return this.prisma.message.create({
-      data: createMessageDto,
-    })
-  }
-
-  async createChatroom(
-    createChatroomDto: CreateChatroomDto,
-  ): Promise<ChatroomEntity> {
-    return null
-    return this.prisma.chatroom.create({
-      data: createChatroomDto,
+      select: {
+        id: true,
+        lastChatTime: true,
+        isCrafterRead: true,
+        isCrafteeRead: true,
+      },
     })
   }
 
