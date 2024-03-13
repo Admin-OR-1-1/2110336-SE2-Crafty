@@ -9,6 +9,7 @@ import { getAvgRatingFromReviewList } from '@/app/_common/utils/rating';
 import userStore from '@/app/_common/store/user/user-store';
 import { getIsFavorite } from '@/app/_common/utils/favorite';
 import { apiService } from '@/configs/apiService/apiService';
+import ReviewContainer from './_components/ReviewContainer';
 
 const FeedDetailPage: FC = () => {
   const user = userStore((state) => state.user);
@@ -102,6 +103,14 @@ const FeedDetailPage: FC = () => {
           <div className="flex w-full items-center justify-between">
             <div className="flex flex-row items-center gap-4">
               <div className="flex flex-row items-center gap-2">
+                <span className="font-semibol mr-2 mt-1 text-3xl">
+                  {post
+                    ? (
+                        post?.reviews.reduce((acc, review) => acc + review.rate, 0) /
+                        post?.reviews.length
+                      ).toFixed(1)
+                    : ''}
+                </span>
                 {
                   // create rating star
                   Array.from({ length: avgRating }).map((_, i) => (
@@ -227,6 +236,8 @@ const FeedDetailPage: FC = () => {
           </div>
         </div>
       </div>
+
+      <ReviewContainer reviews={post?.reviews ?? []} />
     </div>
   );
 };
