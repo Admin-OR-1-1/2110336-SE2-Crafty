@@ -32,10 +32,9 @@ class ApiService {
     }
   };
 
-  // bypass for now
-  loginWithId = async (uid: string): Promise<ApiResponseType<LoginResponse>> => {
+  loginWithFirebaseId = async (firebaseToken: string): Promise<ApiResponseType<LoginResponse>> => {
     try {
-      const response = await axios.post('/auth/login', { uid });
+      const response = await axios.post('/auth/login/firebase', { token: firebaseToken });
       this.setToken(response.data.token);
 
       localStorage.setItem('user', JSON.stringify(response.data.user));
@@ -48,7 +47,31 @@ class ApiService {
     } catch {
       return {
         status: ApiStatus.ERROR,
-        errorMessage: 'Invalid uid',
+        errorMessage: 'Invalid firebase token',
+      };
+    }
+  };
+
+  registerWithFirebaseId = async (
+    firebaseToken: string
+    // TODO: add other field here to create user with data
+  ): Promise<ApiResponseType<LoginResponse>> => {
+    try {
+      // TODO: add other field here to create user with data
+      const response = await axios.post('/auth/register/firebase', { token: firebaseToken });
+      this.setToken(response.data.token);
+
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('token', response.data.token);
+
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Invalid firebase token',
       };
     }
   };
