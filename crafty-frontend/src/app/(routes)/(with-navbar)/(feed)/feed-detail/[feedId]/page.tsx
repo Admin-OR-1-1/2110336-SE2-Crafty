@@ -39,9 +39,10 @@ const FeedDetailPage: FC = () => {
   };
 
   const createNewChatroom = async () => {
-    const crafterId = post;
-    const crafteeId = user.id;
-    const productId = feedId;
+    // const crafterId = post;
+    // const crafteeId = user.id;
+    // const productId = feedId;
+    window.location.href = `/chats`;
   };
 
   if (!init) return <LoadingPage />;

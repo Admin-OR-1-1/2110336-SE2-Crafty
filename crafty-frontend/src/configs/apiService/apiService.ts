@@ -4,7 +4,7 @@ import { ApiResponseType, ApiStatus } from './types';
 import { Post } from '@/app/_common/interface/post';
 import { User } from '@/app/_common/interface/user';
 import { apiClient } from '../axiosConfig';
-import { ReadChatroom } from '@/app/_common/interface/chat';
+import { ChatroomDetail, Message, PostMessage, ReadChatroom } from '@/app/_common/interface/chat';
 
 class ApiService {
   constructor() {
@@ -256,6 +256,36 @@ class ApiService {
       return {
         status: ApiStatus.ERROR,
         errorMessage: 'Failed to fetch chatrooms',
+      };
+    }
+  };
+
+  getChatroomDetail = async (chatroomId: string): Promise<ApiResponseType<ChatroomDetail>> => {
+    try {
+      const response = await apiClient.get(`/chats/${chatroomId}`);
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to fetch chatroom detail',
+      };
+    }
+  };
+
+  createNewMessage = async (postMessage: PostMessage): Promise<ApiResponseType<Message>> => {
+    try {
+      const response = await apiClient.post(`/chats/message`, postMessage);
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to create new message',
       };
     }
   };

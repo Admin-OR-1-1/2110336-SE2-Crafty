@@ -18,7 +18,7 @@ export interface SidebarData {
   chatroomId: string;
 }
 
-enum MessageType {
+export enum MessageType {
   TEXT = 'TEXT',
   IMAGE = 'IMAGE',
   COMPONENT = 'COMPONENT',

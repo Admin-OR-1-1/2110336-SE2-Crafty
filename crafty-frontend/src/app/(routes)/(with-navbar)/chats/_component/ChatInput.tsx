@@ -1,7 +1,7 @@
 'use client';
 
-import { createNewMessage } from '@/app/_common/utils/chatting';
 import { TextInput } from '@/app/_components/ui/input';
+import { apiService } from '@/configs/apiService/apiService';
 import { useState } from 'react';
 import { IoIosSend } from 'react-icons/io';
 import { LuImagePlus } from 'react-icons/lu';
@@ -16,25 +16,26 @@ const ChatInput: React.FC<ChatInputProps> = ({ chatroomId, senderId }) => {
   const submitMessage = async () => {
     console.log('submitted text:', text);
     if (text === '') return;
-    const res = await createNewMessage({
+
+    await apiService.createNewMessage({
       chatroomId,
       senderId,
       content: text,
       messageType: 'TEXT',
     });
+
     setText('');
-    console.log(res);
   };
+
   const submitImageMessage = async (imageUrl: string) => {
-    console.log('submitted image:', imageUrl);
-    const res = await createNewMessage({
+    await apiService.createNewMessage({
       chatroomId,
       senderId,
       content: imageUrl,
       messageType: 'IMAGE',
     });
-    console.log(res);
   };
+
   const promptForImageUrl = () => {
     const imageUrl = window.prompt('Please enter the image URL:');
     if (imageUrl) {
@@ -43,7 +44,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ chatroomId, senderId }) => {
   };
 
   return (
-    <div className="shadow-top flex h-16 items-center justify-center gap-4 px-6">
+    <div className="flex h-16 items-center justify-center gap-4 px-6 shadow-top">
       <div className="image-icon">
         <LuImagePlus
           size={28}

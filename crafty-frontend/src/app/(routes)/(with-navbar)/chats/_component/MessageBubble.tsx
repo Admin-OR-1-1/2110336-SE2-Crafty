@@ -1,3 +1,4 @@
+import { MessageType } from '@/app/_common/interface/chat';
 import { formatDateTime } from '@/app/_common/utils/chatting';
 import React from 'react';
 

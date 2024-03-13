@@ -1,5 +1,6 @@
 'use client';
 
+import { SidebarData } from '@/app/_common/interface/chat';
 import { formatDateTime } from '@/app/_common/utils/chatting';
 import { useRouter } from 'next/navigation';
 
