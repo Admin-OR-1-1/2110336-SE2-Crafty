@@ -38,7 +38,14 @@ const FeedDetailPage: FC = () => {
     setIsFavorite(false);
   };
 
+  const createNewChatroom = async () => {
+    const crafterId = post;
+    const crafteeId = user.id;
+    const productId = feedId;
+  };
+
   if (!init) return <LoadingPage />;
+  console.log(post);
 
   return (
     <div className="flex w-full flex-col gap-2 p-8">
@@ -197,7 +204,9 @@ const FeedDetailPage: FC = () => {
             </span>
           </div>
 
-          <button className="btn w-full rounded-lg bg-ct_brown-500 text-base text-white hover:bg-ct_brown-300">
+          <button
+            className="btn w-full rounded-lg bg-ct_brown-500 text-base text-white hover:bg-ct_brown-300"
+            onClick={createNewChatroom}>
             ติดต่อ Crafter
           </button>
 

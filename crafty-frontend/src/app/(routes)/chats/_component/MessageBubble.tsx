@@ -25,6 +25,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
   const leftSideClasses2 = commonClasses2 + ' mr-auto bg-ct_gray-100';
   const thisClasses1 = isFromCurrentUser ? rightSideClasses1 : leftSideClasses1;
   const thisClasses2 = isFromCurrentUser ? rightSideClasses2 : leftSideClasses2;
+  const thisClasses3 = isFromCurrentUser ? 'ml-auto' : 'mr-auto';
 
   if (messageType === 'IMAGE') {
     return (
@@ -32,14 +33,14 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
         <div className={thisClasses2}>
           <img src={message} className="h-auto max-h-72 max-w-full" />
         </div>
-        <div className="ml-auto mr-1 mt-1 flex text-xs">{formattedDate}</div>
+        <div className={`${thisClasses3} mr-1 mt-1 flex text-xs`}>{formattedDate}</div>
       </div>
     );
   } else {
     return (
       <div className={thisClasses1}>
         <div className={thisClasses2}>{message}</div>
-        <div className="ml-auto mr-1 mt-1 flex text-xs">{formattedDate}</div>
+        <div className={`${thisClasses3} mr-1 mt-1 flex text-xs`}>{formattedDate}</div>
       </div>
     );
   }
