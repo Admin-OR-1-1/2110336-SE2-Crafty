@@ -38,18 +38,12 @@ export class PostsController {
   }
 
   @Post(':id/addfavorites')
-  addFavorite(
-    @Param('id') postId : string,
-    @Body() favoriteDto: FavoriteDto,
-  ){
+  addFavorite(@Param('id') postId: string, @Body() favoriteDto: FavoriteDto) {
     return this.postsService.addFavorite(favoriteDto.userId, postId)
   }
 
   @Post(':id/unfavorites')
-  unFavorite(
-    @Param('id') postId : string,
-    @Body() favoriteDto: FavoriteDto,
-  ){
+  unFavorite(@Param('id') postId: string, @Body() favoriteDto: FavoriteDto) {
     return this.postsService.addFavorite(favoriteDto.userId, postId)
   }
 

@@ -24,4 +24,13 @@ export class AuthService {
       token: await this.jwtService.signAsync(payload),
     }
   }
+
+  async loginById(userId: string) {
+    const user = new UserEntity(await this.usersService.findOne(userId))
+    const payload: JwtPayload = { user: user }
+    return {
+      user: user,
+      token: await this.jwtService.signAsync(payload),
+    }
+  }
 }

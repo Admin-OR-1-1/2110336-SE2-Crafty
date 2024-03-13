@@ -79,13 +79,17 @@ export class PostsService {
   async findOne(id: string) {
     return await this.prisma.post.findUnique({
       where: { id },
+      include: {
+        reviews: true,
+        userFavorite: true,
+      },
     })
   }
 
   async update(id: string, updatePostDto: UpdatePostDto) {
     return await this.prisma.post.update({
       where: { id },
-      data: updatePostDto,
+      data: { ...updatePostDto, price: Number(updatePostDto.price) },
     })
   }
 

@@ -1,4 +1,12 @@
-import { Controller, Post, Body, UseGuards, Get, Request } from '@nestjs/common'
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Get,
+  Request,
+  Param,
+} from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { CreateUserDto } from '../users/dto/create-user.dto'
 import { UserEntity } from '../users/entities/user.entity'
@@ -31,6 +39,12 @@ export class AuthController {
   @ApiCreatedResponse({ type: AuthEntity })
   async login(@Body() loginDto: AuthDto) {
     return new AuthEntity(await this.authService.login(loginDto))
+  }
+
+  @Post('login/id')
+  @ApiCreatedResponse({ type: AuthEntity })
+  async loginById(@Param('id') id: string) {
+    return new AuthEntity(await this.authService.loginById(id))
   }
 
   @Get('me')
