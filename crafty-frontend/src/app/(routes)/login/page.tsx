@@ -16,6 +16,8 @@ import LogoLeftSide from '@/app/_components/ui/logoLeftSide';
 import { useRouter } from 'next/navigation';
 import { apiClient } from '@/configs/axiosConfig';
 import { FirebaseAuthProvider, useFirebaseAuthContext } from '@/contexts/firebaseAuthContext';
+import { apiService } from '@/configs/apiService/apiService';
+import { ApiStatus } from '@/configs/apiService/types';
 
 const Page = () => {
   const router = useRouter();
@@ -37,6 +39,7 @@ const Page = () => {
   const [canEditPhone, setCanEditPhone] = useState<boolean>(true);
 
   useEffect(() => {
+    console.log(auth);
     (window as any).recaptchaVerifier = new RecaptchaVerifier(auth, 'sign-in-button', {
       size: 'invisible',
     });
@@ -50,14 +53,23 @@ const Page = () => {
 
       // This gives you a Google Access Token. You can use it to access Google APIs.
       // const credential = GoogleAuthProvider.credentialFromResult(result);
-      console.log(result.user.email);
 
-      const isValid = await checkUserValid();
-      if (isValid.error) return;
-      if (isValid.valid) {
-        router.push('/');
+      // const isValid = await checkUserValid();
+      // if (isValid.error) return;
+      // if (isValid.valid) {
+      //   router.push('/');
+      // } else {
+      //   setState(2);
+      // }
+      if (!auth.currentUser) return;
+      const response = await apiService.loginWithFirebaseToken(await result.user.getIdToken());
+      if (response.status === ApiStatus.SUCCESS) {
+        window.location.href = '/';
       } else {
-        setState(2);
+        const responseRegister = await apiService.registerWithFirebaseToken(
+          await result.user.getIdToken()
+        );
+        setState;
       }
 
       // if (credential === null) return;
