@@ -21,7 +21,9 @@ model User {
   hashedPwd String
   role      Role   @default(USER)
 
-  favoritePost Post[]
+  ownerPost Post[] @relation("ownerPost")
+
+  favoritePost Post[] @relation("userFavorite")
 }
 
 model Product {
@@ -45,9 +47,11 @@ model Post {
 
   priority Float @default(0)
 
-  reviews Review[]
+  ownerId String
+  owner   User   @relation("ownerPost", fields: [ownerId], references: [id])
 
-  userFavorite User[]
+  reviews      Review[]
+  userFavorite User[]   @relation("userFavorite")
 }
 
 model Review {

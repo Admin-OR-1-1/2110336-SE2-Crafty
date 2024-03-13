@@ -6,13 +6,17 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Request,
 } from '@nestjs/common'
 import { PostsService } from './posts.service'
 import { CreatePostDto } from './dto/create-post.dto'
 import { UpdatePostDto } from './dto/update-post.dto'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { CreateReviewDto } from './dto/create-review'
 import { FavoriteDto } from './dto/favorite.dto'
+import { AuthGuard } from '../auth/guard/auth.guard'
+import { UserEntity } from '../users/entities/user.entity'
 
 @ApiTags('posts')
 @Controller('posts')
@@ -44,17 +48,28 @@ export class PostsController {
 
   @Post(':id/unfavorites')
   unFavorite(@Param('id') postId: string, @Body() favoriteDto: FavoriteDto) {
-    return this.postsService.addFavorite(favoriteDto.userId, postId)
+    return this.postsService.unFavorite(favoriteDto.userId, postId)
   }
 
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postsService.create(createPostDto)
+  create(@Body() createPostDto: CreatePostDto, @Request() req) {
+    const user = new UserEntity(req.user)
+    return this.postsService.create(user.id, createPostDto)
   }
 
   @Get()
   findAll() {
     return this.postsService.findAll()
+  }
+
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @Get('me')
+  findMyPost(@Request() req) {
+    const user = new UserEntity(req.user)
+    return this.postsService.findMyPost(user.id)
   }
 
   @Get(':id')

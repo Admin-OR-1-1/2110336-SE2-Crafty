@@ -3,6 +3,15 @@ import { PrismaClient } from '@prisma/client'
 export const postSeed = async () => {
   const prisma = new PrismaClient()
 
+  await prisma.user.create({
+    data: {
+      id: 'ValOHuWT2JZ6lvXN8pV4Fs9QQPG2',
+      username: 'nonnolnw',
+      hashedPwd: '$2b$10$R.KRjTCXGbRTj2/fFj3u3.U/3MDwOKD1EYfHVMiNs2o3eK/xM87Wu',
+      role: 'USER',
+    },
+  })
+
   Array.from({ length: 20 }).forEach(async (_, i) => {
     await prisma.post.create({
       data: {
@@ -21,6 +30,11 @@ export const postSeed = async () => {
             desc: `The review of the post ${i}`,
             rate: Math.floor(Math.random() * 5) + 1,
             sender: `The sender of the post ${i}`,
+          },
+        },
+        owner: {
+          connect: {
+            id: 'ValOHuWT2JZ6lvXN8pV4Fs9QQPG2',
           },
         },
       },
