@@ -17,4 +17,13 @@ export const userSeed = async () => {
       role: 'USER',
     },
   })
+
+  await prisma.user.create({
+    data: {
+      id: 'ValOHuWT2JZ6lvXN8pV4Fs9QQPG2',
+      username: 'nonnolnw',
+      hashedPwd: '$2b$10$R.KRjTCXGbRTj2/fFj3u3.U/3MDwOKD1EYfHVMiNs2o3eK/xM87Wu',
+      role: 'USER',
+    },
+  })
 }
