@@ -9,7 +9,7 @@ export class MessageEntity implements Partial<Message> {
   id: string
 
   @ApiProperty({
-    example: 'cltoe9rzk0001d6m01uey643v',
+    example: 'chat_user1_id',
     description: 'The unique identifier of the message sender (User).',
   })
   senderId: string
@@ -46,7 +46,7 @@ export class MessageEntity implements Partial<Message> {
     description:
       'The unique identifier of the chat room associated with the message.',
   })
-  chatRoomId: string
+  chatroomId: string
 
   constructor(partial: Partial<MessageEntity>) {
     const allowedKeys = [
@@ -56,7 +56,7 @@ export class MessageEntity implements Partial<Message> {
       'messageType',
       'isRead',
       'date',
-      'chatRoomId',
+      'chatroomId',
     ]
     const messageEntity = Object.keys(partial)
       .filter((key) => allowedKeys.includes(key))

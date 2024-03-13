@@ -27,4 +27,28 @@ export class ChatsController {
     console.log(user)
     return this.chatsService.findAllChatroomsForUser(user)
   }
+
+  @Get(':chatroomId')
+  async findAllMessagesByChatroomId(
+    @Param('chatroomId') chatroomId: string,
+    @GetUser() user: User,
+  ) {
+    return this.chatsService.findAllMessagesByChatroomId(chatroomId, user)
+  }
+
+  @Post('message')
+  async createMessage(
+    @Body() createMessageDto: CreateMessageDto,
+    @GetUser() user: User,
+  ) {
+    return this.chatsService.createMessage(createMessageDto, user)
+  }
+
+  @Post('chatroom')
+  async createChatroom(
+    @Body() createChatroomDto: CreateChatroomDto,
+    @GetUser() user: User,
+  ) {
+    return this.chatsService.createChatroom(createChatroomDto, user)
+  }
 }

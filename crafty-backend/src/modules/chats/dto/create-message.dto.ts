@@ -3,7 +3,7 @@ import { MessageType } from '@prisma/client'
 
 export class CreateMessageDto {
   @ApiProperty({
-    example: 'john_doe',
+    example: 'chat_user1_id',
     description: 'The unique identifier of the message sender (User).',
   })
   senderId: string
@@ -22,9 +22,9 @@ export class CreateMessageDto {
   messageType: MessageType
 
   @ApiProperty({
-    example: '1',
+    example: 'chatroom001',
     description:
       'The unique identifier of the chat room associated with the message.',
   })
-  chatRoomId: string
+  chatroomId: string
 }

@@ -9,19 +9,19 @@ export class ChatroomEntity implements Partial<Chatroom> {
   id: string
 
   @ApiProperty({
-    example: 'cltoe9rzk0001d6m01uey643v',
-    description: 'The unique identifier of the first user in the chat room.',
+    example: 'chat_user1_id',
+    description: 'Crafter id in the chat room.',
   })
-  user1Id: string
+  crafterId: string
 
   @ApiProperty({
-    example: 'cltoe9rzk0001d6m01uey643v',
-    description: 'The unique identifier of the second user in the chat room.',
+    example: 'chat_user2_id',
+    description: 'Craftee in the chat room.',
   })
-  user2Id: string
+  crafteeId: string
 
   constructor(partial: Partial<ChatroomEntity>) {
-    const allowedKeys = ['id', 'user1Id', 'user2Id']
+    const allowedKeys = ['id', 'crafterId', 'crafteeId']
     const chatRoomEntity = Object.keys(partial)
       .filter((key) => allowedKeys.includes(key))
       .reduce((obj, key) => {
