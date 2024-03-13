@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt'
 import { jwtConstants } from './modules/auth/common/jwt-const'
 import { PostsModule } from './modules/posts/posts.module'
 import { ProductsModule } from './modules/products/products.module'
+import { ChatsModule } from './modules/chats/chats.module'
 import { FirebaseModule } from 'src/firebase/firebase.module'
 
 @Module({
@@ -23,6 +24,7 @@ import { FirebaseModule } from 'src/firebase/firebase.module'
     AuthModule,
     PostsModule,
     ProductsModule,
+    ChatsModule,
     FirebaseModule,
   ],
   controllers: [AppController],

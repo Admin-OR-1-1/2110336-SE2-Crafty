@@ -43,4 +43,11 @@ export class CreateProductDto implements Partial<Product> {
     example: 'The note of the product',
   })
   note: string
+
+  @ApiProperty({
+    description: 'chatroom001',
+    type: String,
+    example: 'The chatRoomId of the product',
+  })
+  chatroomId: string
 }
