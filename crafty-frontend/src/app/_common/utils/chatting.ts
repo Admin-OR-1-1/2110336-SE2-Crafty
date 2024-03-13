@@ -1,9 +1,10 @@
 import axios from 'axios';
+import { Message, PostMessage } from '../interface/chat';
 
 const apiPath = 'http://localhost:5000';
 
 const getMyToken = (): string => {
-  return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiY2hhdF91c2VyMV9pZCIsInVzZXJuYW1lIjoiY2hhdF91c2VyMSIsInJvbGUiOiJVU0VSIn0sImlhdCI6MTcxMDMzMTUzM30.rUw31dKTUKpU7EqxGATIPDTlCkA7yV8DN9t3iBeldag';
+  return localStorage.getItem('token') || '';
 };
 
 const getMyName = async (token: string): Promise<string> => {

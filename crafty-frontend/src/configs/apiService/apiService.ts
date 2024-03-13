@@ -4,6 +4,7 @@ import { ApiResponseType, ApiStatus } from './types';
 import { Post } from '@/app/_common/interface/post';
 import { User } from '@/app/_common/interface/user';
 import { apiClient } from '../axiosConfig';
+import { ReadChatroom } from '@/app/_common/interface/chat';
 
 class ApiService {
   constructor() {
@@ -231,7 +232,7 @@ class ApiService {
 
   getmyName = async (): Promise<ApiResponseType<String>> => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/me`);
+      const response = await apiClient.get(`/auth/me`);
       return {
         status: ApiStatus.SUCCESS,
         data: response.data.username,
@@ -240,6 +241,21 @@ class ApiService {
       return {
         status: ApiStatus.ERROR,
         errorMessage: 'Failed to fetch user',
+      };
+    }
+  };
+
+  getChatrooms = async (): Promise<ApiResponseType<ReadChatroom[]>> => {
+    try {
+      const response = await apiClient.get(`/chats`);
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to fetch chatrooms',
       };
     }
   };

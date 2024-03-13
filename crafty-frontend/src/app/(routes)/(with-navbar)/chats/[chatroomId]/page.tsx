@@ -1,9 +1,12 @@
+'use client';
+
 import axios from 'axios';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import MessageBubble from '../_component/MessageBubble';
 import { apiPath, getMyId, getMyName, getMyToken } from '@/app/_common/utils/chatting';
 import ChatHeader from '../_component/ChatHeader';
 import ChatInput from '../_component/ChatInput';
+import { ChatroomDetail, Message } from '@/app/_common/interface/chat';
 
 type PageProps = {
   params: {
@@ -11,7 +14,7 @@ type PageProps = {
   };
 };
 
-const getChatroomDetails = async (chatroomId: string) => {
+const getChatroomDetail = async (chatroomId: string) => {
   // using axios to fetch from localhost:5000/chats/:chatroomId
   // add bearer token to the header
 
@@ -27,21 +30,34 @@ const getChatroomDetails = async (chatroomId: string) => {
 };
 
 const ChatRoomPage: FC<PageProps> = async ({ params }) => {
-  const chatroomDetails = await getChatroomDetails(params.chatroomId);
-  const messages = chatroomDetails.messages;
-  const myId = await getMyId(getMyToken());
-  const myName = await getMyName(getMyToken());
+  const [chatroomDetail, setChatroomDetail] = useState<ChatroomDetail | null>(null);
+  const [myId, setMyId] = useState<string>('');
+  const [myName, setMyName] = useState<string>('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getChatroomDetail(params.chatroomId);
+      setChatroomDetail(data);
+      const myId = await getMyId(getMyToken());
+      setMyId(data);
+      const myName = await getMyName(getMyToken());
+      setMyName(myName);
+    };
+    fetchData();
+  }, []);
+
+  const messages = chatroomDetail?.messages;
 
   const talkerName =
-    chatroomDetails.crafter.username === myName
-      ? chatroomDetails.craftee.username
-      : chatroomDetails.crafter.username;
+    chatroomDetail?.crafter.username === myName
+      ? chatroomDetail?.craftee.username
+      : chatroomDetail?.crafter.username;
 
   return (
     <div className="flex h-screen flex-col">
-      <ChatHeader name={talkerName} />
+      <ChatHeader name={talkerName ?? ''} />
       <div className="flex-1 flex-col space-y-4 overflow-y-auto py-4">
-        {messages.map((message: Message) => {
+        {messages?.map((message: Message) => {
           return (
             <MessageBubble
               key={message.id}

@@ -1,9 +1,9 @@
-interface User {
+export interface User {
   id: string;
   username: string;
 }
 
-interface ReadChatroom {
+export interface ReadChatroom {
   id: string;
   lastChatTime: string;
   isCrafterRead: boolean;
@@ -12,7 +12,7 @@ interface ReadChatroom {
   craftee: User;
 }
 
-interface SidebarData {
+export interface SidebarData {
   talkerName: string;
   lastChatTime: string;
   chatroomId: string;
@@ -24,7 +24,7 @@ enum MessageType {
   COMPONENT = 'COMPONENT',
 }
 
-interface Message {
+export interface Message {
   id: string;
   senderId: string;
   content: string;
@@ -34,9 +34,19 @@ interface Message {
   chatroomId: string;
 }
 
-interface PostMessage {
+export interface PostMessage {
   chatroomId: string;
   senderId: string;
   content: string;
   messageType: MessageType | string;
+}
+
+export interface ChatroomDetail {
+  id: string;
+  lastChatTime: string;
+  isCrafterRead: boolean;
+  isCrafteeRead: boolean;
+  crafter: User;
+  craftee: User;
+  messages: Message[];
 }
