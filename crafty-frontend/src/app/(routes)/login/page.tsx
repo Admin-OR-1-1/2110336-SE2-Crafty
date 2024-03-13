@@ -68,7 +68,7 @@ const Page = () => {
         const responseRegister = await apiService.registerWithFirebaseToken(
           await result.user.getIdToken()
         );
-        setState;
+        setState(2);
       }
 
       // if (credential === null) return;
@@ -150,13 +150,18 @@ const Page = () => {
   const onSubmitOtp = async () => {
     if (confirmationResult && otp.length === 6) {
       try {
-        await confirmationResult.confirm(otp);
-        const isValid = await checkUserValid();
-        if (isValid.error) return;
-        if (isValid.valid) {
+        const result = await confirmationResult.confirm(otp);
+
+        if (!auth.currentUser) return;
+        const response = await apiService.loginWithFirebaseToken(await result.user.getIdToken());
+        if (response.status === ApiStatus.SUCCESS) {
           router.push('/');
         } else {
+          const responseRegister = await apiService.registerWithFirebaseToken(
+            await result.user.getIdToken()
+          );
           setState(2);
+          setPhoneNumber('');
         }
       } catch (error) {
         console.error(error);
