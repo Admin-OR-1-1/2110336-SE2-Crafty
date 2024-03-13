@@ -24,7 +24,6 @@ export class ChatsController {
 
   @Get()
   async findAllChatroomsForUser(@GetUser() user: User) {
-    console.log(user)
     return this.chatsService.findAllChatroomsForUser(user)
   }
 

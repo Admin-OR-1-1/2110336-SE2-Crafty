@@ -31,6 +31,18 @@ export class ChatsService {
         lastChatTime: true,
         isCrafterRead: true,
         isCrafteeRead: true,
+        craftee: {
+          select: {
+            username: true,
+            id: true,
+          },
+        },
+        crafter: {
+          select: {
+            username: true,
+            id: true,
+          },
+        },
       },
     })
   }
