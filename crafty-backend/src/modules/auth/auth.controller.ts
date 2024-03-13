@@ -1,14 +1,5 @@
-import {
-  Controller,
-  Post,
-  Body,
-  UseGuards,
-  Get,
-  Request,
-  Param,
-} from '@nestjs/common'
+import { Controller, Post, Body, UseGuards, Get, Request } from '@nestjs/common'
 import { AuthService } from './auth.service'
-import { CreateUserDto } from '../users/dto/create-user.dto'
 import { UserEntity } from '../users/entities/user.entity'
 import {
   ApiBearerAuth,
@@ -16,24 +7,16 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger'
-import { AuthDto } from './dto/auth.dto'
+import { AuthDto, FirebaseRegisterUserDto } from './dto/auth.dto'
 import { AuthEntity } from './entity/auth.entity'
 import { AuthGuard } from './guard/auth.guard'
-import { Roles } from './guard/roles.decorator'
+
+import { FirebaseTokenDto } from './dto/firebase-token.dto'
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
-  @Post('register')
-  @UseGuards(AuthGuard)
-  @Roles('ADMIN')
-  @ApiBearerAuth()
-  @ApiCreatedResponse({ type: UserEntity })
-  async register(@Body() createUserDto: CreateUserDto) {
-    return new UserEntity(await this.authService.register(createUserDto))
-  }
 
   @Post('login')
   @ApiCreatedResponse({ type: AuthEntity })
@@ -41,10 +24,22 @@ export class AuthController {
     return new AuthEntity(await this.authService.login(loginDto))
   }
 
-  @Post('login/id')
+  @Post('login/firebase')
   @ApiCreatedResponse({ type: AuthEntity })
-  async loginById(@Param('id') id: string) {
-    return new AuthEntity(await this.authService.loginById(id))
+  async loginByToken(@Body() firebaseTokenDto: FirebaseTokenDto) {
+    return new AuthEntity(
+      await this.authService.loginByToken(firebaseTokenDto.token),
+    )
+  }
+
+  @Post('register/firebase')
+  @ApiCreatedResponse({ type: UserEntity })
+  async firebaseRegister(
+    @Body() firebaseRegisterUserDto: FirebaseRegisterUserDto,
+  ) {
+    return new UserEntity(
+      await this.authService.fireBaseRegister(firebaseRegisterUserDto),
+    )
   }
 
   @Get('me')

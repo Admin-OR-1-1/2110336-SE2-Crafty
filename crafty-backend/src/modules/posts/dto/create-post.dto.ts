@@ -1,7 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Post } from '@prisma/client'
 
-export class CreatePostDto implements Omit<Omit<Post, 'id'>, 'priority'> {
+export class CreatePostDto
+  implements Omit<Omit<Omit<Post, 'id'>, 'priority'>, 'ownerId'>
+{
   @ApiProperty({
     description: 'The title of the post',
     type: String,

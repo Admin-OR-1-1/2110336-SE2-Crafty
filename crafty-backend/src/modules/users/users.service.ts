@@ -18,9 +18,12 @@ export class UsersService {
     return passwordHash
   }
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto, userId?: string) {
+    const { username, password, ...rest } = createUserDto
     return await this.prisma.user.create({
       data: {
+        ...rest,
+        id: userId ?? undefined,
         username: createUserDto.username,
         hashedPwd: await this.hashPassword(createUserDto.password),
       },

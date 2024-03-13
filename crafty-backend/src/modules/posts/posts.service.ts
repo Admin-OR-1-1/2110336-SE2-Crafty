@@ -56,9 +56,16 @@ export class PostsService {
     })
   }
 
-  async create(createPostDto: CreatePostDto) {
+  async create(userId: string, createPostDto: CreatePostDto) {
     return await this.prisma.post.create({
-      data: createPostDto,
+      data: {
+        ...createPostDto,
+        owner: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
     })
   }
 
@@ -73,6 +80,18 @@ export class PostsService {
           priority: 'desc',
         },
       ],
+    })
+  }
+
+  async findMyPost(userId: string) {
+    return await this.prisma.post.findMany({
+      where: {
+        ownerId: userId,
+      },
+      include: {
+        reviews: true,
+        userFavorite: true,
+      },
     })
   }
 

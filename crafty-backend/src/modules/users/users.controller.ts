@@ -22,7 +22,7 @@ import { Roles } from '../auth/guard/roles.decorator'
 @ApiTags('users')
 @Controller('users')
 @UseGuards(AuthGuard)
-@Roles('ADMIN')
+// @Roles('ADMIN')
 @ApiBearerAuth()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
