@@ -11,11 +11,41 @@ import { PostsService } from './posts.service'
 import { CreatePostDto } from './dto/create-post.dto'
 import { UpdatePostDto } from './dto/update-post.dto'
 import { ApiTags } from '@nestjs/swagger'
+import { CreateReviewDto } from './dto/create-review'
+import { FavoriteDto } from './dto/favorite.dto'
 
 @ApiTags('posts')
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
+
+  @Post(':id/reviews')
+  addReview(
+    @Param('id') postId: string,
+    @Body() createReviewDto: CreateReviewDto,
+  ) {
+    return this.postsService.addReview(
+      postId,
+      createReviewDto.desc,
+      createReviewDto.rate,
+      createReviewDto.sender,
+    )
+  }
+
+  @Get(':id/reviews')
+  getReviews(@Param('id') postId: string) {
+    return this.postsService.getReviews(postId)
+  }
+
+  @Post(':id/addfavorites')
+  addFavorite(@Param('id') postId: string, @Body() favoriteDto: FavoriteDto) {
+    return this.postsService.addFavorite(favoriteDto.userId, postId)
+  }
+
+  @Post(':id/unfavorites')
+  unFavorite(@Param('id') postId: string, @Body() favoriteDto: FavoriteDto) {
+    return this.postsService.addFavorite(favoriteDto.userId, postId)
+  }
 
   @Post()
   create(@Body() createPostDto: CreatePostDto) {
@@ -40,5 +70,15 @@ export class PostsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.postsService.remove(id)
+  }
+
+  @Patch(':id/boosting')
+  boosting(@Param('id') id: string) {
+    return this.postsService.boosting(id)
+  }
+
+  @Patch(':id/unboosting')
+  unboosting(@Param('id') id: string) {
+    return this.postsService.unboosting(id)
   }
 }

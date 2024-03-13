@@ -29,16 +29,9 @@ model User {
 
   crafterRoom Chatroom[] @relation("CrafterRoom")
   crafteeRoom Chatroom[] @relation("CrafteeRoom")
-}
 
-model Post {
-  id      String @id @default(cuid())
-  title   String
-  detail  String
-  content String
-  price   Float
+  favoritePost Post[]
 }
-
 model Product {
   id       String @id @default(cuid())
   title    String
@@ -78,4 +71,29 @@ model Chatroom {
 
   productId   String?
   product   Product?
+}
+model Post {
+  id      String @id @default(cuid())
+  title   String
+  detail  String
+  content String
+  price   Float
+
+  photoUrl String
+
+  priority Float @default(0)
+
+  reviews Review[]
+
+  userFavorite User[]
+}
+
+model Review {
+  id     String @id @default(cuid())
+  desc   String
+  sender String
+  rate   Int
+
+  post   Post   @relation(fields: [postId], references: [id])
+  postId String
 }

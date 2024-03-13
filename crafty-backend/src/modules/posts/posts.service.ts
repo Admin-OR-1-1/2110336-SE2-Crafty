@@ -7,6 +7,55 @@ import { PrismaService } from 'src/prisma/prisma.service'
 export class PostsService {
   constructor(private prisma: PrismaService) {}
 
+  async addReview(postId: string, desc: string, rate: number, sender: string) {
+    return await this.prisma.review.create({
+      data: {
+        desc,
+        rate,
+        sender,
+        postId,
+      },
+    })
+  }
+
+  async getReviews(postId: string) {
+    return await this.prisma.review.findMany({
+      where: {
+        postId: postId,
+      },
+    })
+  }
+
+  async addFavorite(userId: string, postId: string) {
+    return await this.prisma.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        userFavorite: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
+    })
+  }
+
+  async unFavorite(userId: string, postId: string) {
+    return await this.prisma.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        userFavorite: {
+          disconnect: {
+            id: userId,
+          },
+        },
+      },
+    })
+  }
+
   async create(createPostDto: CreatePostDto) {
     return await this.prisma.post.create({
       data: createPostDto,
@@ -14,25 +63,57 @@ export class PostsService {
   }
 
   async findAll() {
-    return await this.prisma.post.findMany()
+    return await this.prisma.post.findMany({
+      include: {
+        reviews: true,
+        userFavorite: true,
+      },
+      orderBy: [
+        {
+          priority: 'desc',
+        },
+      ],
+    })
   }
 
   async findOne(id: string) {
     return await this.prisma.post.findUnique({
       where: { id },
+      include: {
+        reviews: true,
+        userFavorite: true,
+      },
     })
   }
 
   async update(id: string, updatePostDto: UpdatePostDto) {
     return await this.prisma.post.update({
       where: { id },
-      data: updatePostDto,
+      data: { ...updatePostDto, price: Number(updatePostDto.price) },
     })
   }
 
   async remove(id: string) {
     return await this.prisma.post.delete({
       where: { id },
+    })
+  }
+
+  async boosting(id: string) {
+    return await this.prisma.post.update({
+      where: { id },
+      data: {
+        priority: { increment: 1 },
+      },
+    })
+  }
+
+  async unboosting(id: string) {
+    return await this.prisma.post.update({
+      where: { id },
+      data: {
+        priority: { decrement: 1 },
+      },
     })
   }
 }
