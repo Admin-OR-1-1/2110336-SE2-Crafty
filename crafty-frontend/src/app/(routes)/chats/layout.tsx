@@ -46,11 +46,14 @@ const getSidebarData = async (): Promise<SidebarData[]> => {
 
 const ChatLayout: React.FC<ChatLayoutProps> = async ({ children }) => {
   const sidebarDatas = await getSidebarData();
+  sidebarDatas.sort((a, b) => {
+    return new Date(b.lastChatTime).getTime() - new Date(a.lastChatTime).getTime();
+  });
 
   return (
     <div className="flex h-screen">
       <aside className="flex w-48 flex-col gap-2 bg-ct_brown-100 pt-4" aria-label="Sidebar">
-        <div className="mb-2 flex justify-center border-b pb-4">Chat History</div>
+        <div className="mb-2 flex justify-center border-b pb-4 font-semibold">Chat History</div>
         {sidebarDatas.map((sidebarData: SidebarData) => {
           return (
             <SidebarBubble

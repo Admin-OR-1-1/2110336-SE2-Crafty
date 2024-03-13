@@ -1,7 +1,10 @@
+'use client';
 import axios from 'axios';
 import { FC } from 'react';
 import MessageBubble from '../_component/MessageBubble';
 import { apiPath, getMyId, getMyName, getMyToken } from '@/app/_common/utils/chatting';
+import ChatHeader from '../_component/ChatHeader';
+import ChatInput from '../_component/ChatInput';
 
 type PageProps = {
   params: {
@@ -27,26 +30,31 @@ const getChatroomDetails = async (chatroomId: string) => {
 const ChatRoomPage: FC<PageProps> = async ({ params }) => {
   const chatroomDetails = await getChatroomDetails(params.chatroomId);
   const messages = chatroomDetails.messages;
-  const myName = await getMyId(getMyToken());
+  const myId = await getMyId(getMyToken());
+  const myName = await getMyName(getMyToken());
 
-  console.log(chatroomDetails);
+  const talkerName =
+    chatroomDetails.crafter.username === myName
+      ? chatroomDetails.craftee.username
+      : chatroomDetails.crafter.username;
+
   return (
     <div className="flex h-screen flex-col">
-      <div className="flex justify-center bg-purple-400">This is ChatHeader</div>
+      <ChatHeader name={talkerName} />
       <div className="flex-1 flex-col space-y-4 overflow-y-auto py-4">
         {messages.map((message: Message) => {
           return (
             <MessageBubble
               key={message.id}
               message={message.content}
-              isFromCurrentUser={message.senderId === myName}
+              isFromCurrentUser={message.senderId === myId}
+              date={message.date}
             />
           );
         })}
       </div>
-      <div className="flex h-16 justify-center bg-pink-400">This is ChatInput</div>
+      <ChatInput chatroomId={params.chatroomId} senderId={myId} />
     </div>
-    // <ChatHeader name={params.chatroomId}/>
   );
 };
 

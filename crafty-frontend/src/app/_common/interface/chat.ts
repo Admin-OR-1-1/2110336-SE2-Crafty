@@ -33,3 +33,10 @@ interface Message {
   date: string;
   chatroomId: string;
 }
+
+interface PostMessage {
+  chatroomId: string;
+  senderId: string;
+  content: string;
+  messageType: MessageType | string;
+}
