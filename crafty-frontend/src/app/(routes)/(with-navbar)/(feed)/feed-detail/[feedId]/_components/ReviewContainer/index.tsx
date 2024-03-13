@@ -19,7 +19,7 @@ const ReviewContainer = ({ reviews }: ReviewContainerProps) => {
 
       <div className="grid grid-cols-2 gap-4 max-lg:grid-cols-1">
         {reviews.map((review, i) => (
-          <ReviewCard review={review} />
+          <ReviewCard review={review} key={review.id} />
         ))}
       </div>
     </div>
