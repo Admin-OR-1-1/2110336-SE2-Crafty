@@ -26,8 +26,9 @@ model User {
   username  String @unique
   hashedPwd String
   role      Role   @default(USER)
-  chatrooms1 Chatroom[] @relation("User1Chatroom")
-  chatrooms2 Chatroom[] @relation("User2Chatroom")
+
+  crafterRoom Chatroom[] @relation("CrafterRoom")
+  crafteeRoom Chatroom[] @relation("CrafteeRoom")
 }
 
 model Post {
@@ -46,6 +47,9 @@ model Product {
   deadline String
   status   String
   note     String
+
+  chatRoomId String @unique
+  chatRoom Chatroom  @relation(fields: [chatRoomId], references: [id])
 }
 
 model Message {
@@ -55,6 +59,7 @@ model Message {
   messageType  MessageType
   isRead       Boolean     @default(false)
   date         DateTime    @default(now())
+
   chatRoomId   String
   chatRoom     Chatroom    @relation(fields: [chatRoomId], references: [id])
 }
@@ -62,8 +67,11 @@ model Message {
 model Chatroom {
   id          String   @id @default(uuid())
   messages    Message[]
-  user1Id     String
-  user1       User     @relation("User1Chatroom", fields: [user1Id], references: [id])
-  user2Id     String
-  user2       User     @relation("User2Chatroom", fields: [user2Id], references: [id])
+  crafterId     String
+  crafter       User     @relation("CrafterRoom", fields: [crafterId], references: [id])
+  crafteeId     String
+  craftee       User     @relation("CrafteeRoom", fields: [crafteeId], references: [id])
+
+  productId   String
+  product   Product?
 }
