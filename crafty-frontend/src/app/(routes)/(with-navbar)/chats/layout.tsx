@@ -13,7 +13,7 @@ const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
   const sidebarDatas = useSidebarDatas();
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-full flex-1">
       <aside className="flex w-48 flex-col gap-2 bg-ct_brown-100 pt-4" aria-label="Sidebar">
         <div className="mb-2 flex justify-center border-b pb-4 font-semibold">Chat History</div>
         {sidebarDatas
@@ -31,7 +31,7 @@ const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
             );
           })}
       </aside>
-      <section className="flex-1">
+      <section className="h-full flex-1">
         {children} {/* This is your main content area */}
       </section>
     </div>
