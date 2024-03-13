@@ -1,15 +1,5 @@
-import {
-  Controller,
-  Post,
-  Body,
-  UseGuards,
-  Get,
-  Request,
-  Param,
-  Req,
-} from '@nestjs/common'
+import { Controller, Post, Body, UseGuards, Get, Request } from '@nestjs/common'
 import { AuthService } from './auth.service'
-import { CreateUserDto } from '../users/dto/create-user.dto'
 import { UserEntity } from '../users/entities/user.entity'
 import {
   ApiBearerAuth,
@@ -20,9 +10,7 @@ import {
 import { AuthDto, FirebaseRegisterUserDto } from './dto/auth.dto'
 import { AuthEntity } from './entity/auth.entity'
 import { AuthGuard } from './guard/auth.guard'
-import { Roles } from './guard/roles.decorator'
 
-import { initializeApp } from 'firebase-admin/app'
 import { FirebaseTokenDto } from './dto/firebase-token.dto'
 
 @ApiTags('auth')
