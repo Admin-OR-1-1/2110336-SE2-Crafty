@@ -4,6 +4,8 @@ import { apiService } from '@/configs/apiService/apiService';
 import Logo from '@assets/svgs/logo.svg';
 import { useState } from 'react';
 import { IoMdPerson } from 'react-icons/io';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/configs/firebaseConfig';
 
 export default function NavbarLayout({ children }: { children: React.ReactNode }) {
   const [openUserModal, setOpenUserModal] = useState(false);
@@ -12,6 +14,18 @@ export default function NavbarLayout({ children }: { children: React.ReactNode }
     console.log(responseUser);
     // const response = await apiService.deleteUser(responseUser.status);
   };
+
+  const logoutHandler = async () => {
+    signOut(auth)
+      .then(() => {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div className="flex min-h-screen w-full flex-col">
       <div className="sticky top-0 z-50 flex h-16 w-full flex-row items-center gap-6 bg-ct_brown-200 px-10 max-md:justify-center">
@@ -44,7 +58,9 @@ export default function NavbarLayout({ children }: { children: React.ReactNode }
                 }}>
                 Delete this Account
               </h1>
-              <h1 className="cursor-pointer text-red-500 hover:underline">Logout</h1>
+              <h1 className="cursor-pointer text-red-500 hover:underline" onClick={logoutHandler}>
+                Logout
+              </h1>
             </div>
           )}
         </div>
