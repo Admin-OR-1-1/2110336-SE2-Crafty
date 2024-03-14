@@ -117,7 +117,7 @@ export default function NavbarLayout({ children }: { children: React.ReactNode }
         </div>
 
         <a href="/feed-list" className="hover:underline">
-          my post
+          My Post
         </a>
 
         <div className="ml-auto flex flex-row gap-3">
