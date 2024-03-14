@@ -239,31 +239,32 @@ const Page = () => {
   const registerUser = async (): Promise<void> => {
     if (!user) return;
 
-    apiClient
-      .put('/user', {
-        user: {
-          address: {
-            address_1: address,
-            street: road,
-            tambon: subDistrict,
-            amphoe: district,
-            province: province,
-            postal_code: postalCode,
-          },
-          phone: phone,
-          picture_url: `https://picsum.photos/seed/${await user.uid}/400/400`,
-          username: name,
-        },
-      })
-      .then(() => {
-        // Update successful
-        console.log("Created user's data successfully");
-        router.push('/');
-      })
-      .catch((error) => {
-        // An error occurred
-        console.log('An error occurred', error);
-      });
+    // apiClient
+    //   .put('/user', {
+    //     user: {
+    //       address: {
+    //         address_1: address,
+    //         street: road,
+    //         tambon: subDistrict,
+    //         amphoe: district,
+    //         province: province,
+    //         postal_code: postalCode,
+    //       },
+    //       phone: phone,
+    //       picture_url: `https://picsum.photos/seed/${await user.uid}/400/400`,
+    //       username: name,
+    //     },
+    //   })
+    //   .then(() => {
+    //     // Update successful
+    //     console.log("Created user's data successfully");
+    //     router.push('/');
+    //   })
+    //   .catch((error) => {
+    //     // An error occurred
+    //     console.log('An error occurred', error);
+    //   });
+    router.push('/');
   };
 
   return (
