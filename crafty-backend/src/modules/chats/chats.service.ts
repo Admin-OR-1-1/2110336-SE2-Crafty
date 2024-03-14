@@ -134,13 +134,17 @@ export class ChatsService {
         senderId,
       },
     })
-    // update chatroom's lastChatTime
+    // update chatroom's lastChatTime, read status
     await this.prisma.chatroom.update({
       where: {
         id: chatroomId,
       },
       data: {
         lastChatTime: message.date,
+        // Conditional update based on senderId
+        ...(senderId === chatroom.crafterId
+          ? { isCrafteeRead: false, isCrafterRead: true }
+          : { isCrafterRead: false, isCrafteeRead: true }),
       },
     })
 
