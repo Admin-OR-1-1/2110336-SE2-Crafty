@@ -46,7 +46,7 @@ const ChatRoomPage: FC<PageProps> = ({ params }) => {
         </div>
         <ChatInput chatroomId={params.chatroomId} senderId={myId} />
       </div>
-      <div className="flex min-h-[calc(100vh-64px)] min-w-[300px] max-w-[300px] flex-col gap-2 border bg-ct_brown-100 p-3">
+      <div className="flex min-h-[calc(100vh-64px)] min-w-[300px] max-w-[300px] flex-col gap-2 border-l bg-ct_brown-100 p-3">
         <span className="text-2xl font-semibold">Your Order</span>
         <div className="flex w-full border-t border-ct_brown-400" />
         <span className="text-2xl">Title for order</span>
