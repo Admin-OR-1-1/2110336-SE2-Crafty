@@ -30,8 +30,7 @@ const useUnreadCount = (): Number => {
     }
   });
 
-  //   TODO: fix this return
-  return 1;
+  return count;
 };
 
 export default useUnreadCount;
