@@ -10,6 +10,7 @@ export interface Post {
   priority: number;
   reviews: Review[];
   userFavorite: User[];
+  ownerId?: string;
 }
 
 export interface Package {

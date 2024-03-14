@@ -50,3 +50,9 @@ export interface ChatroomDetail {
   craftee: User;
   messages: Message[];
 }
+
+export interface PostChatroom {
+  crafterId: string;
+  crafteeId: string;
+  productId: string;
+}

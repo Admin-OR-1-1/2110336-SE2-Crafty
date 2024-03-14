@@ -39,14 +39,18 @@ const FeedDetailPage: FC = () => {
   };
 
   const createNewChatroom = async () => {
-    // const crafterId = post;
-    // const crafteeId = user.id;
-    // const productId = feedId;
-    window.location.href = `/chats`;
+    const crafterId = String(post?.ownerId) || '';
+    const crafteeId = String(user.id);
+    const productId = String(feedId);
+    // console.log(user.username);
+    // console.log(crafteeId, crafterId, productId);
+    const response = await apiService.createNewChatroom({ crafterId, crafteeId, productId });
+    if (response.status === 'ERROR') return alert('Failed to create chatroom');
+    const newChatroom = response.data;
+    window.location.href = `/chats/${newChatroom.id}`;
   };
 
   if (!init) return <LoadingPage />;
-  console.log(post);
 
   return (
     <div className="flex w-full flex-col gap-2 p-8">
