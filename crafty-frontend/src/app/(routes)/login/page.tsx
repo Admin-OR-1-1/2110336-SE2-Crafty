@@ -15,7 +15,7 @@ import { auth } from '@/configs/firebaseConfig';
 import LogoLeftSide from '@/app/_components/ui/logoLeftSide';
 import { useRouter } from 'next/navigation';
 import { apiClient } from '@/configs/axiosConfig';
-import { FirebaseAuthProvider, useFirebaseAuthContext } from '@/contexts/firebaseAuthContext';
+import { useFirebaseAuthContext } from '@/contexts/firebaseAuthContext';
 import { apiService } from '@/configs/apiService/apiService';
 import { ApiStatus } from '@/configs/apiService/types';
 
