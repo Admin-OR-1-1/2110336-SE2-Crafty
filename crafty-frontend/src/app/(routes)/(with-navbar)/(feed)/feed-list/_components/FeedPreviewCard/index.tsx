@@ -1,8 +1,8 @@
+import useMyFeed from '@/app/(routes)/(with-navbar)/_hooks/myFeed';
 import { Post } from '@/app/_common/interface/post';
 import { apiService } from '@/configs/apiService/apiService';
 import { ApiStatus } from '@/configs/apiService/types';
 import Image from 'next/image';
-import useFeedList from '../../../../_hooks/allFeed';
 import { useEffect, useState } from 'react';
 
 interface FeedPreviewCardProps {
@@ -15,7 +15,7 @@ const FeedPreviewCard = ({ post }: FeedPreviewCardProps) => {
     setPriority(post.priority);
   }, [post.priority]);
 
-  const { updateLocalPost } = useFeedList();
+  const { updateLocalPost } = useMyFeed();
   const boostPost = async () => {
     const response = await apiService.boostPost(post.id);
     if (response.status === ApiStatus.SUCCESS) {
