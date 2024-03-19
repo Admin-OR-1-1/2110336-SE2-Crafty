@@ -11,9 +11,20 @@ import { apiClient } from '@/configs/axiosConfig';
 import { ApiStatus } from '@/configs/apiService/types';
 import { useRouter } from 'next/navigation';
 import useUnreadCount from './_hooks/useUnreadCount';
+import searchStore from './_hooks/searchOnNavbar/stores/search';
+import useDebounce from '@/app/_common/hooks/debounce';
 
 export default function NavbarLayout({ children }: { children: React.ReactNode }) {
   useUserStore();
+  const [localSearch, setLocalSearch] = useState('');
+  const setSearch = searchStore((state) => state.setSearch);
+  const enableSearch = searchStore((state) => state.enableSearch);
+
+  const debouncedSearch = useDebounce(localSearch, 300);
+
+  useEffect(() => {
+    setSearch(debouncedSearch);
+  }, [debouncedSearch, setSearch]);
 
   const router = useRouter();
   const [openUserModal, setOpenUserModal] = useState(false);
@@ -124,6 +135,15 @@ export default function NavbarLayout({ children }: { children: React.ReactNode }
         <a href="/feed-list" className="hover:underline">
           My Post
         </a>
+
+        {enableSearch && (
+          <input
+            type="text"
+            className="input h-10 w-full max-w-[1000px]"
+            placeholder="Search for a post"
+            onChange={(e) => setLocalSearch(e.target.value)}
+          />
+        )}
 
         <div className="ml-auto flex flex-row gap-3">
           <span>mute</span>

@@ -101,9 +101,9 @@ class ApiService {
     }
   };
 
-  getPosts = async (): Promise<ApiResponseType<Post[]>> => {
+  getPosts = async (search: string): Promise<ApiResponseType<Post[]>> => {
     try {
-      const response = await apiClient.get('/posts');
+      const response = await apiClient.get('/posts', { params: { search } });
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
