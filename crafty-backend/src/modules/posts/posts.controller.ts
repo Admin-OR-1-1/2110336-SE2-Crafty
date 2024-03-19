@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Request,
+  Query,
 } from '@nestjs/common'
 import { PostsService } from './posts.service'
 import { CreatePostDto } from './dto/create-post.dto'
@@ -17,6 +18,7 @@ import { CreateReviewDto } from './dto/create-review'
 import { FavoriteDto } from './dto/favorite.dto'
 import { AuthGuard } from '../auth/guard/auth.guard'
 import { UserEntity } from '../users/entities/user.entity'
+import { SearchDto } from './dto/search.dto'
 
 @ApiTags('posts')
 @Controller('posts')
@@ -60,8 +62,8 @@ export class PostsController {
   }
 
   @Get()
-  findAll() {
-    return this.postsService.findAll()
+  findAll(@Query() searchDto: SearchDto) {
+    return this.postsService.findAll(searchDto.search)
   }
 
   @UseGuards(AuthGuard)

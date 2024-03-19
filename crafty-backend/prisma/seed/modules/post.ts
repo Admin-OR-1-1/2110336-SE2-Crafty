@@ -16,7 +16,9 @@ export const postSeed = async () => {
     await prisma.post.create({
       data: {
         title: `The title of the post ${i}`,
-        detail: `The detail of the post ${i}`,
+        detail: `The detail of the post ${i} ${
+          ['cat', 'rat', 'bat', 'bag', 'water'][Math.floor(Math.random() * 5)]
+        }`,
         content: `The content of the post ${i}`,
         price: 100 + i,
         photoUrl: `https://picsum.photos/seed/${Math.random()

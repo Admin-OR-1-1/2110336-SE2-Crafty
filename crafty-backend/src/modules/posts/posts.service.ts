@@ -70,11 +70,41 @@ export class PostsService {
     })
   }
 
-  async findAll() {
+  async findAll(search?: string) {
     return await this.prisma.post.findMany({
       include: {
         reviews: true,
         userFavorite: true,
+      },
+      where: {
+        OR: [
+          {
+            title: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+          {
+            detail: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+          {
+            content: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+          {
+            owner: {
+              username: {
+                contains: search,
+                mode: 'insensitive',
+              },
+            },
+          },
+        ],
       },
       orderBy: [
         {
