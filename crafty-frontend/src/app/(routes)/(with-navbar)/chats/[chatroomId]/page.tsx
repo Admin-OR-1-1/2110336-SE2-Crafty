@@ -1,6 +1,6 @@
 'use client';
 
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import MessageBubble from '../_component/MessageBubble';
 import ChatHeader from '../_component/ChatHeader';
 import ChatInput from '../_component/ChatInput';
@@ -8,6 +8,7 @@ import { ChatroomDetail, Message } from '@/app/_common/interface/chat';
 import userStore from '@/app/_common/store/user/user-store';
 import useChatroomDetail from '../_hook/useChatroomDetail';
 import Image from 'next/image';
+import { socket } from '../socket';
 
 type PageProps = {
   params: {
@@ -19,8 +20,17 @@ const ChatRoomPage: FC<PageProps> = ({ params }) => {
   const chatroomDetail = useChatroomDetail(params.chatroomId);
   const myId = userStore((state) => state.user.id);
   const myName = userStore((state) => state.user.username);
-
   const messages = chatroomDetail?.messages;
+
+  useEffect(() => {
+    socket.connect();
+    socket.emit('joinRoom', params.chatroomId);
+
+    return () => {
+      socket.emit('leaveRoom', params.chatroomId);
+      socket.disconnect();
+    };
+  }, [params.chatroomId]);
 
   const talkerName =
     chatroomDetail?.crafter.username === myName
