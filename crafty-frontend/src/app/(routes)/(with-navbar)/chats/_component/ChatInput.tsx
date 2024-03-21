@@ -59,6 +59,11 @@ const ChatInput: React.FC<ChatInputProps> = ({ chatroomId, senderId }) => {
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           setText(e.target.value);
         }}
+        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+          if (e.key === 'Enter') {
+            submitMessage();
+          }
+        }}
       />
       <div className="send-icon">
         <IoIosSend

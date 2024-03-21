@@ -9,6 +9,7 @@ interface TextInputProps {
   border?: boolean;
   disabled?: boolean;
   autoComplete?: string;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const TextInput: FC<TextInputProps> = ({
@@ -20,6 +21,7 @@ const TextInput: FC<TextInputProps> = ({
   border = false,
   disabled = false,
   autoComplete = 'off',
+  onKeyDown = () => {},
 }) => {
   return (
     <>
@@ -31,6 +33,7 @@ const TextInput: FC<TextInputProps> = ({
         className={`input ${disabled && 'input-disabled'} h-10 w-full rounded-lg placeholder:font-normal focus:border-none ${border ? 'border-2 border-ct_brown-500 focus:border-ct_brown-500' : ''} bg-white py-4 focus:outline-none active:outline-none`}
         onChange={onChange}
         autoComplete={autoComplete}
+        onKeyDown={onKeyDown}
       />
     </>
   );
