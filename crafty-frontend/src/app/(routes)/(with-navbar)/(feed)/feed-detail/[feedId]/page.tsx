@@ -41,10 +41,10 @@ const FeedDetailPage: FC = () => {
   const createNewChatroom = async () => {
     const crafterId = String(post?.ownerId) || '';
     const crafteeId = String(user.id);
-    const productId = String(feedId);
+    const postId = String(feedId);
     // console.log(user.username);
-    // console.log(crafteeId, crafterId, productId);
-    const response = await apiService.createNewChatroom({ crafterId, crafteeId, productId });
+    // console.log(crafteeId, crafterId, postId);
+    const response = await apiService.createNewChatroom({ crafterId, crafteeId, postId });
     if (response.status === 'ERROR') return alert('Failed to create chatroom');
     const newChatroom = response.data;
     window.location.href = `/chats/${newChatroom.id}`;

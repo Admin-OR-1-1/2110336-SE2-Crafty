@@ -54,5 +54,5 @@ export interface ChatroomDetail {
 export interface PostChatroom {
   crafterId: string;
   crafteeId: string;
-  productId: string;
+  postId: string;
 }
