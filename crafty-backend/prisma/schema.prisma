@@ -30,64 +30,71 @@ model User {
   crafterRoom Chatroom[] @relation("CrafterRoom")
   crafteeRoom Chatroom[] @relation("CrafteeRoom")
 
-
-
   ownerPost Post[] @relation("ownerPost")
 
   favoritePost Post[] @relation("userFavorite")
 }
+
 model Product {
-  id       String @id @default(cuid())
+  id       String  @id @default(cuid())
   title    String
   desc     String
   price    Float
-  deadline String
-  status   String
-  note     String
+  deadline String?
+  status   String?
+  note     String?
 
-  chatroomId String @unique
-  chatroom Chatroom  @relation(fields: [chatroomId], references: [id])
+  // ### tee
+  step     Int     @default(1)
+  imageUrl String?
+  // ###
+
+  chatroomId String   @unique
+  chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
 }
 
 model Message {
-  id           String      @id @default(uuid())
-  senderId     String
-  content      String
-  messageType  MessageType
-  isRead       Boolean     @default(false)
-  date         DateTime    @default(now())
+  id          String      @id @default(uuid())
+  senderId    String
+  content     String
+  messageType MessageType
+  isRead      Boolean     @default(false)
+  date        DateTime    @default(now())
 
-  chatroomId   String
-  chatroom     Chatroom    @relation(fields: [chatroomId], references: [id])
+  chatroomId String
+  chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
 }
 
 model Chatroom {
-  id          String   @id @default(uuid())
-  messages    Message[]
-  crafterId     String
-  crafter       User     @relation("CrafterRoom", fields: [crafterId], references: [id])
-  crafteeId     String
-  craftee       User     @relation("CrafteeRoom", fields: [crafteeId], references: [id])
+  id        String    @id @default(uuid())
+  messages  Message[]
+  crafterId String
+  crafter   User      @relation("CrafterRoom", fields: [crafterId], references: [id])
+  crafteeId String
+  craftee   User      @relation("CrafteeRoom", fields: [crafteeId], references: [id])
 
-  lastChatTime DateTime @default(now())
+  lastChatTime  DateTime @default(now())
   isCrafterRead Boolean  @default(false)
   isCrafteeRead Boolean  @default(false)
 
-  productId   String?
-  product   Product?
+  postId  String?
+  post    Post?    @relation(fields: [postId], references: [id])
+  Product Product? 
 }
+
 model Post {
-  id      String @id @default(cuid())
-  title   String
-  detail  String
-  content String
-  price   Float
-  photoUrl String
-  priority Float @default(0)
-  ownerId String
-  owner   User   @relation("ownerPost", fields: [ownerId], references: [id])
+  id           String     @id @default(cuid())
+  title        String
+  detail       String
+  content      String
+  price        Float
+  photoUrl     String
+  priority     Float      @default(0)
+  ownerId      String
+  owner        User       @relation("ownerPost", fields: [ownerId], references: [id])
   reviews      Review[]
-  userFavorite User[]   @relation("userFavorite")
+  userFavorite User[]     @relation("userFavorite")
+  Chatroom     Chatroom[]
 }
 
 model Review {
