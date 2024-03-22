@@ -152,13 +152,13 @@ export class ChatsService {
   }
 
   async createChatroom(createChatroomDto: CreateChatroomDto, user: User) {
-    const { crafterId, crafteeId, productId } = createChatroomDto
+    const { crafterId, crafteeId, postId } = createChatroomDto
     // check if chatroom already exists
     const chatroom = await this.prisma.chatroom.findFirst({
       where: {
         crafterId,
         crafteeId,
-        productId,
+        postId,
       },
     })
     if (chatroom) {
@@ -170,7 +170,7 @@ export class ChatsService {
       data: {
         crafterId,
         crafteeId,
-        productId,
+        postId,
       },
     })
   }

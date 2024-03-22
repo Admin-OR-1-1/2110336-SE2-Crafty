@@ -20,5 +20,5 @@ export class CreateChatroomDto {
     example: 'product001',
     description: 'id of product from this chatroom.',
   })
-  productId?: string
+  postId?: string
 }
