@@ -11,6 +11,7 @@ import { PostsModule } from './modules/posts/posts.module'
 import { ProductsModule } from './modules/products/products.module'
 import { ChatsModule } from './modules/chats/chats.module'
 import { FirebaseModule } from 'src/firebase/firebase.module'
+import { WalletModule } from './modules/wallet/wallet.module'
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { FirebaseModule } from 'src/firebase/firebase.module'
     ProductsModule,
     ChatsModule,
     FirebaseModule,
+    WalletModule,
   ],
   controllers: [AppController],
   providers: [AppService],
