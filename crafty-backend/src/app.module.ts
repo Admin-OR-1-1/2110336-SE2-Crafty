@@ -12,6 +12,7 @@ import { ProductsModule } from './modules/products/products.module'
 import { ChatsModule } from './modules/chats/chats.module'
 import { FirebaseModule } from 'src/firebase/firebase.module'
 import { WalletModule } from './modules/wallet/wallet.module'
+import { MongooseModule } from '@nestjs/mongoose'
 
 @Module({
   imports: [
@@ -19,6 +20,9 @@ import { WalletModule } from './modules/wallet/wallet.module'
       global: true,
       secret: jwtConstants.secret,
     }),
+    MongooseModule.forRoot(
+      'mongodb+srv://crafty-dev:KRsTqlWoqbDt5A9P@crafty-0.2mqdoth.mongodb.net/?retryWrites=true&w=majority',
+    ),
     ConfigModule.forRoot(),
     PrismaModule,
     UsersModule,

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsNumber } from 'class-validator'
+import { TransactionType } from '../schemas/transactions.schema'
 
 export class DepositDTO {
   @IsNumber()
@@ -19,8 +20,26 @@ export class TransferDTO {
   amount: string
 
   @ApiProperty({
-    example: 'john_doe',
+    example: 'account_id',
     description: 'The username of the recipient',
   })
-  recipient: string
+  sourceAccount: string
+
+  @ApiProperty({
+    example: 'account_id',
+    description: 'The username of the recipient',
+  })
+  destinationAccount: string
+
+  @ApiProperty({
+    example: 'Transfer',
+    description: 'The username of the recipient',
+  })
+  type: TransactionType
+
+  @ApiProperty({
+    example: 'Date',
+    description: 'The username of the recipient',
+  })
+  timestamp: Date
 }
