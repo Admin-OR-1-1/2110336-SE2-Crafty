@@ -45,9 +45,11 @@ export class PaymentService {
       { headers: header },
     )
     const status = res.data.status.code
-    if (status !== '1000') {
+    // consol
+    if (status !== 1000) {
       throw new Error('Failed to generate OAuth token')
     }
+    // console.log(res.data.data)
     const accessToken = res.data.data.accessToken
 
     return accessToken
@@ -59,25 +61,39 @@ export class PaymentService {
     const apiKey = process.env.SCB_API_KEY
     const ref1 = this.generateRandomString(20)
     const header = {
-      'Content-Type': 'application/json',
-      resourceOwnerId: apiKey,
+      'content-type': 'application/json',
+      resourceOwnerId: process.env.SCB_API_KEY,
       requestUid: reqUUID,
       'accept-language': 'EN',
       authorization: `Bearer ${accessToken}`,
     }
     const data = {
-      qrType: 'PP',
+      qrType: 'PPCS',
       amount: amount,
+      invoice: ref1,
+      merchantId: process.env.SCB_MERCHANT_ID,
+      terminalId: process.env.SCB_TERMINAL_ID,
       ppType: 'BILLERID',
-      ppId: '711104778704961',
+      ppId: process.env.SCB_BILLER_ID,
       ref1: ref1,
+      ref3: 'CRT888888',
     }
-
-    const res = await axios.post(
-      'https://api-sandbox.partners.scb/partners/sandbox/v1/payment/qrcode/create',
-      data,
-      { headers: header },
-    )
+    console.log(data)
+    console.log(header)
+    const res = await axios
+      .post(
+        'https://api-sandbox.partners.scb/partners/sandbox/v1/payment/qrcode/create',
+        data,
+        { headers: header },
+      )
+      .catch((err) => {
+        console.log(err.code)
+        return err.response
+      })
+    console.log(res.data.status)
+    if (res.data.status.code !== 1000) {
+      throw new Error('Failed to generate QR code')
+    }
     return {
       qrImage: res.data.data.qrImage,
       ref: ref1,

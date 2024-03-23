@@ -18,9 +18,9 @@ import { PaymentService } from './scb/payment.service'
 
 @ApiTags('wallets')
 @Controller('wallets')
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 // @Roles('ADMIN')
-@ApiBearerAuth()
+// @ApiBearerAuth()
 export class WalletsController {
   constructor(private readonly paymentService: PaymentService) {}
 
