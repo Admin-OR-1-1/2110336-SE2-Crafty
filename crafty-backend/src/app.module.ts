@@ -20,9 +20,7 @@ import { MongooseModule } from '@nestjs/mongoose'
       global: true,
       secret: jwtConstants.secret,
     }),
-    MongooseModule.forRoot(
-      'mongodb+srv://crafty-dev:KRsTqlWoqbDt5A9P@crafty-0.2mqdoth.mongodb.net/?retryWrites=true&w=majority',
-    ),
+    MongooseModule.forRoot(process.env.WALLET_DB_URI),
     ConfigModule.forRoot(),
     PrismaModule,
     UsersModule,
