@@ -31,8 +31,8 @@ const ProductSidebar = ({ product, chatroomId }: ProductSidebarProps) => {
 
       {/* Sidebar */}
       <div
-        className={`absolute bottom-0 right-0 z-50 h-[calc(100vh-64px)] w-[64] transform overflow-visible border-l bg-white transition-all duration-300 ease-in-out ${
-          isOpen ? 'w-[600px] translate-x-0' : 'w-[16px]'
+        className={`absolute bottom-0 right-0 z-50 h-[calc(100vh-64px)] w-[64] transform overflow-y-auto overflow-x-visible border-l bg-white transition-all duration-300 ease-in-out ${
+          isOpen ? 'w-[640px] translate-x-0' : 'w-[16px]'
         }`}>
         {/* Sidebar content */}
         <button
@@ -40,7 +40,9 @@ const ProductSidebar = ({ product, chatroomId }: ProductSidebarProps) => {
           onClick={toggleSidebar}>
           <BsChevronLeft style={iconStyle} />
         </button>
-        {isOpen && <ProductCard product={product} chatroomId={chatroomId} />}
+        <div className="overflow-y-auto">
+          {isOpen && <ProductCard product={product} chatroomId={chatroomId} />}
+        </div>
       </div>
     </div>
   );

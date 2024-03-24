@@ -360,6 +360,21 @@ class ApiService {
       };
     }
   };
+
+  incrementProductStep = async (productId: string): Promise<ApiResponseType<ProductDetail>> => {
+    try {
+      const response = await apiClient.patch(`/products/${productId}`, { incrementStep: true });
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to increment product step',
+      };
+    }
+  };
 }
 
 export const apiService = new ApiService();

@@ -29,7 +29,7 @@ const ChatRoomPage: FC<PageProps> = ({ params }) => {
       : chatroomDetail?.crafter.username;
 
   return (
-    <div className="flex min-h-[calc(100vh-64px)] w-full flex-row overflow-x-hidden">
+    <div className="flex min-h-[calc(100vh-64px)] w-full flex-row overflow-x-hidden overflow-y-hidden">
       <div className="mr-2 flex h-full min-h-[calc(100vh-64px)] w-full flex-col">
         <ChatHeader name={talkerName ?? ''} />
         <div className="flex-1 flex-col space-y-4 overflow-y-auto py-4">
@@ -48,9 +48,6 @@ const ChatRoomPage: FC<PageProps> = ({ params }) => {
         <ChatInput chatroomId={params.chatroomId} senderId={myId} />
       </div>
       <ProductSidebar product={productDetail} chatroomId={params.chatroomId} />
-      {/* <div className="absolute right-0 flex min-h-[calc(100vh-64px)] w-1/2 flex-col bg-red-300">
-        <ProductSidebar />
-      </div> */}
     </div>
   );
 };

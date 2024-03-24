@@ -4,6 +4,7 @@ import { apiService } from '@/configs/apiService/apiService';
 import { useState } from 'react';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { ProductSidebarProps } from './ProductSidebar';
+import StepProgress from './StepProgress';
 
 interface MyTextInputProps {
   label: string;
@@ -150,6 +151,7 @@ const EmptyProductCard = ({ chatroomId }: ChatroomIdProps) => {
 };
 
 const RealProductCard = ({ product, chatroomId }: NonEmptyProductSidebarProps) => {
+  const [step, setStep] = useState(product.step);
   const deleteProduct = async () => {
     // display confirmation dialog
     const confirmDelete = confirm('Are you sure you want to cancel this product?');
@@ -163,23 +165,44 @@ const RealProductCard = ({ product, chatroomId }: NonEmptyProductSidebarProps) =
     }
   };
 
+  const incrementStep = async () => {
+    try {
+      const updatedProduct = await apiService.incrementProductStep(product.id);
+      console.log(updatedProduct);
+      setStep(step + 1);
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center gap-6">
-      <div className="text-xl font-bold">{product.title}</div>
-      <div className="flex flex-col items-center gap-2">
+    <div className="flex flex-col items-center gap-12 p-6">
+      <div className="flex flex-col items-center gap-6">
+        <div className="flex flex-col break-all text-2xl font-bold">
+          <div>{product.title}</div>
+          <div className="ml-2 text-lg">#{product.id}</div>
+        </div>
         {product.imageUrl && (
-          <img
-            src={product.imageUrl}
-            alt="product"
-            className="h-[200px] w-[200px] rounded-md object-cover"
-          />
+          <div>
+            <img
+              src={product.imageUrl}
+              alt={product.title}
+              className="h-[200px] rounded-lg object-cover"
+            />
+          </div>
         )}
-        <div className="text-lg">{product.desc}</div>
-        <div className="text-lg">{product.price} บาท</div>
       </div>
-      <Button className="rounded-xl bg-red-500 hover:bg-red-700" onClick={deleteProduct}>
-        Cancel this product
-      </Button>
+
+      <StepProgress step={step} />
+      <div className="flex w-[400px] flex-col gap-2 px-10">
+        <Button className="rounded-xl" onClick={incrementStep}>
+          Increment Step
+        </Button>
+        <Button className="rounded-xl bg-red-500 hover:bg-red-700" onClick={deleteProduct}>
+          Cancel this product
+        </Button>
+      </div>
     </div>
   );
 };
