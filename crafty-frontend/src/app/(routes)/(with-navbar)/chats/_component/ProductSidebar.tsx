@@ -5,12 +5,12 @@ import { BsChevronLeft } from 'react-icons/bs';
 import ProductCard from './ProductCard';
 import { ProductDetail } from '@/app/_common/interface/chat';
 
-interface ProductSidebarProps {
-  //   productId: string | undefined;
+export interface ProductSidebarProps {
   product: ProductDetail | null;
+  chatroomId: string;
 }
 
-const ProductSidebar = ({ product }: ProductSidebarProps) => {
+const ProductSidebar = ({ product, chatroomId }: ProductSidebarProps) => {
   // State to manage sidebar visibility
   const [isOpen, setIsOpen] = useState(false);
 
@@ -40,7 +40,7 @@ const ProductSidebar = ({ product }: ProductSidebarProps) => {
           onClick={toggleSidebar}>
           <BsChevronLeft style={iconStyle} />
         </button>
-        {isOpen && <ProductCard product={product} />}
+        {isOpen && <ProductCard product={product} chatroomId={chatroomId} />}
       </div>
     </div>
   );

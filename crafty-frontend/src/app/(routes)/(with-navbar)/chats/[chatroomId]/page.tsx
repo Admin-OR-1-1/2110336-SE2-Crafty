@@ -47,7 +47,7 @@ const ChatRoomPage: FC<PageProps> = ({ params }) => {
         </div>
         <ChatInput chatroomId={params.chatroomId} senderId={myId} />
       </div>
-      <ProductSidebar product={productDetail} />
+      <ProductSidebar product={productDetail} chatroomId={params.chatroomId} />
       {/* <div className="absolute right-0 flex min-h-[calc(100vh-64px)] w-1/2 flex-col bg-red-300">
         <ProductSidebar />
       </div> */}

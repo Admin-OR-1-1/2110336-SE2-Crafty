@@ -328,6 +328,23 @@ class ApiService {
       };
     }
   };
+
+  createNewProduct = async (
+    product: Partial<ProductDetail>
+  ): Promise<ApiResponseType<ProductDetail>> => {
+    try {
+      const response = await apiClient.post('/products', product);
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to create product',
+      };
+    }
+  };
 }
 
 export const apiService = new ApiService();
