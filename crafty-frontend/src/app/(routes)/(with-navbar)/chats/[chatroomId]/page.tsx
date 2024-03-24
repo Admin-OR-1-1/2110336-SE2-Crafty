@@ -1,6 +1,6 @@
 'use client';
 
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import MessageBubble from '../_component/MessageBubble';
 import ChatHeader from '../_component/ChatHeader';
 import ChatInput from '../_component/ChatInput';
@@ -17,7 +17,7 @@ type PageProps = {
 };
 
 const ChatRoomPage: FC<PageProps> = ({ params }) => {
-  const chatroomDetail = useChatroomDetail(params.chatroomId);
+  const { chatroomDetail, productDetail } = useChatroomDetail(params.chatroomId);
   const myId = userStore((state) => state.user.id);
   const myName = userStore((state) => state.user.username);
 
@@ -47,7 +47,7 @@ const ChatRoomPage: FC<PageProps> = ({ params }) => {
         </div>
         <ChatInput chatroomId={params.chatroomId} senderId={myId} />
       </div>
-      <ProductSidebar />
+      <ProductSidebar product={productDetail} />
       {/* <div className="absolute right-0 flex min-h-[calc(100vh-64px)] w-1/2 flex-col bg-red-300">
         <ProductSidebar />
       </div> */}

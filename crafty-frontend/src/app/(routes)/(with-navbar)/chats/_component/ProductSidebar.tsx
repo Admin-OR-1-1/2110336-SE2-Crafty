@@ -2,10 +2,15 @@
 
 import { useState } from 'react';
 import { BsChevronLeft } from 'react-icons/bs';
+import ProductCard from './ProductCard';
+import { ProductDetail } from '@/app/_common/interface/chat';
 
-interface ProductSidebarProps {}
+interface ProductSidebarProps {
+  //   productId: string | undefined;
+  product: ProductDetail | null;
+}
 
-const ProductSidebar = () => {
+const ProductSidebar = ({ product }: ProductSidebarProps) => {
   // State to manage sidebar visibility
   const [isOpen, setIsOpen] = useState(false);
 
@@ -26,8 +31,8 @@ const ProductSidebar = () => {
 
       {/* Sidebar */}
       <div
-        className={`absolute bottom-0 right-0 z-50 h-[calc(100vh-64px)] w-64 transform overflow-visible border-l bg-white transition-all duration-300 ease-in-out ${
-          isOpen ? 'translate-x-0' : 'w-[16px]'
+        className={`absolute bottom-0 right-0 z-50 h-[calc(100vh-64px)] w-[64] transform overflow-visible border-l bg-white transition-all duration-300 ease-in-out ${
+          isOpen ? 'w-[600px] translate-x-0' : 'w-[16px]'
         }`}>
         {/* Sidebar content */}
         <button
@@ -35,7 +40,7 @@ const ProductSidebar = () => {
           onClick={toggleSidebar}>
           <BsChevronLeft style={iconStyle} />
         </button>
-        {/* Add your sidebar content here */}
+        {isOpen && <ProductCard product={product} />}
       </div>
     </div>
   );
