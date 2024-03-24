@@ -17,6 +17,11 @@ interface ChatroomIdProps {
   chatroomId: string;
 }
 
+export interface NonEmptyProductSidebarProps {
+  product: ProductDetail;
+  chatroomId: string;
+}
+
 const MyTextInput = ({ label, placeholder, required, value, setText }: MyTextInputProps) => {
   return (
     <>
@@ -52,6 +57,14 @@ const CreateProductForm = ({ chatroomId }: ChatroomIdProps) => {
   const [desc, setDesc] = useState('');
 
   const createNewProduct = async () => {
+    // loop through textInputList
+    for (const textInput of textInputList) {
+      if (textInput.required && !textInput.value) {
+        alert('Please fill in all required fields');
+        return;
+      }
+    }
+
     try {
       const product = await apiService.createNewProduct({
         title,
@@ -113,17 +126,61 @@ const CreateProductForm = ({ chatroomId }: ChatroomIdProps) => {
 };
 
 const EmptyProductCard = ({ chatroomId }: ChatroomIdProps) => {
-  return <CreateProductForm chatroomId={chatroomId} />;
+  const [showCreateForm, setShowCreateForm] = useState(false);
+
+  const handleCreateProduct = () => {
+    setShowCreateForm(true);
+  };
+
   return (
     <>
-      <div className="flex flex-col items-center gap-4">
-        <AiOutlineShoppingCart size={100} />
-        <div className="text-2xl font-semibold">ยังไม่มีสินค้าในขณะนี้</div>
-      </div>
-      <div className="flex w-[200px]">
-        <Button>สร้างสินค้า</Button>
-      </div>
+      {showCreateForm ? (
+        <CreateProductForm chatroomId={chatroomId} />
+      ) : (
+        <div className="flex flex-col items-center gap-4">
+          <AiOutlineShoppingCart size={100} />
+          <div className="text-2xl font-semibold">ยังไม่มีสินค้าในขณะนี้</div>
+          <div className="flex w-[200px]">
+            <Button onClick={handleCreateProduct}>สร้างสินค้า</Button>
+          </div>
+        </div>
+      )}
     </>
+  );
+};
+
+const RealProductCard = ({ product, chatroomId }: NonEmptyProductSidebarProps) => {
+  const deleteProduct = async () => {
+    // display confirmation dialog
+    const confirmDelete = confirm('Are you sure you want to cancel this product?');
+    if (!confirmDelete) return;
+
+    try {
+      await apiService.deleteProduct(product.id);
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-6">
+      <div className="text-xl font-bold">{product.title}</div>
+      <div className="flex flex-col items-center gap-2">
+        {product.imageUrl && (
+          <img
+            src={product.imageUrl}
+            alt="product"
+            className="h-[200px] w-[200px] rounded-md object-cover"
+          />
+        )}
+        <div className="text-lg">{product.desc}</div>
+        <div className="text-lg">{product.price} บาท</div>
+      </div>
+      <Button className="rounded-xl bg-red-500 hover:bg-red-700" onClick={deleteProduct}>
+        Cancel this product
+      </Button>
+    </div>
   );
 };
 
@@ -131,7 +188,7 @@ const ProductCard = ({ product, chatroomId }: ProductSidebarProps) => {
   return (
     <div className="flex h-full flex-col items-center justify-center gap-9">
       {!product && <EmptyProductCard chatroomId={chatroomId} />}
-      {product && <pre>{JSON.stringify(product, null, 2)}</pre>}
+      {product && <RealProductCard product={product} chatroomId={chatroomId} />}
     </div>
   );
 };

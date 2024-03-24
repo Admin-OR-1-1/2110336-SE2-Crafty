@@ -345,6 +345,21 @@ class ApiService {
       };
     }
   };
+
+  deleteProduct = async (productId: string): Promise<ApiResponseType<ProductDetail>> => {
+    try {
+      const response = await apiClient.delete(`/products/${productId}`);
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to delete product',
+      };
+    }
+  };
 }
 
 export const apiService = new ApiService();
