@@ -28,11 +28,29 @@ export class ProductsService {
     return product
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`
+  async update(id: string, updateProductDto: UpdateProductDto) {
+    try {
+      const product = await this.findOne(id)
+      if (updateProductDto.incrementStep && product.step < 5) {
+        await this.prisma.product.update({
+          where: { id },
+          data: {
+            step: {
+              increment: 1,
+            },
+          },
+        })
+      }
+      return product
+    } catch (error) {
+      console.log(error)
+      throw new NotFoundException(`Product with ID ${id} not found`)
+    }
   }
 
-  async remove(id: number) {
-    return `This action removes a #${id} product`
+  async remove(id: string) {
+    return await this.prisma.product.delete({
+      where: { id },
+    })
   }
 }
