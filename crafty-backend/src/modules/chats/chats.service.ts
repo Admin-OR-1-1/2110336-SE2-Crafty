@@ -56,6 +56,7 @@ export class ChatsService {
       select: {
         crafterId: true,
         crafteeId: true,
+        Product: true,
         messages: true,
         isCrafteeRead: true,
         isCrafterRead: true,
