@@ -28,6 +28,8 @@ const ChatRoomPage: FC<PageProps> = ({ params }) => {
       ? chatroomDetail?.craftee.username
       : chatroomDetail?.crafter.username;
 
+  const isCrafter = chatroomDetail?.crafterId === myId;
+
   return (
     <div className="flex min-h-[calc(100vh-64px)] w-full flex-row overflow-x-hidden overflow-y-hidden">
       <div className="mr-2 flex h-full min-h-[calc(100vh-64px)] w-full flex-col">
@@ -47,7 +49,11 @@ const ChatRoomPage: FC<PageProps> = ({ params }) => {
         </div>
         <ChatInput chatroomId={params.chatroomId} senderId={myId} />
       </div>
-      <ProductSidebar product={productDetail} chatroomId={params.chatroomId} />
+      <ProductSidebar
+        product={productDetail}
+        chatroomId={params.chatroomId}
+        isCrafter={isCrafter}
+      />
     </div>
   );
 };

@@ -8,9 +8,10 @@ import { ProductDetail } from '@/app/_common/interface/chat';
 export interface ProductSidebarProps {
   product: ProductDetail | null;
   chatroomId: string;
+  isCrafter: boolean;
 }
 
-const ProductSidebar = ({ product, chatroomId }: ProductSidebarProps) => {
+const ProductSidebar = ({ product, chatroomId, isCrafter }: ProductSidebarProps) => {
   // State to manage sidebar visibility
   const [isOpen, setIsOpen] = useState(false);
 
@@ -40,8 +41,10 @@ const ProductSidebar = ({ product, chatroomId }: ProductSidebarProps) => {
           onClick={toggleSidebar}>
           <BsChevronLeft style={iconStyle} />
         </button>
-        <div className="overflow-y-auto">
-          {isOpen && <ProductCard product={product} chatroomId={chatroomId} />}
+        <div className="h-full overflow-y-auto">
+          {isOpen && (
+            <ProductCard product={product} chatroomId={chatroomId} isCrafter={isCrafter} />
+          )}
         </div>
       </div>
     </div>

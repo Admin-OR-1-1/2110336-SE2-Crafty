@@ -51,6 +51,8 @@ export interface ChatroomDetail {
   messages: Message[];
 
   Product: ProductDetail | null;
+  crafterId?: string;
+  crafteeId?: string;
 }
 
 export interface PostChatroom {
