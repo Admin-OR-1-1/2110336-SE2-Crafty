@@ -15,5 +15,10 @@ RUN pnpm run build
 FROM base
 COPY --from=prod-deps /app/node_modules /app/node_modules
 COPY --from=build /app/dist /app/dist
+COPY --from=build /app/node_modules/@prisma /app/node_modules/.prisma
+# RUN ls -la /app/dist
 EXPOSE 5000
-CMD [ "node", "/app/dist/main" ]
+CMD ["node", "/app/dist/src/main.js"]
+# CMD [ "pnpm", "run","start" ]
+# CMD ["pnpm", "run", "start:prod"]
+# CMD ["/bin/sh", "-c", "bash"]
