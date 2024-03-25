@@ -11,6 +11,8 @@ import { PostsModule } from './modules/posts/posts.module'
 import { ProductsModule } from './modules/products/products.module'
 import { ChatsModule } from './modules/chats/chats.module'
 import { FirebaseModule } from 'src/firebase/firebase.module'
+import { WalletModule } from './modules/wallet/wallet.module'
+import { MongooseModule } from '@nestjs/mongoose'
 
 @Module({
   imports: [
@@ -18,6 +20,7 @@ import { FirebaseModule } from 'src/firebase/firebase.module'
       global: true,
       secret: jwtConstants.secret,
     }),
+    MongooseModule.forRoot(process.env.WALLET_DB_URI),
     ConfigModule.forRoot(),
     PrismaModule,
     UsersModule,
@@ -26,6 +29,7 @@ import { FirebaseModule } from 'src/firebase/firebase.module'
     ProductsModule,
     ChatsModule,
     FirebaseModule,
+    WalletModule,
   ],
   controllers: [AppController],
   providers: [AppService],
