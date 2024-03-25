@@ -57,6 +57,9 @@ jobs:
           platforms: linux/amd64
   deploy:
     name: Deploy to GooseHQ
+    needs: 
+      - setup-build-publish
+    if: ${{ always() && !cancelled() && needs.build.result == 'success' }}
     runs-on: self-hosted
     environment: develop
     env:
