@@ -9,6 +9,7 @@ services:
       - 5000
     environment:
       MONGODB_URI: ${MONGODB_URI}
+      WALLET_DB_URI: ${WALLET_DB_URI}
       MONGODB_NAME: ${MONGODB_NAME}
       FIREBASE_SDK: ${FIREBASE_SDK}
       DATABASE_URL: ${DATABASE_URL}

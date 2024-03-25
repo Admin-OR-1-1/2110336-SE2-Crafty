@@ -77,25 +77,9 @@ jobs:
       FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
       FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
       FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+      WALLET_DB_URI: ${{ secrets.WALLET_DB_URI }}
 
     steps:
-      # - name: Create .env file
-      #   working-directory: ./crafty-backend
-      #   run: |
-      #     echo MONGODB_URI=${{ secrets.MONGODB_URI }} >> .env
-      #     echo MONGODB_NAME=${{ vars.MONGODB_NAME }} >> .env
-      #     echo FIREBASE_SDK=${{ secrets.FIREBASE_SDK }} >> .env
-      #     echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
-      #     echo PORT=${{ secrets.PORT }} >> .env
-      #     echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
-      #     echo SCB_API_KEY=${{ secrets.SCB_API_KEY }} >> .env
-      #     echo SCB_API_SECRET=${{ secrets.SCB_API_SECRET }} >> .env
-      #     echo SCB_BILLER_ID=${{ secrets.SCB_BILLER_ID }} >> .env
-      #     echo SCB_MERCHANT_ID=${{ secrets.SCB_MERCHANT_ID }} >> .env
-      #     echo SCB_TERMINAL_ID=${{ secrets.SCB_TERMINAL_ID }} >> .env
-      #     echo FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }} >> .env
-      #     echo FIREBASE_PRIVATE_KEY="${{ secrets.FIREBASE_PRIVATE_KEY }}" >> .env
-      #     echo FIREBASE_CLIENT_EMAIL=${{ secrets.FIREBASE_CLIENT_EMAIL }} >> .env
       - name: checkout
         uses: actions/checkout@v2
         with:
