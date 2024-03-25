@@ -59,7 +59,7 @@ jobs:
     name: Deploy to GooseHQ
     needs: 
       - setup-build-publish
-    if: ${{ always() && !cancelled() && needs.build.result == 'success' }}
+    if: ${{ always() && !cancelled() && needs.setup-build-publish.result == 'success' }}
     runs-on: self-hosted
     environment: develop
     env:
