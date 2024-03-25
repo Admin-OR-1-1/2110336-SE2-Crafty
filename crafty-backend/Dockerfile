@@ -1,24 +1,59 @@
-FROM node:20-slim AS base
+# ---- Base Node ----
+FROM node:16-alpine AS base
+
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
-COPY . /app
-WORKDIR /app
 
-FROM base AS prod-deps
+# Install pnpm
+# RUN npm install -g pnpm
+
+WORKDIR /usr/src/app
+
+# ---- Dependencies ----
+FROM base AS dependencies
+# Copy the pnpm-lock file to leverage Docker caching
+COPY package.json pnpm-lock.yaml ./
+
+# Install all node packages, including 'devDependencies' for the build process
+# RUN pnpm fetch --prod false
+# RUN pnpm install -r --offline
+
+# FROM base AS prod-deps
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
 
-FROM base AS build
+
+# Copy Prisma files
+COPY prisma ./prisma/
+
+# Install the Prisma Client
+RUN npx prisma generate
+
+# ---- Build ----
+FROM dependencies AS build
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+COPY . .
+# Build the application
 RUN pnpm run build
 
-FROM base
-COPY --from=prod-deps /app/node_modules /app/node_modules
-COPY --from=build /app/dist /app/dist
-COPY --from=build /app/node_modules/@prisma /app/node_modules/.prisma
-# RUN ls -la /app/dist
+# ---- Release ----
+FROM base AS release
+# Install production node packages only
+# COPY package.json pnpm-lock.yaml ./
+# RUN pnpm fetch --prod true
+# RUN pnpm install -r --offline
+COPY --from=dependencies /usr/src/app/node_modules /usr/src/app/node_modules
+
+# Copy built assets from the 'build' stage
+COPY --from=build /usr/src/app/dist ./dist
+# Copy generated Prisma client from the 'dependencies' stage
+# COPY --from=dependencies /usr/src/app/node_modules/.prisma ./.prisma
+# COPY --from=dependencies /usr/src/app/node_modules/@prisma ./@prisma
+
+# Copy any other required files you may need
+# COPY .env ./
+
 EXPOSE 5000
-CMD ["node", "/app/dist/src/main.js"]
-# CMD [ "pnpm", "run","start" ]
-# CMD ["pnpm", "run", "start:prod"]
-# CMD ["/bin/sh", "-c", "bash"]
+
+# Set the default command for the container
+CMD ["node", "dist/src/main"]
