@@ -12,7 +12,7 @@ on:
 
 
 jobs:
-  setup-build-publish-deploy:
+  setup-build-publish:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
     environment: develop
@@ -55,3 +55,33 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64
+  deploy:
+    name: Deploy to GooseHQ
+    runs-on: self-hosted
+    environment: develop
+    env:
+      MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      MONGODB_NAME: ${{ vars.MONGODB_NAME }}
+      FIREBASE_SDK: ${{ secrets.FIREBASE_SDK }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      PORT: ${{ secrets.PORT }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      SCB_API_KEY: ${{ secrets.SCB_API_KEY }}
+      SCB_API_SECRET: ${{ secrets.SCB_API_SECRET }}
+      SCB_BILLER_ID: ${{ secrets.SCB_BILLER_ID }}
+      SCB_MERCHANT_ID: ${{ secrets.SCB_MERCHANT_ID }}
+      SCB_TERMINAL_ID: ${{ secrets.SCB_TERMINAL_ID }}
+      FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+      FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+      FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          ref: develop-backend
+      - name: Pull Image to GooseHQ
+        working-directory: ./crafty-backend
+        run: docker compose pull
+      - name: Deploy to GooseHQ
+        working-directory: ./crafty-backend
+        run: docker compose up -d
