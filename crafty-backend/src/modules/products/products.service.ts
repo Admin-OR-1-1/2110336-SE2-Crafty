@@ -31,7 +31,7 @@ export class ProductsService {
   async update(id: string, updateProductDto: UpdateProductDto) {
     try {
       const product = await this.findOne(id)
-      if (updateProductDto.incrementStep && product.step < 5) {
+      if (updateProductDto.incrementStep && product.step < 6) {
         await this.prisma.product.update({
           where: { id },
           data: {
