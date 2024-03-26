@@ -37,6 +37,6 @@ async function bootstrap() {
 
   Logger.log(`Listening on port ${port}`, 'Bootstrap')
 
-  await app.listen(port)
+  await app.listen(port, '0.0.0.0')
 }
 bootstrap()
