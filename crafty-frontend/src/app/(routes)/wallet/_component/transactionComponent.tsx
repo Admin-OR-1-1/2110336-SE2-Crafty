@@ -5,7 +5,7 @@ import { FaPlus } from 'react-icons/fa6';
 import { HiMiniArrowRightOnRectangle } from 'react-icons/hi2';
 
 interface Props {
-  type: 'Topup' | 'Withdraw' | 'Purchase';
+  type: 'Topup' | 'Buy' | 'Sell';
   amount: number;
   timestamp: Date;
 }
@@ -77,7 +77,7 @@ const TransactionComponent: FC<Props> = ({ type, amount, timestamp }) => {
         </div>
       </div>
     );
-  else if (type === 'Withdraw')
+  else if (type === 'Buy')
     return (
       <div className="relative flex w-full items-center gap-x-3 rounded-xl bg-white px-4 py-2 shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]">
         <p className="absolute right-3 top-3 text-sm text-ct_gray-400">
@@ -87,12 +87,12 @@ const TransactionComponent: FC<Props> = ({ type, amount, timestamp }) => {
           <HiMiniArrowRightOnRectangle color="white" className="h-8 w-8" />
         </div>
         <div className="flex flex-1 flex-col gap-y-1 py-1">
-          <p className="font-bold text-ct_brown-500">ถอนเงิน</p>
+          <p className="font-bold text-ct_brown-500">ซื้อสินค้า</p>
           <p className="text-ct_neg font-medium">-{amount.toFixed(2)} ฿</p>
         </div>
       </div>
     );
-  else if (type === 'Purchase')
+  else if (type === 'Sell')
     return (
       <div className="relative flex w-full items-center gap-x-3 rounded-xl bg-white px-4 py-2 shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]">
         <p className="absolute right-3 top-3 text-sm text-ct_gray-400">
@@ -102,8 +102,8 @@ const TransactionComponent: FC<Props> = ({ type, amount, timestamp }) => {
           <p className="select-none text-center text-4xl font-normal text-white">฿</p>
         </div>
         <div className="flex flex-1 flex-col gap-y-1 py-1">
-          <p className="font-bold text-ct_brown-500">ซื้อสินค้า</p>
-          <p className="text-ct_neg font-medium">-{amount.toFixed(2)} ฿</p>
+          <p className="font-bold text-ct_brown-500">ขายสินค้า</p>
+          <p className="text-ct_pos font-medium">+{amount.toFixed(2)} ฿</p>
         </div>
       </div>
     );
