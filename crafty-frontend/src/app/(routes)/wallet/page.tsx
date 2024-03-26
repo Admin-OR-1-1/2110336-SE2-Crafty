@@ -16,7 +16,7 @@ import { revalidatePath } from 'next/cache';
 
 interface IMesssageProps {
   txid: string;
-  type: 'Topup' | 'Purchase' | 'Withdraw';
+  type: 'Topup' | 'Buy' | 'Sell';
   amount: number;
   timestamp: number;
 }
