@@ -26,6 +26,8 @@ const config: Config = {
         500: '#9A9A9A',
         600: '#5C5C5C',
       },
+      ct_pos: '#00C93F',
+      ct_neg: '#DE1135',
     },
     extend: {
       backgroundImage: {
