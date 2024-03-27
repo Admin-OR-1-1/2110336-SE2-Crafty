@@ -185,15 +185,17 @@ const RealProductCard = ({ product, chatroomId, isCrafter }: NonEmptyProductSide
   };
 
   const deleteProduct = async () => {
-    if (step >= 4) return;
+    if (step >= 4 && step != 6) return;
+
+    // display confirmation dialog
+    const confirmDelete = confirm('Are you sure you want to cancel this product?');
+    if (!confirmDelete) return;
+
     if (product.isPaid) {
       // TODO: refund
       const isCancelSuccess = await cancelPayment();
       if (!isCancelSuccess) return;
     }
-    // display confirmation dialog
-    const confirmDelete = confirm('Are you sure you want to cancel this product?');
-    if (!confirmDelete) return;
 
     try {
       await apiService.deleteProduct(product.id);
@@ -274,24 +276,34 @@ const RealProductCard = ({ product, chatroomId, isCrafter }: NonEmptyProductSide
     },
   ];
 
-  console.log('isCrafter: ', isCrafter);
+  // console.log('isCrafter: ', isCrafter);
 
   return (
     <div className="flex flex-col items-center gap-12 p-6">
-      <div className="flex flex-col items-center gap-6">
+      <div className={`${product.imageUrl ? 'mt-[250px]' : ''} flex flex-col items-center gap-6`}>
         <div className="flex flex-col break-all text-2xl font-bold">
           <div>{product.title}</div>
           <div className="ml-2 text-lg">#{product.id}</div>
         </div>
         {product.imageUrl && (
-          <div>
-            <img
-              src={product.imageUrl}
-              alt={product.title}
-              className="h-[200px] rounded-lg object-cover"
-            />
+          <div className="flex h-[200px]">
+            <img src={product.imageUrl} alt={product.title} className="h-full w-auto rounded-lg" />
           </div>
         )}
+        <div className="mb-2 flex w-full flex-col gap-3">
+          <div className="text-xl font-bold">รายละเอียดสินค้า</div>
+          <div className="ml-6">{product.desc}</div>
+        </div>
+        <div className="flex w-full items-end text-xl font-bold">
+          <div className="mr-3">ราคา:</div>
+          <div className="text-2xl">
+            {Intl.NumberFormat('en-US', {
+              minimumFractionDigits: 2, // Ensure two decimal places
+              maximumFractionDigits: 2, // Ensure two decimal places
+            }).format(product.price)}
+          </div>
+          <div className="ml-1 text-2xl">฿</div>
+        </div>
       </div>
 
       <StepProgress step={step} />
@@ -304,12 +316,11 @@ const RealProductCard = ({ product, chatroomId, isCrafter }: NonEmptyProductSide
             ? incrementButtonStatus[step - 1].crafterTitle
             : incrementButtonStatus[step - 1].crafteeTitle}
         </Button>
-        <Button
-          className="rounded-xl bg-red-500 hover:bg-red-700"
-          onClick={deleteProduct}
-          disabled={step >= 4}>
-          Cancel this product
-        </Button>
+        {(step <= 3 || step == 6) && (
+          <Button className="rounded-xl bg-red-500 hover:bg-red-700" onClick={deleteProduct}>
+            {step != 6 ? 'Cancel this product' : 'Finish'}
+          </Button>
+        )}
       </div>
     </div>
   );
