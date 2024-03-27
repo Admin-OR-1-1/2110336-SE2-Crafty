@@ -1,10 +1,5 @@
-.git
-.github
-.idea
-.vscode
-*Dockerfile*
-*docker-compose*
-vendor/*
-gin*
-tmp/*
-
+Dockerfile
+.env
+.gitignore
+*docker-compose.yaml
+node_modules/
