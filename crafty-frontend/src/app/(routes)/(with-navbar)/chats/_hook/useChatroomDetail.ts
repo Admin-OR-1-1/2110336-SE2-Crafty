@@ -21,11 +21,12 @@ const useChatroomDetail = (chatroomId: string) => {
       if (response.status === ApiStatus.SUCCESS) {
         setChatroomDetail(response.data);
         setProductDetail(response.data.Product);
+        // console.log(response.data.Product?.step);
       }
     };
     fetchChatroomDetail();
-    // const intervalId = setInterval(fetchChatroomDetail, 3000); // Fetch every 3 seconds
-    // return () => clearInterval(intervalId);
+    const intervalId = setInterval(fetchChatroomDetail, 3000); // Fetch every 3 seconds
+    return () => clearInterval(intervalId);
   }, []);
 
   return { chatroomDetail, productDetail };
