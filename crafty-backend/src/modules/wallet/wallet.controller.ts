@@ -27,7 +27,6 @@ import { TransferDTO } from './dto/wallet.dto'
 
 @ApiTags('wallet')
 @Controller('wallet')
-@UseGuards(AuthGuard)
 // @Roles('ADMIN')
 @ApiBearerAuth()
 export class WalletsController {
@@ -36,6 +35,7 @@ export class WalletsController {
     private readonly walletService: WalletService,
   ) {}
 
+  @UseGuards(AuthGuard)
   @Get('/payment/qr')
   @ApiOkResponse({ type: String })
   async GetQRCode(@GetUser() user: User, @Query('amount') amount: number) {
@@ -49,6 +49,7 @@ export class WalletsController {
     return qrImage
   }
 
+  @UseGuards(AuthGuard)
   @Get('/balance')
   @ApiOkResponse({ type: Number })
   async GetBalance(@GetUser() user: User) {
@@ -56,6 +57,7 @@ export class WalletsController {
     return this.walletService.getBalance(uid)
   }
 
+  @UseGuards(AuthGuard)
   @Get('/transactions')
   @ApiOkResponse({ type: Array<TransferDTO> })
   async GetTransactions(@GetUser() user: User) {
