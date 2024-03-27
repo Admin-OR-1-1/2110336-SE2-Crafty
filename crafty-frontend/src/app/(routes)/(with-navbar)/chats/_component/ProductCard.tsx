@@ -1,10 +1,11 @@
 import { ProductDetail } from '@/app/_common/interface/chat';
 import { Button, TextInput } from '@/app/_components/ui/input';
 import { apiService } from '@/configs/apiService/apiService';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { ProductSidebarProps } from './ProductSidebar';
 import StepProgress from './StepProgress';
+import { ApiStatus } from '@/configs/apiService/types';
 
 interface MyTextInputProps {
   label: string;
@@ -14,7 +15,7 @@ interface MyTextInputProps {
   setText: (text: string) => void;
 }
 
-interface ChatroomIdProps {
+interface CreateProductFormProps {
   chatroomId: string;
   isCrafter: boolean;
 }
@@ -53,7 +54,7 @@ const MyTextInput = ({ label, placeholder, required, value, setText }: MyTextInp
   );
 };
 
-const CreateProductForm = ({ chatroomId }: ChatroomIdProps) => {
+const CreateProductForm = ({ chatroomId }: CreateProductFormProps) => {
   const [title, setTitle] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [price, setPrice] = useState('');
@@ -128,7 +129,7 @@ const CreateProductForm = ({ chatroomId }: ChatroomIdProps) => {
   );
 };
 
-const EmptyProductCard = ({ chatroomId, isCrafter }: ChatroomIdProps) => {
+const EmptyProductCard = ({ chatroomId, isCrafter }: CreateProductFormProps) => {
   const [showCreateForm, setShowCreateForm] = useState(false);
 
   const handleCreateProduct = () => {
@@ -155,10 +156,46 @@ const EmptyProductCard = ({ chatroomId, isCrafter }: ChatroomIdProps) => {
 
 const RealProductCard = ({ product, chatroomId, isCrafter }: NonEmptyProductSidebarProps) => {
   const [step, setStep] = useState(product.step);
+
+  const cancelPayment = async () => {
+    const chatroom_response = await apiService.getChatroomDetail(chatroomId);
+    let chatroom;
+
+    if (chatroom_response.status === ApiStatus.SUCCESS) {
+      chatroom = chatroom_response.data;
+    } else {
+      console.log('chatroom error');
+      return;
+    }
+
+    // TODO: call pay api
+    const amount = product.price;
+    const productId = product.id;
+    const from = chatroom.crafterId || '';
+    const to = chatroom.crafteeId || '';
+    const pay_response = await apiService.pay({ productId, from, to, amount });
+
+    if (pay_response.status == ApiStatus.SUCCESS) {
+      console.log('Refund Success!');
+      return true;
+    } else {
+      console.log('Refund failed', pay_response.errorMessage);
+      return false;
+    }
+  };
+
   const deleteProduct = async () => {
+    if (step >= 4 && step != 6) return;
+
     // display confirmation dialog
     const confirmDelete = confirm('Are you sure you want to cancel this product?');
     if (!confirmDelete) return;
+
+    if (product.isPaid) {
+      // TODO: refund
+      const isCancelSuccess = await cancelPayment();
+      if (!isCancelSuccess) return;
+    }
 
     try {
       await apiService.deleteProduct(product.id);
@@ -168,12 +205,45 @@ const RealProductCard = ({ product, chatroomId, isCrafter }: NonEmptyProductSide
     }
   };
 
+  const submitPayment = async () => {
+    // display confirmation dialog
+    const confirmPayment = confirm(
+      `Are you sure you want to pay ${product.price}฿ for this product?`
+    );
+    if (!confirmPayment) return;
+
+    const chatroom_response = await apiService.getChatroomDetail(chatroomId);
+    let chatroom;
+
+    if (chatroom_response.status === ApiStatus.SUCCESS) {
+      chatroom = chatroom_response.data;
+    } else {
+      console.log('chatroom error');
+      return;
+    }
+
+    // TODO: call pay api
+    const amount = product.price;
+    const productId = product.id;
+    const from = chatroom.crafteeId || '';
+    const to = chatroom.crafterId || '';
+    const pay_response = await apiService.pay({ productId, from, to, amount });
+
+    if (pay_response.status == ApiStatus.SUCCESS) {
+      console.log('Payment Success!');
+      await incrementStep();
+    } else {
+      console.log('Payment failed', pay_response.errorMessage);
+      return;
+    }
+  };
+
   const incrementStep = async () => {
     try {
       const updatedProduct = await apiService.incrementProductStep(product.id);
       console.log(updatedProduct);
       if (step < 6) setStep(step + 1);
-      window.location.reload();
+      // window.location.reload();
     } catch (err) {
       console.log(err);
     }
@@ -212,53 +282,89 @@ const RealProductCard = ({ product, chatroomId, isCrafter }: NonEmptyProductSide
     },
   ];
 
-  console.log('isCrafter: ', isCrafter);
+  // console.log('isCrafter: ', isCrafter);
 
   return (
-    <div className="flex flex-col items-center gap-12 p-6">
-      <div className="flex flex-col items-center gap-6">
+    <div className="flex min-h-[calc(100vh-64px)] flex-col items-center justify-center gap-12 p-10">
+      <div
+        className={`${product.imageUrl ? 'mt-[200px]asdf' : ''} flex flex-col items-center gap-6`}>
         <div className="flex flex-col break-all text-2xl font-bold">
           <div>{product.title}</div>
           <div className="ml-2 text-lg">#{product.id}</div>
         </div>
         {product.imageUrl && (
-          <div>
-            <img
-              src={product.imageUrl}
-              alt={product.title}
-              className="h-[200px] rounded-lg object-cover"
-            />
+          <div className="flex h-[200px]">
+            <img src={product.imageUrl} alt={product.title} className="h-full w-auto rounded-lg" />
           </div>
         )}
+        <div className="mb-2 flex w-full flex-col gap-3">
+          <div className="text-xl font-bold">รายละเอียดสินค้า</div>
+          <div className="ml-6 break-all">{product.desc}</div>
+        </div>
+        <div className="flex w-full items-end text-xl font-bold">
+          <div className="mr-3">ราคา:</div>
+          <div className="text-2xl">
+            {Intl.NumberFormat('en-US', {
+              minimumFractionDigits: 2, // Ensure two decimal places
+              maximumFractionDigits: 2, // Ensure two decimal places
+            }).format(product.price)}
+          </div>
+          <div className="ml-1 text-2xl">฿</div>
+        </div>
       </div>
 
       <StepProgress step={step} />
       <div className="flex min-w-[400px] flex-col gap-2 px-10">
         <Button
           className="rounded-xl"
-          onClick={incrementStep}
+          onClick={!isCrafter && step == 2 ? submitPayment : incrementStep}
           disabled={incrementButtonStatus[step - 1].isEnableForCrafter != isCrafter || step == 6}>
           {isCrafter
             ? incrementButtonStatus[step - 1].crafterTitle
             : incrementButtonStatus[step - 1].crafteeTitle}
         </Button>
-        <Button className="rounded-xl bg-red-500 hover:bg-red-700" onClick={deleteProduct}>
-          Cancel this product
-        </Button>
+        {(step <= 3 || step == 6) && (
+          <Button className="rounded-xl bg-red-500 hover:bg-red-700" onClick={deleteProduct}>
+            {step != 6 ? 'Cancel this product' : 'Finish'}
+          </Button>
+        )}
       </div>
     </div>
   );
 };
 
-const ProductCard = ({ product, chatroomId, isCrafter }: ProductSidebarProps) => {
+const arePropsEqual = (prevProps: ProductSidebarProps, nextProps: ProductSidebarProps) => {
+  // Check if the chatroomId has changed
+  // console.log('Check');
+  if (prevProps.chatroomId !== nextProps.chatroomId) {
+    return false;
+  }
+
+  // Check if the isCrafter flag has changed
+  if (prevProps.isCrafter !== nextProps.isCrafter) {
+    return false;
+  }
+
+  // Check if the product object reference has changed or product.step has changed
+  if (prevProps.product?.step !== nextProps.product?.step) {
+    console.log('Not equal!');
+    return false;
+  }
+
+  // If none of the above conditions are true, props are considered equal
+  // and the component does not need to re-render.
+  return true;
+};
+
+const ProductCard = memo(({ product, chatroomId, isCrafter }: ProductSidebarProps) => {
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-9">
+    <div className="flex h-full min-h-[calc(100vh-64px)] flex-col items-center justify-center gap-9">
       {!product && <EmptyProductCard chatroomId={chatroomId} isCrafter={isCrafter} />}
       {product && (
         <RealProductCard product={product} chatroomId={chatroomId} isCrafter={isCrafter} />
       )}
     </div>
   );
-};
+}, arePropsEqual);
 
 export default ProductCard;
