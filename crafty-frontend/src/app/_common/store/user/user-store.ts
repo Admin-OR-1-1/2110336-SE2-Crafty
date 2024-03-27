@@ -27,7 +27,8 @@ const userStore = create<IUserStore>((set) => ({
     if (typeof window === 'undefined') return;
     set({ isLoading: true });
     const userInStorage = localStorage.getItem('user');
-    const user = userInStorage ? JSON.parse(userInStorage) : undefined;
+    const user =
+      userInStorage && userInStorage !== 'undefined' ? JSON.parse(userInStorage) : undefined;
     const token = localStorage.getItem('token') ?? '';
     if (user) {
       apiService.setToken(token);
