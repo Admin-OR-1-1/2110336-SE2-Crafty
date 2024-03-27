@@ -5,8 +5,9 @@ export type TransactionDocuments = HydratedDocument<Transaction>
 
 export enum TransactionType {
   Topup = 'Topup',
-  Transfer = 'Transfer',
-  Withdrawal = 'Withdrawal',
+  Buy = 'Buy',
+  Sell = 'Sell',
+  // Withdrawal = 'Withdrawal',
 }
 
 export type AccountId = string | 'System'

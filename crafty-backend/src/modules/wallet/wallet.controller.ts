@@ -27,9 +27,9 @@ import { TransferDTO } from './dto/wallet.dto'
 
 @ApiTags('wallet')
 @Controller('wallet')
-// @UseGuards(AuthGuard)
+@UseGuards(AuthGuard)
 // @Roles('ADMIN')
-// @ApiBearerAuth()
+@ApiBearerAuth()
 export class WalletsController {
   constructor(
     private readonly paymentService: PaymentService,
@@ -42,8 +42,8 @@ export class WalletsController {
     const { qrImage, ref1, ref3, tid } = await this.paymentService.generateQR(
       amount,
     )
-    // const uid = user.id
-    const uid = 'testid'
+    const uid = user.id
+    // const uid = 'testid'
     this.walletService.createPendingTopup(uid, amount, ref1, ref3, tid)
 
     return qrImage
