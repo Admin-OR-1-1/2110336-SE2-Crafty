@@ -132,7 +132,7 @@ export default function NavbarLayout({ children }: { children: React.ReactNode }
           <h1 className="text-2xl">Crafty</h1>
         </div>
 
-        <a href="/feed-list" className="hover:underline">
+        <a href="/feed-list" className="flex-nowrap whitespace-nowrap text-nowrap hover:underline">
           My Post
         </a>
 

@@ -31,7 +31,7 @@ const ChatRoomPage: FC<PageProps> = ({ params }) => {
 
   return (
     <div className="flex min-h-[calc(100vh-64px)] w-full flex-row overflow-x-hidden overflow-y-hidden">
-      <div className="mr-2 flex h-full min-h-[calc(100vh-64px)] w-full flex-col">
+      <div className="mr-2 flex h-full min-h-[calc(100vh-64px)] w-full flex-col pr-3">
         <ChatHeader name={talkerName ?? ''} />
         <div className="flex-1 flex-col space-y-4 overflow-y-auto py-4">
           {messages?.map((message: Message) => {
