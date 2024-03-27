@@ -72,4 +72,12 @@ export interface ProductDetail {
   step: number;
   imageUrl?: string;
   chatroomId: string;
+  isPaid: boolean;
+}
+
+export interface PayDetail {
+  productId: string;
+  from: string;
+  to: string;
+  amount: number;
 }

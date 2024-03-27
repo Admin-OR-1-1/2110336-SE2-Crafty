@@ -7,6 +7,7 @@ import { apiClient } from '../axiosConfig';
 import {
   ChatroomDetail,
   Message,
+  PayDetail,
   PostChatroom,
   PostMessage,
   ProductDetail,
@@ -372,6 +373,21 @@ class ApiService {
       return {
         status: ApiStatus.ERROR,
         errorMessage: 'Failed to increment product step',
+      };
+    }
+  };
+
+  pay = async (payDetail: PayDetail): Promise<ApiResponseType<ProductDetail>> => {
+    try {
+      const response = await apiClient.post(`/products/pay`, payDetail);
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Payment Failed',
       };
     }
   };

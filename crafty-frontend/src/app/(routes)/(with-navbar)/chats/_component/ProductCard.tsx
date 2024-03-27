@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { ProductSidebarProps } from './ProductSidebar';
 import StepProgress from './StepProgress';
+import { ApiStatus } from '@/configs/apiService/types';
 
 interface MyTextInputProps {
   label: string;
@@ -14,7 +15,7 @@ interface MyTextInputProps {
   setText: (text: string) => void;
 }
 
-interface ChatroomIdProps {
+interface CreateProductFormProps {
   chatroomId: string;
   isCrafter: boolean;
 }
@@ -53,7 +54,7 @@ const MyTextInput = ({ label, placeholder, required, value, setText }: MyTextInp
   );
 };
 
-const CreateProductForm = ({ chatroomId }: ChatroomIdProps) => {
+const CreateProductForm = ({ chatroomId }: CreateProductFormProps) => {
   const [title, setTitle] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [price, setPrice] = useState('');
@@ -128,7 +129,7 @@ const CreateProductForm = ({ chatroomId }: ChatroomIdProps) => {
   );
 };
 
-const EmptyProductCard = ({ chatroomId, isCrafter }: ChatroomIdProps) => {
+const EmptyProductCard = ({ chatroomId, isCrafter }: CreateProductFormProps) => {
   const [showCreateForm, setShowCreateForm] = useState(false);
 
   const handleCreateProduct = () => {
@@ -155,7 +156,41 @@ const EmptyProductCard = ({ chatroomId, isCrafter }: ChatroomIdProps) => {
 
 const RealProductCard = ({ product, chatroomId, isCrafter }: NonEmptyProductSidebarProps) => {
   const [step, setStep] = useState(product.step);
+
+  const cancelPayment = async () => {
+    const chatroom_response = await apiService.getChatroomDetail(chatroomId);
+    let chatroom;
+
+    if (chatroom_response.status === ApiStatus.SUCCESS) {
+      chatroom = chatroom_response.data;
+    } else {
+      console.log('chatroom error');
+      return;
+    }
+
+    // TODO: call pay api
+    const amount = product.price;
+    const productId = product.id;
+    const from = chatroom.crafterId || '';
+    const to = chatroom.crafteeId || '';
+    const pay_response = await apiService.pay({ productId, from, to, amount });
+
+    if (pay_response.status == ApiStatus.SUCCESS) {
+      console.log('Refund Success!');
+      return true;
+    } else {
+      console.log('Refund failed', pay_response.errorMessage);
+      return false;
+    }
+  };
+
   const deleteProduct = async () => {
+    if (step >= 4) return;
+    if (product.isPaid) {
+      // TODO: refund
+      const isCancelSuccess = await cancelPayment();
+      if (!isCancelSuccess) return;
+    }
     // display confirmation dialog
     const confirmDelete = confirm('Are you sure you want to cancel this product?');
     if (!confirmDelete) return;
@@ -165,6 +200,33 @@ const RealProductCard = ({ product, chatroomId, isCrafter }: NonEmptyProductSide
       window.location.reload();
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const submitPayment = async () => {
+    const chatroom_response = await apiService.getChatroomDetail(chatroomId);
+    let chatroom;
+
+    if (chatroom_response.status === ApiStatus.SUCCESS) {
+      chatroom = chatroom_response.data;
+    } else {
+      console.log('chatroom error');
+      return;
+    }
+
+    // TODO: call pay api
+    const amount = product.price;
+    const productId = product.id;
+    const from = chatroom.crafteeId || '';
+    const to = chatroom.crafterId || '';
+    const pay_response = await apiService.pay({ productId, from, to, amount });
+
+    if (pay_response.status == ApiStatus.SUCCESS) {
+      console.log('Payment Success!');
+      await incrementStep();
+    } else {
+      console.log('Payment failed', pay_response.errorMessage);
+      return;
     }
   };
 
@@ -236,13 +298,16 @@ const RealProductCard = ({ product, chatroomId, isCrafter }: NonEmptyProductSide
       <div className="flex min-w-[400px] flex-col gap-2 px-10">
         <Button
           className="rounded-xl"
-          onClick={incrementStep}
+          onClick={!isCrafter && step == 2 ? submitPayment : incrementStep}
           disabled={incrementButtonStatus[step - 1].isEnableForCrafter != isCrafter || step == 6}>
           {isCrafter
             ? incrementButtonStatus[step - 1].crafterTitle
             : incrementButtonStatus[step - 1].crafteeTitle}
         </Button>
-        <Button className="rounded-xl bg-red-500 hover:bg-red-700" onClick={deleteProduct}>
+        <Button
+          className="rounded-xl bg-red-500 hover:bg-red-700"
+          onClick={deleteProduct}
+          disabled={step >= 4}>
           Cancel this product
         </Button>
       </div>
