@@ -194,6 +194,13 @@ export default function NavbarLayout({ children }: { children: React.ReactNode }
               <h1
                 className="cursor-pointer text-ct_brown-500 hover:underline"
                 onClick={() => {
+                  router.push('/wallet');
+                }}>
+                My wallet
+              </h1>
+              <h1
+                className="cursor-pointer text-ct_brown-500 hover:underline"
+                onClick={() => {
                   setConfirmModal(true);
                 }}>
                 Delete this Account
