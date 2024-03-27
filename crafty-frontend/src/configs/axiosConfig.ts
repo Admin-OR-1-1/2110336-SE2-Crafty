@@ -28,10 +28,11 @@ export const apiClient = axios.create({
 // Interceptor to add Authorization header with Firebase access token to all requests
 apiClient.interceptors.request.use(async (config) => {
   try {
-    const accessToken = await getFirebaseAccessToken();
+    // const accessToken = await getFirebaseAccessToken();
+    const accessToken = localStorage.getItem('token');
     config.headers.Authorization = `Bearer ${accessToken}`;
     return config;
   } catch (error) {
-    return Promise.reject(error);
+    return Promise.resolve(config);
   }
 });

@@ -1,33 +1,57 @@
+import useMyFeed from '@/app/(routes)/(with-navbar)/_hooks/myFeed';
+import { Post } from '@/app/_common/interface/post';
+import { apiService } from '@/configs/apiService/apiService';
+import { ApiStatus } from '@/configs/apiService/types';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
-const FeedPreviewCard = () => {
+interface FeedPreviewCardProps {
+  post: Post;
+}
+const FeedPreviewCard = ({ post }: FeedPreviewCardProps) => {
+  const [priority, setPriority] = useState<number>(post.priority);
+
+  useEffect(() => {
+    setPriority(post.priority);
+  }, [post.priority]);
+
+  const { updateLocalPost } = useMyFeed();
+  const boostPost = async () => {
+    const response = await apiService.boostPost(post.id);
+    if (response.status === ApiStatus.SUCCESS) {
+      updateLocalPost(response.data);
+      setPriority(response.data.priority);
+    }
+  };
   return (
     <div className="flex h-fit w-full flex-row items-center gap-4 rounded-lg bg-white p-4 px-6">
       {/* image */}
-      <div className="flex h-[90px] w-[90px] min-w-[90px]">
-        <Image
-          src={`https://picsum.photos/seed/${Math.random() * 1000}/1000/1000`}
-          className="h-fit w-full overflow-hidden rounded-lg object-contain"
-          placeholder="blur"
-          blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-          width={5000}
-          height={5000}
-          alt={`Image`}
-          loading="lazy"
-        />
-      </div>
+      {post.photoUrl && (
+        <div className="flex h-[90px] w-[90px] min-w-[90px] overflow-hidden rounded-lg">
+          <Image
+            src={post.photoUrl}
+            className="h-fit w-full overflow-hidden rounded-lg object-cover"
+            placeholder="blur"
+            blurDataURL="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+            width={5000}
+            height={5000}
+            alt={`Image`}
+            loading="lazy"
+          />
+        </div>
+      )}
 
       {/* title and price */}
       <div className="flex flex-col gap-2">
-        <span className="text-xl">
-          The First Edition-กระเป๋าผ้าใส่เงิน (Hand Craft) ลาย, สี, ขนาด Custom
+        <span className="text-xl">{post.title}</span>
+        <span className="text-xl font-bold">
+          ฿{post?.price.toLocaleString(undefined, { minimumFractionDigits: 2 }) ?? 0}
         </span>
-        <span className="text-xl font-bold">฿299.00</span>
       </div>
 
       {/* detail */}
-      <div className="ml-auto flex flex-row items-center gap-2 max-md:flex-col">
-        <div className="badge">default</div>
+      <div className="ml-auto flex flex-row items-center gap-3 max-md:flex-col">
+        {/* <div className="badge">default</div> */}
         {/* heart */}
         <div className="flex flex-row items-center gap-2">
           <svg
@@ -49,13 +73,13 @@ const FeedPreviewCard = () => {
               </clipPath>
             </defs>
           </svg>
-          <span className="text-xl">27</span>
+          <span className="text-xl">{post.userFavorite?.length ?? 0}</span>
         </div>
 
-        <span className="text-xl">•</span>
+        {/* <span className="text-xl">•</span> */}
 
         {/* message */}
-        <div className="flex flex-row items-center gap-2">
+        {/* <div className="flex flex-row items-center gap-2">
           <svg
             width="27"
             height="27"
@@ -71,10 +95,75 @@ const FeedPreviewCard = () => {
             />
           </svg>
           <span className="text-xl">7</span>
-        </div>
+        </div> */}
+
+        <button className="hover:underline" onClick={boostPost}>
+          boost {priority}
+        </button>
+
+        {/* view button */}
+        <a
+          href={`/feed-detail/${post.id}`}
+          target="_blank"
+          className="rounded-md p-2 duration-75 hover:bg-gray-200 hover:underline">
+          <svg
+            width="19"
+            height="20"
+            viewBox="0 0 19 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M2.30762 10.3003C2.30762 10.3003 4.8251 5.24316 9.23069 5.24316C13.6363 5.24316 16.1538 10.3003 16.1538 10.3003C16.1538 10.3003 13.6363 15.3575 9.23069 15.3575C4.8251 15.3575 2.30762 10.3003 2.30762 10.3003Z"
+              stroke="#98A9BC"
+              stroke-width="1.55604"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M9.23084 12.2455C10.0805 12.2455 10.7693 11.3746 10.7693 10.3004C10.7693 9.22618 10.0805 8.35535 9.23084 8.35535C8.38118 8.35535 7.69238 9.22618 7.69238 10.3004C7.69238 11.3746 8.38118 12.2455 9.23084 12.2455Z"
+              stroke="#98A9BC"
+              stroke-width="1.55604"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </a>
+
+        {/* edit button */}
+        <a
+          href={`/feed-edit/${post.id}`}
+          target="_blank"
+          className="rounded-md p-2 duration-75 hover:bg-gray-200 hover:underline">
+          <svg
+            width="20"
+            height="19"
+            viewBox="0 0 20 19"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_199_9245)">
+              <path
+                d="M14.1418 2.33411C14.359 2.12977 14.6169 1.96767 14.9007 1.85708C15.1845 1.74649 15.4887 1.68958 15.7959 1.68958C16.1031 1.68958 16.4073 1.74649 16.6911 1.85708C16.9749 1.96767 17.2327 2.12977 17.4499 2.33411C17.6672 2.53845 17.8395 2.78104 17.957 3.04803C18.0746 3.31502 18.1351 3.60117 18.1351 3.89015C18.1351 4.17914 18.0746 4.46529 17.957 4.73228C17.8395 4.99927 17.6672 5.24186 17.4499 5.4462L6.28501 15.9495L1.73633 17.1165L2.97688 12.8374L14.1418 2.33411Z"
+                stroke="#98A9BC"
+                stroke-width="1.55604"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_199_9245">
+                <rect
+                  width="19.8488"
+                  height="18.6725"
+                  fill="white"
+                  transform="translate(0.0820312)"
+                />
+              </clipPath>
+            </defs>
+          </svg>
+        </a>
 
         {/* more */}
-        <div className="btn border-white bg-white">
+        {/* <div className="btn border-white bg-white">
           <svg
             width="8"
             height="30"
@@ -86,7 +175,7 @@ const FeedPreviewCard = () => {
               fill="#232323"
             />
           </svg>
-        </div>
+        </div> */}
       </div>
     </div>
   );
