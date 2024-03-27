@@ -9,6 +9,7 @@ import {
   Message,
   PostChatroom,
   PostMessage,
+  ProductDetail,
   ReadChatroom,
 } from '@/app/_common/interface/chat';
 
@@ -309,6 +310,68 @@ class ApiService {
       return {
         status: ApiStatus.ERROR,
         errorMessage: 'Failed to create new chatroom',
+      };
+    }
+  };
+
+  getProductDetail = async (productId: string): Promise<ApiResponseType<ProductDetail>> => {
+    try {
+      const response = await apiClient.get(`/products/${productId}`);
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to fetch product detail',
+      };
+    }
+  };
+
+  createNewProduct = async (
+    product: Partial<ProductDetail>
+  ): Promise<ApiResponseType<ProductDetail>> => {
+    try {
+      const response = await apiClient.post('/products', product);
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to create product',
+      };
+    }
+  };
+
+  deleteProduct = async (productId: string): Promise<ApiResponseType<ProductDetail>> => {
+    try {
+      const response = await apiClient.delete(`/products/${productId}`);
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to delete product',
+      };
+    }
+  };
+
+  incrementProductStep = async (productId: string): Promise<ApiResponseType<ProductDetail>> => {
+    try {
+      const response = await apiClient.patch(`/products/${productId}`, { incrementStep: true });
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to increment product step',
       };
     }
   };
