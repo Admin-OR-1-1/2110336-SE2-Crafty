@@ -9,4 +9,12 @@ const useEnableSearchOnNavbar = () => {
   }, [setEnableSearch]);
 };
 
-export default useEnableSearchOnNavbar;
+const useDisableSearchOnNavbar = () => {
+  const { setEnableSearch } = searchStore();
+
+  useEffect(() => {
+    setEnableSearch(false);
+  }, [setEnableSearch]);
+};
+
+export { useEnableSearchOnNavbar, useDisableSearchOnNavbar };

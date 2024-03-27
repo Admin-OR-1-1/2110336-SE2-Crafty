@@ -212,7 +212,7 @@ export default function NavbarLayout({ children }: { children: React.ReactNode }
           )}
         </div>
       </div>
-      <div className="flex-1 bg-ct_brown-100">{children}</div>
+      <div className="flex flex-1 bg-ct_brown-100">{children}</div>
     </div>
   );
 }
