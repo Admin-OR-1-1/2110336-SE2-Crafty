@@ -33,13 +33,13 @@ const ProductSidebar = ({ product, chatroomId, isCrafter }: ProductSidebarProps)
       {/* Sidebar */}
       <div
         className={`absolute bottom-0 right-0 z-50 h-[calc(100vh-64px)] w-[64] transform overflow-y-auto overflow-x-visible border-l bg-white transition-all duration-300 ease-in-out ${
-          isOpen ? 'w-[640px] translate-x-0' : 'w-[16px]'
+          isOpen ? 'w-[640px] translate-x-0' : 'w-[24px]'
         }`}>
         {/* Sidebar content */}
         <button
-          className="absolute left-0 top-1/2 z-[500] flex -translate-x-1/2 items-center justify-center rounded-full border border-black bg-white p-1"
+          className="absolute left-3 top-1/2 z-[500] flex -translate-x-1/2 items-center justify-center rounded-full border border-black bg-white p-1"
           onClick={toggleSidebar}>
-          <BsChevronLeft style={iconStyle} />
+          <BsChevronLeft style={iconStyle} size={8} />
         </button>
         <div className="h-full overflow-y-auto">
           {isOpen && (

@@ -7,7 +7,6 @@ import ChatInput from '../_component/ChatInput';
 import { ChatroomDetail, Message } from '@/app/_common/interface/chat';
 import userStore from '@/app/_common/store/user/user-store';
 import useChatroomDetail from '../_hook/useChatroomDetail';
-import Image from 'next/image';
 import ProductSidebar from '../_component/ProductSidebar';
 
 type PageProps = {
