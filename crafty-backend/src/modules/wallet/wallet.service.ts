@@ -58,6 +58,7 @@ export class WalletService {
     return this.transactionModel
       .find({ $or: [{ sourceAccount: uid }, { destinationAccount: uid }] })
       .exec()
+      .then((transactions) => transactions.map((t) => t.toJSON()))
   }
 
   async getTopup(txid: string): Promise<Topup> {
@@ -68,22 +69,49 @@ export class WalletService {
     return this.topupModel.find({ account: uid }).exec()
   }
 
-  async transfer(
-    uid: string,
-    amount: number,
-    recipient: string,
-  ): Promise<Transaction> {
-    const txid = uuid()
+  async transfer(source: string, amount: number, destination: string) {
+    // Invalid source
+    const sourceWallet = await this.getWallet(source)
+    if (!sourceWallet) throw new Error('Invalid source')
+
+    // Invalid destination
+    const destinationWallet = await this.getWallet(destination)
+    if (!destinationWallet) throw new Error('Invalid destination')
+
+    // Invalid amount
     if (amount <= 0) throw new Error('Invalid amount')
-    const transaction = {
+
+    // Check money is enough
+    if (sourceWallet.amount < amount) throw new Error('Not enough money')
+
+    const txid = uuid()
+
+    const sourceTransaction = {
       txid,
-      sourceAccount: uid,
+      sourceAccount: source,
       amount,
-      type: TransactionType.Transfer,
-      destinationAccount: recipient,
+      type: TransactionType.Buy,
+      destinationAccount: destination,
       timestamp: new Date(),
     }
-    return this.createTransaction(transaction)
+
+    const destinationTransaction = {
+      txid,
+      sourceAccount: source,
+      amount,
+      type: TransactionType.Sell,
+      destinationAccount: destination,
+      timestamp: new Date(),
+    }
+
+    // this.createTransaction(tx)
+    this.addMoneyToWallet(source, -1 * amount)
+    this.createTransaction(sourceTransaction)
+
+    this.addMoneyToWallet(destination, amount)
+    this.createTransaction(destinationTransaction)
+
+    return
   }
 
   async createPendingTopup(
