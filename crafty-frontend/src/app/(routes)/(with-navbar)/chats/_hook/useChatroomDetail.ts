@@ -18,11 +18,7 @@ const useChatroomDetail = (chatroomId: string) => {
   useEffect(() => {
     const fetchChatroomDetail = async () => {
       const response = await apiService.getChatroomDetail(chatroomId);
-      if (
-        response.status === ApiStatus.SUCCESS &&
-        (JSON.stringify(chatroomDetail) !== JSON.stringify(response.data) ||
-          JSON.stringify(productDetail) !== JSON.stringify(response.data.Product))
-      ) {
+      if (response.status === ApiStatus.SUCCESS) {
         setChatroomDetail(response.data);
         setProductDetail(response.data.Product);
       }

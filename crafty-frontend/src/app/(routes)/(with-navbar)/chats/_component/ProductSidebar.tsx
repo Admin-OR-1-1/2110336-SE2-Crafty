@@ -43,7 +43,12 @@ const ProductSidebar = ({ product, chatroomId, isCrafter }: ProductSidebarProps)
         </button>
         <div className="overflow-y-auto">
           {isOpen && (
-            <ProductCard product={product} chatroomId={chatroomId} isCrafter={isCrafter} />
+            <ProductCard
+              key={product?.step}
+              product={product}
+              chatroomId={chatroomId}
+              isCrafter={isCrafter}
+            />
           )}
         </div>
       </div>

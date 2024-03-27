@@ -333,6 +333,29 @@ const RealProductCard = ({ product, chatroomId, isCrafter }: NonEmptyProductSide
   );
 };
 
+const arePropsEqual = (prevProps: ProductSidebarProps, nextProps: ProductSidebarProps) => {
+  // Check if the chatroomId has changed
+  // console.log('Check');
+  if (prevProps.chatroomId !== nextProps.chatroomId) {
+    return false;
+  }
+
+  // Check if the isCrafter flag has changed
+  if (prevProps.isCrafter !== nextProps.isCrafter) {
+    return false;
+  }
+
+  // Check if the product object reference has changed or product.step has changed
+  if (prevProps.product?.step !== nextProps.product?.step) {
+    console.log('Not equal!');
+    return false;
+  }
+
+  // If none of the above conditions are true, props are considered equal
+  // and the component does not need to re-render.
+  return true;
+};
+
 const ProductCard = memo(({ product, chatroomId, isCrafter }: ProductSidebarProps) => {
   return (
     <div className="flex h-full min-h-[calc(100vh-64px)] flex-col items-center justify-center gap-9">
@@ -342,6 +365,6 @@ const ProductCard = memo(({ product, chatroomId, isCrafter }: ProductSidebarProp
       )}
     </div>
   );
-});
+}, arePropsEqual);
 
 export default ProductCard;
