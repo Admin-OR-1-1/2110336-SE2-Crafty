@@ -18,16 +18,19 @@ const useChatroomDetail = (chatroomId: string) => {
   useEffect(() => {
     const fetchChatroomDetail = async () => {
       const response = await apiService.getChatroomDetail(chatroomId);
-      if (response.status === ApiStatus.SUCCESS) {
+      if (
+        response.status === ApiStatus.SUCCESS &&
+        (JSON.stringify(chatroomDetail) !== JSON.stringify(response.data) ||
+          JSON.stringify(productDetail) !== JSON.stringify(response.data.Product))
+      ) {
         setChatroomDetail(response.data);
         setProductDetail(response.data.Product);
-        // console.log(response.data.Product?.step);
       }
     };
     fetchChatroomDetail();
-    const intervalId = setInterval(fetchChatroomDetail, 3000); // Fetch every 3 seconds
+    const intervalId = setInterval(fetchChatroomDetail, 2000); // Fetch every 2 seconds
     return () => clearInterval(intervalId);
-  }, []);
+  }, [chatroomId]);
 
   return { chatroomDetail, productDetail };
 };

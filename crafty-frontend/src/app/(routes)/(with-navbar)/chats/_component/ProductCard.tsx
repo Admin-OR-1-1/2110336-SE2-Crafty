@@ -1,7 +1,7 @@
 import { ProductDetail } from '@/app/_common/interface/chat';
 import { Button, TextInput } from '@/app/_components/ui/input';
 import { apiService } from '@/configs/apiService/apiService';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { ProductSidebarProps } from './ProductSidebar';
 import StepProgress from './StepProgress';
@@ -243,7 +243,7 @@ const RealProductCard = ({ product, chatroomId, isCrafter }: NonEmptyProductSide
       const updatedProduct = await apiService.incrementProductStep(product.id);
       console.log(updatedProduct);
       if (step < 6) setStep(step + 1);
-      window.location.reload();
+      // window.location.reload();
     } catch (err) {
       console.log(err);
     }
@@ -333,7 +333,7 @@ const RealProductCard = ({ product, chatroomId, isCrafter }: NonEmptyProductSide
   );
 };
 
-const ProductCard = ({ product, chatroomId, isCrafter }: ProductSidebarProps) => {
+const ProductCard = memo(({ product, chatroomId, isCrafter }: ProductSidebarProps) => {
   return (
     <div className="flex h-full min-h-[calc(100vh-64px)] flex-col items-center justify-center gap-9">
       {!product && <EmptyProductCard chatroomId={chatroomId} isCrafter={isCrafter} />}
@@ -342,6 +342,6 @@ const ProductCard = ({ product, chatroomId, isCrafter }: ProductSidebarProps) =>
       )}
     </div>
   );
-};
+});
 
 export default ProductCard;
