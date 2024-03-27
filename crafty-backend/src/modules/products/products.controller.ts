@@ -45,4 +45,11 @@ export class ProductsController {
   remove(@Param('id') id: string) {
     return this.productsService.remove(id)
   }
+
+  @UseGuards(AuthGuard)
+  @Post(':id/pay')
+  pay(@Param('id') id: string) {
+    return 'product payment route'
+    // return this.productsService.remove(id)
+  }
 }
