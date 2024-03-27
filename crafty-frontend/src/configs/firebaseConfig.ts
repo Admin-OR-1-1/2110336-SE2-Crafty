@@ -16,11 +16,5 @@ const firebaseConfig = {
 let firebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
 // src/configs/firebaseConfig.ts
-let auth;
-if (process.env.FIREBASE_CONFIG) {
-  const firebaseApp = initializeApp(firebaseConfig);
-  auth = getAuth(firebaseApp);
-} else {
-  auth = require('./mockFirebase').auth;
-}
+const auth = getAuth(firebaseApp);
 export { auth };
