@@ -18,8 +18,11 @@ const useProductDetail = (productId: string) => {
     const fetchProductDetail = async () => {
       const response = await apiService.getProductDetail(productId);
       if (response.status === ApiStatus.SUCCESS) setProductDetail(response.data);
+      console.log('product fetch');
     };
     fetchProductDetail();
+    const intervalId = setInterval(fetchProductDetail, 3000); // Fetch every 3 seconds
+    return () => clearInterval(intervalId);
   }, []);
 
   return productDetail;

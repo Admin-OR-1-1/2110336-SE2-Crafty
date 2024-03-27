@@ -24,6 +24,8 @@ const useChatroomDetail = (chatroomId: string) => {
       }
     };
     fetchChatroomDetail();
+    // const intervalId = setInterval(fetchChatroomDetail, 3000); // Fetch every 3 seconds
+    // return () => clearInterval(intervalId);
   }, []);
 
   return { chatroomDetail, productDetail };

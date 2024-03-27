@@ -206,6 +206,12 @@ const RealProductCard = ({ product, chatroomId, isCrafter }: NonEmptyProductSide
   };
 
   const submitPayment = async () => {
+    // display confirmation dialog
+    const confirmPayment = confirm(
+      `Are you sure you want to pay ${product.price}฿ for this product?`
+    );
+    if (!confirmPayment) return;
+
     const chatroom_response = await apiService.getChatroomDetail(chatroomId);
     let chatroom;
 
@@ -279,8 +285,9 @@ const RealProductCard = ({ product, chatroomId, isCrafter }: NonEmptyProductSide
   // console.log('isCrafter: ', isCrafter);
 
   return (
-    <div className="flex flex-col items-center gap-12 p-6">
-      <div className={`${product.imageUrl ? 'mt-[250px]' : ''} flex flex-col items-center gap-6`}>
+    <div className="flex min-h-[calc(100vh-64px)] flex-col items-center justify-center gap-12 p-10">
+      <div
+        className={`${product.imageUrl ? 'mt-[200px]asdf' : ''} flex flex-col items-center gap-6`}>
         <div className="flex flex-col break-all text-2xl font-bold">
           <div>{product.title}</div>
           <div className="ml-2 text-lg">#{product.id}</div>
@@ -292,7 +299,7 @@ const RealProductCard = ({ product, chatroomId, isCrafter }: NonEmptyProductSide
         )}
         <div className="mb-2 flex w-full flex-col gap-3">
           <div className="text-xl font-bold">รายละเอียดสินค้า</div>
-          <div className="ml-6">{product.desc}</div>
+          <div className="ml-6 break-all">{product.desc}</div>
         </div>
         <div className="flex w-full items-end text-xl font-bold">
           <div className="mr-3">ราคา:</div>
@@ -328,7 +335,7 @@ const RealProductCard = ({ product, chatroomId, isCrafter }: NonEmptyProductSide
 
 const ProductCard = ({ product, chatroomId, isCrafter }: ProductSidebarProps) => {
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-9">
+    <div className="flex h-full min-h-[calc(100vh-64px)] flex-col items-center justify-center gap-9">
       {!product && <EmptyProductCard chatroomId={chatroomId} isCrafter={isCrafter} />}
       {product && (
         <RealProductCard product={product} chatroomId={chatroomId} isCrafter={isCrafter} />
