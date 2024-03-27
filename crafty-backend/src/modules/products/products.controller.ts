@@ -13,6 +13,7 @@ import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
 import { ApiTags } from '@nestjs/swagger'
 import { AuthGuard } from '../auth/guard/auth.guard'
+import { PayProductDto } from './dto/pay-product.dto'
 
 @ApiTags('products')
 @Controller('products')
@@ -44,5 +45,11 @@ export class ProductsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.productsService.remove(id)
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('/pay')
+  pay(@Body() payProductDto: PayProductDto) {
+    return this.productsService.pay(payProductDto)
   }
 }

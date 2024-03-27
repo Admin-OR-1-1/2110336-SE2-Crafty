@@ -17,6 +17,6 @@ import { Wallet, WalletSchema } from './schemas/wallet.schma'
       { name: Wallet.name, schema: WalletSchema },
     ]),
   ],
-  exports: [],
+  exports: [WalletService],
 })
 export class WalletModule {}

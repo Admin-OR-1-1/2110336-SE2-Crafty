@@ -8,4 +8,11 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
     example: true,
   })
   incrementStep?: boolean
+
+  @ApiProperty({
+    description: 'Update "isPaid" status',
+    type: Boolean,
+    example: true,
+  })
+  isPaid?: boolean
 }
