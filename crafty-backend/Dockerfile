@@ -51,7 +51,7 @@ COPY --from=build /usr/src/app/dist ./dist
 # COPY --from=dependencies /usr/src/app/node_modules/@prisma ./@prisma
 
 # Copy any other required files you may need
-COPY .env ./
+# COPY .env ./
 
 EXPOSE 5000
 
