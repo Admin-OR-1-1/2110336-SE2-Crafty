@@ -356,7 +356,7 @@ const arePropsEqual = (prevProps: ProductSidebarProps, nextProps: ProductSidebar
   return true;
 };
 
-const ProductCard = memo(({ product, chatroomId, isCrafter }: ProductSidebarProps) => {
+const ProductCard = ({ product, chatroomId, isCrafter }: ProductSidebarProps) => {
   return (
     <div className="flex h-full min-h-[calc(100vh-64px)] flex-col items-center justify-center gap-9">
       {!product && <EmptyProductCard chatroomId={chatroomId} isCrafter={isCrafter} />}
@@ -365,6 +365,6 @@ const ProductCard = memo(({ product, chatroomId, isCrafter }: ProductSidebarProp
       )}
     </div>
   );
-}, arePropsEqual);
+};
 
 export default ProductCard;
