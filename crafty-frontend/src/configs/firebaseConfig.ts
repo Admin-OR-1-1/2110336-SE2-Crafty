@@ -17,4 +17,6 @@ let firebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getAp
 
 // src/configs/firebaseConfig.ts
 const auth = getAuth(firebaseApp);
+auth.languageCode = 'th';
 export { auth };
+export default firebaseApp;
