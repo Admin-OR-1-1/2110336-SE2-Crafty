@@ -51,6 +51,8 @@ model Product {
 
   chatroomId String   @unique
   chatroom   Chatroom @relation(fields: [chatroomId], references: [id])
+
+  isPaid  Boolean @default(false)
 }
 
 model Message {

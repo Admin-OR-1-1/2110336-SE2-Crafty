@@ -4,7 +4,7 @@ import { FC, useEffect } from 'react';
 import FeedCard from './_components/FeedCard';
 import useFeedList from '../../../_hooks/allFeed';
 import LoadingPage from '@/app/_components/common-component/loading';
-import useEnableSearchOnNavbar from '../../../_hooks/searchOnNavbar/enableSearchOnNavbar';
+import { useEnableSearchOnNavbar } from '../../../_hooks/searchOnNavbar/enableSearchOnNavbar';
 import searchStore from '../../../_hooks/searchOnNavbar/stores/search';
 
 const WaterfallContainer: FC = () => {

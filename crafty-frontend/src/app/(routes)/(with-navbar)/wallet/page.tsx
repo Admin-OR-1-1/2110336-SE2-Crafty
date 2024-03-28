@@ -14,6 +14,8 @@ import useSWR, { Fetcher } from 'swr';
 import axios from 'axios';
 import { revalidatePath } from 'next/cache';
 
+import { useDisableSearchOnNavbar } from '../_hooks/searchOnNavbar/enableSearchOnNavbar';
+
 interface IMesssageProps {
   txid: string;
   type: 'Topup' | 'Buy' | 'Sell';
@@ -23,6 +25,7 @@ interface IMesssageProps {
 
 const Page = () => {
   // const fetcher = (url: string) => apiClient.get(url).then((res) => res.data);
+  useDisableSearchOnNavbar();
 
   const fetcher1 = async () =>
     await apiClient.get('wallet/balance').then((res: any) => {
@@ -148,7 +151,7 @@ const Page = () => {
   return (
     <>
       {!amountLoading && !transLoading && (
-        <div className="flex h-screen max-h-screen w-screen flex-col items-center bg-ct_brown-100 pt-9">
+        <div className="flex max-h-screen w-full flex-1 flex-col items-center bg-ct_brown-100 pt-9">
           <div className="relative flex h-full w-full max-w-[450px] flex-col gap-y-3 overflow-x-hidden rounded-t-[36px] bg-white pt-10">
             <div className="flex flex-col gap-y-4 px-8">
               <div className="flex flex-col gap-y-6 rounded-2xl border-2 border-solid border-ct_brown-500 px-6 py-4">
@@ -313,7 +316,7 @@ const Page = () => {
                       </div>
                       {amount < withdrawAmount && (
                         <div className="label">
-                          <span className="text-ct_neg label-text">
+                          <span className="label-text text-ct_neg">
                             ไม่สามารถถอนเงินมากกว่าเงินที่มีได้
                           </span>
                         </div>

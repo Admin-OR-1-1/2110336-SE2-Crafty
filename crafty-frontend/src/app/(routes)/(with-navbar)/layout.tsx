@@ -194,6 +194,13 @@ export default function NavbarLayout({ children }: { children: React.ReactNode }
               <h1
                 className="cursor-pointer text-ct_brown-500 hover:underline"
                 onClick={() => {
+                  router.push('/wallet');
+                }}>
+                My wallet
+              </h1>
+              <h1
+                className="cursor-pointer text-ct_brown-500 hover:underline"
+                onClick={() => {
                   setConfirmModal(true);
                 }}>
                 Delete this Account
@@ -205,7 +212,7 @@ export default function NavbarLayout({ children }: { children: React.ReactNode }
           )}
         </div>
       </div>
-      <div className="flex-1 bg-ct_brown-100">{children}</div>
+      <div className="flex flex-1 bg-ct_brown-100">{children}</div>
     </div>
   );
 }
