@@ -17,14 +17,14 @@ const ChatInput: React.FC<ChatInputProps> = ({ chatroomId, senderId }) => {
     console.log('submitted text:', text);
     if (text === '') return;
 
+    const thisText = text;
+    setText('');
     await apiService.createNewMessage({
       chatroomId,
       senderId,
-      content: text,
+      content: thisText,
       messageType: 'TEXT',
     });
-
-    setText('');
   };
 
   const submitImageMessage = async (imageUrl: string) => {
@@ -40,6 +40,13 @@ const ChatInput: React.FC<ChatInputProps> = ({ chatroomId, senderId }) => {
     const imageUrl = window.prompt('Please enter the image URL:');
     if (imageUrl) {
       submitImageMessage(imageUrl);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == 'Enter') {
+      e.preventDefault();
+      submitMessage();
     }
   };
 
@@ -59,6 +66,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ chatroomId, senderId }) => {
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           setText(e.target.value);
         }}
+        onKeyDown={handleKeyDown}
       />
       <div className="send-icon">
         <IoIosSend

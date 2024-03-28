@@ -32,7 +32,7 @@ const ProductSidebar = ({ product, chatroomId, isCrafter }: ProductSidebarProps)
 
       {/* Sidebar */}
       <div
-        className={`absolute bottom-0 right-0 z-50 h-[calc(100vh-64px)] w-[64] transform overflow-y-auto overflow-x-visible border-l bg-white transition-all duration-300 ease-in-out ${
+        className={`fixed right-0 top-[64px] z-50 h-[calc(100vh-64px)] w-[64] transform overflow-y-auto overflow-x-visible border-l bg-white transition-all duration-300 ease-in-out ${
           isOpen ? 'w-[640px] translate-x-0' : 'w-[24px]'
         }`}>
         {/* Sidebar content */}
@@ -41,9 +41,14 @@ const ProductSidebar = ({ product, chatroomId, isCrafter }: ProductSidebarProps)
           onClick={toggleSidebar}>
           <BsChevronLeft style={iconStyle} size={8} />
         </button>
-        <div className="h-full overflow-y-auto">
+        <div className="overflow-y-auto">
           {isOpen && (
-            <ProductCard product={product} chatroomId={chatroomId} isCrafter={isCrafter} />
+            <ProductCard
+              key={product?.step}
+              product={product}
+              chatroomId={chatroomId}
+              isCrafter={isCrafter}
+            />
           )}
         </div>
       </div>
