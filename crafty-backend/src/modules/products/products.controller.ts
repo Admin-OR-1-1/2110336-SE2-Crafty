@@ -11,15 +11,19 @@ import {
 import { ProductsService } from './products.service'
 import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { AuthGuard } from '../auth/guard/auth.guard'
 import { PayProductDto } from './dto/pay-product.dto'
+import { Roles } from '../auth/guard/roles.decorator'
 
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+  @UseGuards(AuthGuard)
+  @Roles('ADMIN')
+  @ApiBearerAuth()
   @Get('history')
   history() {
     return this.productsService.history()
