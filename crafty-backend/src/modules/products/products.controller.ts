@@ -20,6 +20,11 @@ import { PayProductDto } from './dto/pay-product.dto'
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+  @Get('history')
+  history() {
+    return this.productsService.history()
+  }
+
   @Post()
   create(@Body() createProductDto: CreateProductDto) {
     return this.productsService.create(createProductDto)
@@ -35,7 +40,6 @@ export class ProductsController {
     return this.productsService.findOne(id)
   }
 
-  @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productsService.update(id, updateProductDto)
