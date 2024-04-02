@@ -97,6 +97,7 @@ model Post {
   reviews      Review[]
   userFavorite User[]     @relation("userFavorite")
   Chatroom     Chatroom[]
+  isBanned     Boolean    @default(false)
 }
 
 model Review {

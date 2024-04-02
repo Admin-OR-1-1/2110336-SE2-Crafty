@@ -77,32 +77,39 @@ export class PostsService {
         userFavorite: true,
       },
       where: {
-        OR: [
+        AND: [
           {
-            title: {
-              contains: search,
-              mode: 'insensitive',
-            },
+            isBanned: false, // Filter out posts where isBanned is false
           },
           {
-            detail: {
-              contains: search,
-              mode: 'insensitive',
-            },
-          },
-          {
-            content: {
-              contains: search,
-              mode: 'insensitive',
-            },
-          },
-          {
-            owner: {
-              username: {
-                contains: search,
-                mode: 'insensitive',
+            OR: [
+              {
+                title: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
               },
-            },
+              {
+                detail: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                content: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                owner: {
+                  username: {
+                    contains: search,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+            ],
           },
         ],
       },
@@ -111,7 +118,7 @@ export class PostsService {
           priority: 'desc',
         },
       ],
-    })
+    });
   }
 
   async findMyPost(userId: string) {
@@ -163,6 +170,24 @@ export class PostsService {
       where: { id },
       data: {
         priority: { decrement: 1 },
+      },
+    })
+  }
+
+  async banning(id: string) {
+    return await this.prisma.post.update({
+      where: { id },
+      data: {
+        isBanned: true,
+      },
+    })
+  }
+
+  async unbanning(id: string) {
+    return await this.prisma.post.update({
+      where: { id },
+      data: {
+        isBanned: false,
       },
     })
   }
