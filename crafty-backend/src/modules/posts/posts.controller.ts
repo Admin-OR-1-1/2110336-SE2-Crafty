@@ -19,6 +19,7 @@ import { FavoriteDto } from './dto/favorite.dto'
 import { AuthGuard } from '../auth/guard/auth.guard'
 import { UserEntity } from '../users/entities/user.entity'
 import { SearchDto } from './dto/search.dto'
+import { Roles } from '../auth/guard/roles.decorator'
 
 @ApiTags('posts')
 @Controller('posts')
@@ -97,5 +98,22 @@ export class PostsController {
   @Patch(':id/unboosting')
   unboosting(@Param('id') id: string) {
     return this.postsService.unboosting(id)
+  }
+
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @Roles('ADMIN')
+  @Patch(':id/banning')
+  banning(@Param('id') id: string) {
+    return this.postsService.banning(id)
+  }
+
+  
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @Roles('ADMIN')
+  @Patch(':id/unbanning')
+  unbanning(@Param('id') id: string) {
+    return this.postsService.unbanning(id)
   }
 }
