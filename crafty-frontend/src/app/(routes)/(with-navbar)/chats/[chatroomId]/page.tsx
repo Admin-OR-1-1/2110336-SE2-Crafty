@@ -28,6 +28,7 @@ const ChatRoomPage: FC<PageProps> = ({ params }) => {
       : chatroomDetail?.crafter.username;
 
   const isCrafter = chatroomDetail?.crafterId === myId;
+  const postId = chatroomDetail?.postId || null;
 
   return (
     <div className="flex w-full flex-row overflow-x-hidden">
@@ -53,6 +54,7 @@ const ChatRoomPage: FC<PageProps> = ({ params }) => {
           product={productDetail}
           chatroomId={params.chatroomId}
           isCrafter={isCrafter}
+          postId={postId}
         />
       </div>
     </div>

@@ -18,12 +18,14 @@ interface MyTextInputProps {
 interface CreateProductFormProps {
   chatroomId: string;
   isCrafter: boolean;
+  postId: string | null;
 }
 
 export interface NonEmptyProductSidebarProps {
   product: ProductDetail;
   chatroomId: string;
   isCrafter: boolean;
+  postId: string | null;
 }
 
 const MyTextInput = ({ label, placeholder, required, value, setText }: MyTextInputProps) => {
@@ -129,7 +131,7 @@ const CreateProductForm = ({ chatroomId }: CreateProductFormProps) => {
   );
 };
 
-const EmptyProductCard = ({ chatroomId, isCrafter }: CreateProductFormProps) => {
+const EmptyProductCard = ({ chatroomId, isCrafter, postId }: CreateProductFormProps) => {
   const [showCreateForm, setShowCreateForm] = useState(false);
 
   const handleCreateProduct = () => {
@@ -139,9 +141,21 @@ const EmptyProductCard = ({ chatroomId, isCrafter }: CreateProductFormProps) => 
   return (
     <>
       {showCreateForm ? (
-        <CreateProductForm chatroomId={chatroomId} isCrafter={isCrafter} />
+        <CreateProductForm chatroomId={chatroomId} isCrafter={isCrafter} postId={postId} />
       ) : (
         <div className="flex h-full flex-col items-center justify-center gap-4">
+          <div className="text-lg font-bold">
+            Post:{' '}
+            {postId ? (
+              <span
+                className="ml-1 font-normal underline hover:cursor-pointer hover:shadow-md"
+                onClick={() => (window.location.href = `/feed-detail/${postId}`)}>
+                {postId}
+              </span>
+            ) : (
+              'ไม่มี'
+            )}{' '}
+          </div>
           <AiOutlineShoppingCart size={100} />
           <div className="text-2xl font-semibold">ยังไม่มีสินค้าในขณะนี้</div>
           <div className="flex min-w-[200px]">
@@ -356,12 +370,19 @@ const arePropsEqual = (prevProps: ProductSidebarProps, nextProps: ProductSidebar
   return true;
 };
 
-const ProductCard = ({ product, chatroomId, isCrafter }: ProductSidebarProps) => {
+const ProductCard = ({ product, chatroomId, isCrafter, postId }: ProductSidebarProps) => {
   return (
     <div className="flex h-full min-h-[calc(100vh-64px)] flex-col items-center justify-center gap-9">
-      {!product && <EmptyProductCard chatroomId={chatroomId} isCrafter={isCrafter} />}
+      {!product && (
+        <EmptyProductCard chatroomId={chatroomId} isCrafter={isCrafter} postId={postId} />
+      )}
       {product && (
-        <RealProductCard product={product} chatroomId={chatroomId} isCrafter={isCrafter} />
+        <RealProductCard
+          product={product}
+          chatroomId={chatroomId}
+          isCrafter={isCrafter}
+          postId={postId}
+        />
       )}
     </div>
   );
