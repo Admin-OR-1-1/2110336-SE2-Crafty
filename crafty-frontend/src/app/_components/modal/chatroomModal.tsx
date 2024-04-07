@@ -30,13 +30,13 @@ const ChatroomModal: FC<SkipModalProps> = ({
 }) => {
   return (
     <>
-      <div className="absolute z-50 w-full">
+      <div className="absolute z-[500] h-[calc(100vh-64px)] w-full">
         <div
-          className={`flex h-[calc(100vh-64px)] w-full items-center justify-center ${blurBackground && 'backdrop-blur-sm'}`}>
-          <div className="flex flex-col items-center justify-center rounded-lg bg-white p-6 shadow-xl">
+          className={`flex h-full w-full items-center justify-center ${blurBackground && 'backdrop-blur-sm'}`}>
+          <div className="flex max-h-[calc(100vh-84px)] flex-col items-center justify-center place-self-center overflow-hidden rounded-lg bg-white p-6 shadow-xl">
             <h1 className="mb-4 text-xl font-semibold text-gray-700">{title}</h1>
             <p className="mb-6 text-gray-500">{description}</p>
-            <div className="my-3 flex flex-col gap-4">
+            <div className="my-3 flex flex-col gap-4 overflow-y-auto">
               {chatroomData.map((chatroom) => {
                 return (
                   <div
