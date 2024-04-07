@@ -144,7 +144,7 @@ const EmptyProductCard = ({ chatroomId, isCrafter, postId }: CreateProductFormPr
         <CreateProductForm chatroomId={chatroomId} isCrafter={isCrafter} postId={postId} />
       ) : (
         <div className="flex h-full flex-col items-center justify-center gap-4">
-          <div className="text-lg font-bold">
+          <div className="mb-8 text-lg font-bold">
             Post:{' '}
             {postId ? (
               <span
