@@ -43,6 +43,7 @@ export class ChatsService {
             id: true,
           },
         },
+        postId: true,
       },
     })
   }
@@ -71,6 +72,7 @@ export class ChatsService {
             username: true,
           },
         },
+        postId: true,
       },
     })
     // check if chatroom exists
