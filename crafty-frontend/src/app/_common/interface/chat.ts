@@ -1,6 +1,7 @@
 export interface User {
   id: string;
   username: string;
+  role?: string;
 }
 
 export interface ReadChatroom {
@@ -16,6 +17,8 @@ export interface SidebarData {
   talkerName: string;
   lastChatTime: string;
   chatroomId: string;
+  isAdmin: boolean;
+  isRead: boolean;
 }
 
 export enum MessageType {
