@@ -15,6 +15,31 @@ export class ChatsService {
   constructor(private prisma: PrismaService) {}
 
   async findAllChatroomsForUser(user: User) {
+    if (user.role === 'ADMIN') {
+      return await this.prisma.chatroom.findMany({
+        select: {
+          id: true,
+          lastChatTime: true,
+          isCrafterRead: true,
+          isCrafteeRead: true,
+          craftee: {
+            select: {
+              username: true,
+              id: true,
+              role: true,
+            },
+          },
+          crafter: {
+            select: {
+              username: true,
+              id: true,
+              role: true,
+            },
+          },
+          postId: true,
+        },
+      })
+    }
     return await this.prisma.chatroom.findMany({
       where: {
         OR: [
@@ -35,12 +60,14 @@ export class ChatsService {
           select: {
             username: true,
             id: true,
+            role: true,
           },
         },
         crafter: {
           select: {
             username: true,
             id: true,
+            role: true,
           },
         },
         postId: true,
@@ -101,7 +128,7 @@ export class ChatsService {
           isCrafteeRead: true,
         },
       })
-    } else {
+    } else if (user.role !== 'ADMIN') {
       // otherwise user is not part of this chatroom
       throw new UnauthorizedException('User is not part of this chatroom')
     }
