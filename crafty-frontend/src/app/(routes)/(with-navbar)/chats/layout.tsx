@@ -25,8 +25,11 @@ const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
   }, [sidebarDatas]);
 
   const createChatroomWithAdmin = async () => {
+    const adminId = process.env.CRAFTEE_ADMIN_ID || 'admin_id';
+    if (adminId === myId) return;
+
     const postChatroom: PostChatroom = {
-      crafterId: process.env.CRAFTEE_ADMIN_ID || 'admin_id',
+      crafterId: adminId,
       crafteeId: myId,
     };
     const response = await apiService.createNewChatroom(postChatroom);
