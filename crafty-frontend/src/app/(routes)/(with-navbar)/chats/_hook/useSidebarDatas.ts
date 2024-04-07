@@ -32,6 +32,8 @@ const useSidebarDatas = (refreshSidebar: boolean): SidebarData[] => {
       chatroomId: chatroom.id,
       isAdmin: isAdmin,
       isRead: isRead,
+      myName: isOtherCrafter ? chatroom.craftee.username : chatroom.crafter.username,
+      postId: chatroom.postId,
     };
   });
 };

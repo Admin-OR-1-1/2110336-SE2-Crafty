@@ -168,7 +168,12 @@ const EmptyProductCard = ({ chatroomId, isCrafter, postId }: CreateProductFormPr
   );
 };
 
-const RealProductCard = ({ product, chatroomId, isCrafter }: NonEmptyProductSidebarProps) => {
+const RealProductCard = ({
+  product,
+  chatroomId,
+  isCrafter,
+  postId,
+}: NonEmptyProductSidebarProps) => {
   const [step, setStep] = useState(product.step);
 
   const cancelPayment = async () => {
@@ -302,6 +307,18 @@ const RealProductCard = ({ product, chatroomId, isCrafter }: NonEmptyProductSide
     <div className="flex min-h-[calc(100vh-64px)] flex-col items-center justify-center gap-12 p-10">
       <div
         className={`${product.imageUrl ? 'mt-[200px]asdf' : ''} flex flex-col items-center gap-6`}>
+        <div className="flex flex-col gap-2 font-bold">
+          <div>
+            Post:{' '}
+            <span
+              className="ml-1 font-normal underline hover:cursor-pointer hover:shadow-md"
+              onClick={() => (window.location.href = `/feed-detail/${postId}`)}>
+              {postId}
+            </span>
+          </div>
+          <hr className="border-1 w-full text-red-500"></hr>
+        </div>
+
         <div className="flex flex-col break-all text-2xl font-bold">
           <div>{product.title}</div>
           <div className="ml-2 text-lg">#{product.id}</div>

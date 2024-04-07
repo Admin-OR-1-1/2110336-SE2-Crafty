@@ -11,6 +11,7 @@ export interface ReadChatroom {
   isCrafteeRead: boolean;
   crafter: User;
   craftee: User;
+  postId?: string | null;
 }
 
 export interface SidebarData {
@@ -19,6 +20,8 @@ export interface SidebarData {
   chatroomId: string;
   isAdmin: boolean;
   isRead: boolean;
+  myName: string;
+  postId?: string | null;
 }
 
 export enum MessageType {
