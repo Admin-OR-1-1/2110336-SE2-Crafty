@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import SidebarBubble from './_component/SidebarBubble';
-import { PostChatroom, SidebarData } from '@/app/_common/interface/chat';
+import { PostChatroom, SidebarData, User } from '@/app/_common/interface/chat';
 import useSidebarDatas from './_hook/useSidebarDatas';
 import { Button } from '@/app/_components/ui/input';
 import { apiService } from '@/configs/apiService/apiService';
 import userStore from '@/app/_common/store/user/user-store';
 import ChatroomModal from '@/app/_components/modal/chatroomModal';
+import { ApiStatus } from '@/configs/apiService/types';
+import UserModal from '@/app/_components/modal/userModal';
 
 type ChatLayoutProps = {
   children: React.ReactNode;
@@ -16,8 +18,28 @@ type ChatLayoutProps = {
 const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
   const [refreshSidebar, setRefreshSidebar] = useState(false);
   const sidebarDatas = useSidebarDatas(refreshSidebar);
-  const myId = userStore((state) => state.user.id);
-  const myName = userStore((state) => state.user.username);
+
+  const me = userStore((state) => state.user);
+  const myId = me.id;
+  const myName = me.username;
+  const myRole = me.role;
+
+  const [showChatroomModal, setShowChatroomModal] = useState(false);
+  const [showUserModal, setShowUserModal] = useState(false);
+  const [users, setUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+    if (myRole === 'ADMIN') {
+      const fetchUsers = async () => {
+        const response = await apiService.getUsers();
+        if (response.status === ApiStatus.SUCCESS) {
+          const nonAdminUsers = response.data.filter((user) => user.role !== 'ADMIN');
+          setUsers(nonAdminUsers);
+        }
+      };
+      fetchUsers();
+    }
+  }, [showUserModal]);
 
   const sortedSidebarDatas = useMemo(() => {
     return [...sidebarDatas]
@@ -29,9 +51,6 @@ const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
       });
   }, [sidebarDatas]);
 
-  const [showChatroomModal, setShowChatroomModal] = useState(false);
-  const [showUserModal, setShowUserModal] = useState(false);
-
   const adminId = process.env.CRAFTEE_ADMIN_ID || 'admin_id';
 
   const createChatroomWithAdmin = async () => {
@@ -42,13 +61,8 @@ const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
       crafteeId: myId,
     };
     const response = await apiService.createNewChatroom(postChatroom);
-    // console.log(response);
+
     if (response.status === 'SUCCESS') {
-      // console.log('success');
-      // console.log(response.data);
-      // refresh sidebar
-      // setRefreshSidebar((prev) => !prev);
-      // navigate to the chatroom
       window.location.href = `/chats/${response.data.id}`;
     }
   };
@@ -57,7 +71,9 @@ const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
     setShowChatroomModal(true);
   };
 
-  const browseAllUser = () => {};
+  const browseAllUser = async () => {
+    setShowUserModal(true);
+  };
 
   return (
     <div className="flex max-h-[calc(100vh-64px)] min-h-[calc(100vh-64px)] w-full">
@@ -67,6 +83,9 @@ const ChatLayout: React.FC<ChatLayoutProps> = ({ children }) => {
           onBack={() => setShowChatroomModal(false)}
           chatroomData={sidebarDatas}
         />
+      )}
+      {showUserModal && (
+        <UserModal title="User List" onBack={() => setShowUserModal(false)} userData={users} />
       )}
       <aside className="flex w-[300px] flex-col gap-2 bg-ct_brown-100 pt-4" aria-label="Sidebar">
         <div className="mb-2 flex justify-center border-b pb-4 font-semibold">

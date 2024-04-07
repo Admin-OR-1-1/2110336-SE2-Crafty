@@ -391,6 +391,21 @@ class ApiService {
       };
     }
   };
+
+  getUsers = async (): Promise<ApiResponseType<User[]>> => {
+    try {
+      const response = await apiClient.get('/users');
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to fetch users',
+      };
+    }
+  };
 }
 
 export const apiService = new ApiService();
