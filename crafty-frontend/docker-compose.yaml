@@ -1,7 +1,7 @@
 version: '3.9'
 
 services:
-  backend:
+  frontend:
     image: kuranasaki/crafty-frontend:latest
     pull_policy: always
     container_name: crafty-frontend
