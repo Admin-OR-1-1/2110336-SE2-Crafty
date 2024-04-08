@@ -9,7 +9,6 @@ services:
       - 5000:${PORT}
     environment:
       WALLET_DB_URI: ${WALLET_DB_URI}
-      FIREBASE_SDK: ${FIREBASE_SDK}
       DATABASE_URL: ${DATABASE_URL}
       PORT: ${PORT}
       JWT_SECRET: ${JWT_SECRET}
