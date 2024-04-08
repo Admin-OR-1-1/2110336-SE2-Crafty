@@ -47,8 +47,9 @@ jobs:
           context: "{{defaultContext}}:crafty-backend"
           push: true
           tags: kuranasaki/crafty-backend:latest,kuranasaki/crafty-backend:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          load: true
+          cache-from: type=gha,scope=global
+          cache-to: type=gha,mode=max,scope=global
           platforms: linux/amd64
   build-frontend:
     name: Build frontend image from production
@@ -83,8 +84,9 @@ jobs:
           context: "{{defaultContext}}:crafty-frontend"
           push: true
           tags: kuranasaki/crafty-frontend:latest,kuranasaki/crafty-frontend:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          load: true
+          cache-from: type=gha,scope=global
+          cache-to: type=gha,mode=max,scope=global
           platforms: linux/amd64
   deploy:
     name: Deploy to GooseHQ
