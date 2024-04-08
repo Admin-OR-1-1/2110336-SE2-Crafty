@@ -6,8 +6,8 @@ on:
   push:
     paths:
       - crafty-frontend/**
-    branches:
-      - "develop"
+    # branches:
+    #   - "develop"
 
 
 jobs:
