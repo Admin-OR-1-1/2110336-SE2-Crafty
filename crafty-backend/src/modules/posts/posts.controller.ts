@@ -62,6 +62,14 @@ export class PostsController {
     return this.postsService.create(user.id, createPostDto)
   }
 
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @Roles('ADMIN')
+  @Get('all-admin')
+  findAllAdmin(@Query() searchDto: SearchDto) {
+    return this.postsService.findAllAdmin(searchDto.search)
+  }
+
   @Get()
   findAll(@Query() searchDto: SearchDto) {
     return this.postsService.findAll(searchDto.search)
@@ -108,7 +116,6 @@ export class PostsController {
     return this.postsService.banning(id)
   }
 
-  
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @Roles('ADMIN')

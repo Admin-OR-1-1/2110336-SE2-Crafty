@@ -37,20 +37,17 @@ export class ProductsService {
   async update(id: string, updateProductDto: UpdateProductDto) {
     try {
       const product = await this.findOne(id)
-      let updateData = {}
+      const updateData = {}
 
-      // Check if incrementStep is true and the current step is less than 6
-      if (updateProductDto.incrementStep && product.step < 6) {
-        updateData['step'] = { increment: 1 }
-      }
-
-      if (product.step === 6) {
+      if (product.step === 5 && updateProductDto.incrementStep) {
         // If the product is already at step 6, save the product in the products_history table
         const chatroom = await this.prisma.chatroom.findUnique({
           where: { id: product.chatroomId },
         })
         if (!chatroom) {
-          throw new NotFoundException(`Chatroom with ID ${product.chatroomId} not found`)
+          throw new NotFoundException(
+            `Chatroom with ID ${product.chatroomId} not found`,
+          )
         }
         await this.prisma.productHistory.create({
           data: {
@@ -64,8 +61,13 @@ export class ProductsService {
             isPaid: product.isPaid,
             crafteeId: chatroom.crafteeId,
             crafterId: chatroom.crafterId,
-          }
+          },
         })
+      }
+
+      // Check if incrementStep is true and the current step is less than 6
+      if (updateProductDto.incrementStep && product.step < 6) {
+        updateData['step'] = { increment: 1 }
       }
 
       // Check if isPaid is provided in updateProductDto and update it
