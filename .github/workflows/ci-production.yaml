@@ -3,12 +3,9 @@ name: Deploy Production to GooseHQ
 
 on:
   workflow_dispatch:
-  # push:
-  #   paths:
-  #     - crafty-backend/**
-    # branches:
-      # - "develop"
-      # - "develop-backend"
+  push:
+    branches:
+      - "production"
 
 
 jobs:
