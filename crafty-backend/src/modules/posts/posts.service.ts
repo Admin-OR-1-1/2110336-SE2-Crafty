@@ -77,6 +77,57 @@ export class PostsService {
         userFavorite: true,
       },
       where: {
+        AND: [
+          {
+            isBanned: false, // Filter out posts where isBanned is false
+          },
+          {
+            OR: [
+              {
+                title: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                detail: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                content: {
+                  contains: search,
+                  mode: 'insensitive',
+                },
+              },
+              {
+                owner: {
+                  username: {
+                    contains: search,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      },
+      orderBy: [
+        {
+          priority: 'desc',
+        },
+      ],
+    })
+  }
+
+  async findAllAdmin(search?: string) {
+    return await this.prisma.post.findMany({
+      include: {
+        reviews: true,
+        userFavorite: true,
+      },
+      where: {
         OR: [
           {
             title: {
@@ -163,6 +214,24 @@ export class PostsService {
       where: { id },
       data: {
         priority: { decrement: 1 },
+      },
+    })
+  }
+
+  async banning(id: string) {
+    return await this.prisma.post.update({
+      where: { id },
+      data: {
+        isBanned: true,
+      },
+    })
+  }
+
+  async unbanning(id: string) {
+    return await this.prisma.post.update({
+      where: { id },
+      data: {
+        isBanned: false,
       },
     })
   }
