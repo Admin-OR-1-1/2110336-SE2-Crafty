@@ -1,5 +1,5 @@
 
-name: Build backend image from develop
+name: Deploy Production to GooseHQ
 
 on:
   workflow_dispatch:
@@ -125,8 +125,6 @@ jobs:
         with:
           ref: production
       - name: Pull Image to GooseHQ
-        working-directory: ./crafty-backend
         run: docker compose pull
       - name: Deploy to GooseHQ
-        working-directory: ./crafty-backend
         run: docker compose up -d
