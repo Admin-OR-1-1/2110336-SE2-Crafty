@@ -14,7 +14,7 @@ import { auth } from '@/configs/firebaseConfig';
 
 import LogoLeftSide from '@/app/_components/ui/logoLeftSide';
 import { useRouter } from 'next/navigation';
-import { apiClient } from '@/configs/axiosConfig';
+import { apiV2Client } from '@/configs/axiosConfig';
 import { useFirebaseAuthContext } from '@/contexts/firebaseAuthContext';
 import { apiService } from '@/configs/apiService/apiService';
 import { ApiStatus } from '@/configs/apiService/types';
@@ -173,7 +173,7 @@ const Page = () => {
 
   const checkUserValid = async () => {
     if (auth) {
-      const isValid = apiClient
+      const isValid = apiV2Client
         .get('/user')
         .then((response) => {
           console.log(response.status);

@@ -7,7 +7,7 @@ import { IoMdPerson } from 'react-icons/io';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/configs/firebaseConfig';
 import useUserStore from '@/app/_common/store/user/hooks/useUserStore';
-import { apiClient } from '@/configs/axiosConfig';
+import { apiV2Client } from '@/configs/axiosConfig';
 import { ApiStatus } from '@/configs/apiService/types';
 import { useRouter } from 'next/navigation';
 import useDebounce from '@/app/_common/hooks/debounce';
@@ -32,7 +32,7 @@ export default function NavbarLayout({ children }: { children: React.ReactNode }
   const deleteUserHandler = async () => {
     // const responseUser = await apiService.getMe();
     if (confirmPrompt !== 'ลบบัญชี') return;
-    const responseUser = await apiClient.get('/auth/me');
+    const responseUser = await apiV2Client.get('/auth/me');
     console.log(responseUser);
     const responseDelete = await apiService.deleteUser(responseUser.data.id);
     if (responseDelete.status === ApiStatus.SUCCESS) {
