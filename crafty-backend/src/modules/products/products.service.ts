@@ -5,6 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service'
 import { PayProductDto } from './dto/pay-product.dto'
 import { WalletService } from '../wallet/wallet.service'
 import { CreateProductHistoryDto } from './dto/create-product-history.dto'
+import { getDateStringDisplay } from './utils/date-format'
 
 @Injectable()
 export class ProductsService {
@@ -113,6 +114,9 @@ export class ProductsService {
   }
 
   async history() {
-    return await this.prisma.productHistory.findMany()
+    return (await this.prisma.productHistory.findMany()).map((product) => ({
+      ...product,
+      date: getDateStringDisplay(product.date),
+    }))
   }
 }
