@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import MessageBubble from '../_component/MessageBubble';
 import ChatHeader from '../_component/ChatHeader';
 import ChatInput from '../_component/ChatInput';
@@ -8,13 +8,40 @@ import { ChatroomDetail, Message } from '@/app/_common/interface/chat';
 import userStore from '@/app/_common/store/user/user-store';
 import useChatroomDetail from '../_hook/useChatroomDetail';
 import ProductSidebar from '../_component/ProductSidebar';
+import { io } from 'socket.io-client';
+import { socket } from '@/app/socket';
 type PageProps = {
   params: {
     chatroomId: string;
   };
 };
 
+// const socket = io('http://localhost:5000', { transports: ['websocket'] });
+
 const ChatRoomPage: FC<PageProps> = ({ params }) => {
+  const [isConnected, setIsConnected] = useState(socket.connected);
+
+  useEffect(() => {
+    const onConnect = () => {
+      setIsConnected(true);
+      console.log('Connected to WebSocket server (Page)');
+    };
+
+    const onDisconnect = () => {
+      setIsConnected(false);
+      console.log('Disconnected from WebSocket server (Page)');
+    };
+
+    socket.on('connect', onConnect);
+    socket.on('disconnect', onDisconnect);
+
+    return () => {
+      socket.off('connect', onConnect);
+      socket.off('disconnect', onDisconnect);
+    };
+  }, [params.chatroomId]);
+
+  // normal code
   const { chatroomDetail, productDetail } = useChatroomDetail(params.chatroomId);
   const myId = userStore((state) => state.user.id);
   const myName = userStore((state) => state.user.username);
@@ -35,16 +62,16 @@ const ChatRoomPage: FC<PageProps> = ({ params }) => {
   const isOtherChat = chatroomDetail?.crafterId !== myId && chatroomDetail?.crafteeId !== myId;
 
   return (
-    <div className="flex w-full flex-row overflow-x-hidden">
+    <div className="flex w-full flex-row overflow-hidden">
       <div className="relative flex h-full w-full">
-        <div className="mr-2 flex h-full min-h-[calc(100vh-64px)] w-full flex-col pr-3">
+        <div className="mr-2 flex h-full max-h-[calc(100vh-64px)] min-h-[calc(100vh-64px)] w-full flex-col pr-3">
           <ChatHeader
             name={
               isOtherChat ? (talkerName ? `${talkerName} - ${senderName}` : '.') : talkerName ?? ''
             }
           />
 
-          <div className="flex-1 flex-col space-y-4 overflow-y-auto py-4">
+          <div className="flex-1 space-y-4 overflow-y-auto py-4">
             {messages?.map((message: Message) => {
               return (
                 <MessageBubble
@@ -57,7 +84,9 @@ const ChatRoomPage: FC<PageProps> = ({ params }) => {
               );
             })}
           </div>
-          <ChatInput chatroomId={params.chatroomId} senderId={myId} />
+          <div>
+            <ChatInput chatroomId={params.chatroomId} senderId={myId} />
+          </div>
         </div>
         <ProductSidebar
           product={productDetail}

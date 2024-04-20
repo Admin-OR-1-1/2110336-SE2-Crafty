@@ -1,6 +1,7 @@
 'use client';
 
 import { TextInput } from '@/app/_components/ui/input';
+import { socket } from '@/app/socket';
 import { apiService } from '@/configs/apiService/apiService';
 import { useState } from 'react';
 import { IoIosSend } from 'react-icons/io';
@@ -25,6 +26,8 @@ const ChatInput: React.FC<ChatInputProps> = ({ chatroomId, senderId }) => {
       content: thisText,
       messageType: 'TEXT',
     });
+
+    socket.emit('sendMessage', 'message');
   };
 
   const submitImageMessage = async (imageUrl: string) => {

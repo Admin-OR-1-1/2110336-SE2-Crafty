@@ -7,6 +7,7 @@ import {
   SidebarData,
 } from '@/app/_common/interface/chat';
 import userStore from '@/app/_common/store/user/user-store';
+import { socket } from '@/app/socket';
 import { apiService } from '@/configs/apiService/apiService';
 import { ApiStatus } from '@/configs/apiService/types';
 import { useEffect, useState } from 'react';
@@ -24,8 +25,19 @@ const useChatroomDetail = (chatroomId: string) => {
       }
     };
     fetchChatroomDetail();
-    const intervalId = setInterval(fetchChatroomDetail, 2000); // Fetch every 2 seconds
-    return () => clearInterval(intervalId);
+
+    const onNewMessage = async (message: any) => {
+      // console.log('New message (useChatroomDetail):', message);
+      await fetchChatroomDetail();
+    };
+
+    socket.on('receiveMessage', onNewMessage);
+
+    return () => {
+      socket.off('receiveMessage', onNewMessage);
+    };
+    // const intervalId = setInterval(fetchChatroomDetail, 2000); // Fetch every 2 seconds
+    // return () => clearInterval(intervalId);
   }, [chatroomId]);
 
   return { chatroomDetail, productDetail };
