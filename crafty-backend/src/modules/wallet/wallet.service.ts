@@ -56,7 +56,7 @@ export class WalletService {
 
   async getTransactions(uid: string): Promise<Transaction[]> {
     return this.transactionModel
-      .find({ $or: [{ sourceAccount: uid }, { destinationAccount: uid }] })
+      .find({ sourceAccount: uid })
       .exec()
       .then((transactions) => transactions.map((t) => t.toJSON()))
   }
@@ -84,10 +84,11 @@ export class WalletService {
     // Check money is enough
     if (sourceWallet.amount < amount) throw new Error('Not enough money')
 
-    const txid = uuid()
+    const buyTXid = uuid()
+    const sellTXid = uuid()
 
     const sourceTransaction = {
-      txid,
+      txid: buyTXid,
       sourceAccount: source,
       amount,
       type: TransactionType.Buy,
@@ -96,11 +97,11 @@ export class WalletService {
     }
 
     const destinationTransaction = {
-      txid,
-      sourceAccount: source,
+      txid: sellTXid,
+      sourceAccount: destination,
       amount,
       type: TransactionType.Sell,
-      destinationAccount: destination,
+      destinationAccount: source,
       timestamp: new Date(),
     }
 
