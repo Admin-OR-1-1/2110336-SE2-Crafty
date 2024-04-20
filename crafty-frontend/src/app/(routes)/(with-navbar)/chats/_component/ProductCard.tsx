@@ -6,6 +6,7 @@ import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { ProductSidebarProps } from './ProductSidebar';
 import StepProgress from './StepProgress';
 import { ApiStatus } from '@/configs/apiService/types';
+import { socket } from '@/app/socket';
 import userStore from '@/app/_common/store/user/user-store';
 
 interface MyTextInputProps {
@@ -219,7 +220,8 @@ const RealProductCard = ({
 
     try {
       await apiService.deleteProduct(product.id);
-      window.location.reload();
+      // window.location.reload();
+      socket.emit('sendMessage', 'product (delete)');
     } catch (err) {
       console.log(err);
     }
@@ -290,6 +292,7 @@ const RealProductCard = ({
       console.log(updatedProduct);
       if (step < 6) setStep(step + 1);
       // window.location.reload();
+      socket.emit('sendMessage', 'product');
     } catch (err) {
       console.log(err);
     }
