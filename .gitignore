@@ -2,7 +2,7 @@
 crafty-backend/.local.env
 */*.env
 !.example.env
-*env*
+# *env*
 *.exe 
 *.bin
 
