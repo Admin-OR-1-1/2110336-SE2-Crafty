@@ -33,25 +33,18 @@ const ChatRoomPage: FC<PageProps> = ({ params }) => {
       console.log('Disconnected from WebSocket server (Page)');
     };
 
-    const onNewMessage = (message: string) => {
-      console.log('Received message:', message);
-    };
-
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
-    socket.on('receiveMessage', onNewMessage);
 
     return () => {
       socket.off('connect', onConnect);
-      socket.off('receiveMessage', onNewMessage);
       socket.off('disconnect', onDisconnect);
     };
   }, []);
 
   useEffect(() => {
-    console.log('trigger');
     // emit sendMessage event
-    socket.emit('sendMessage', 'Hello from client (Page)');
+    socket.emit('sendMessage', 'message');
   }, [triggerRefresh]);
 
   const handleMessageSubmit = () => {
