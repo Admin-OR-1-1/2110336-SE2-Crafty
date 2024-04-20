@@ -101,8 +101,8 @@ jobs:
     name: Deploy to GooseHQ
     needs: 
       - build-backend
-      # - build-frontend
-    if: ${{ always() && !cancelled() && needs.build-backend.result == 'success'}}
+      - build-frontend
+    if: ${{ always() && !cancelled() && needs.build-backend.result == 'success' && needs.build-frontend.result == 'success'}}
     runs-on: self-hosted
     environment: production
     env:
