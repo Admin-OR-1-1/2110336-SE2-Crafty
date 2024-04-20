@@ -119,7 +119,7 @@ export class PostsController {
   @Roles('ADMIN')
   @Patch(':id/banning')
   @ApiOkResponse({
-    description: 'Unboosting a post',
+    description: 'banning a post',
     type: PostEntity,
   })
   banning(@Param('id') id: string) {
@@ -131,7 +131,7 @@ export class PostsController {
   @Roles('ADMIN')
   @Patch(':id/unbanning')
   @ApiOkResponse({
-    description: 'Unboosting a post',
+    description: 'Unbanning a post',
     type: PostEntity,
   })
   unbanning(@Param('id') id: string) {
