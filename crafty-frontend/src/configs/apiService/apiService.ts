@@ -482,6 +482,26 @@ class ApiService {
       };
     }
   };
+
+  reviewProduct = async (
+    id: string,
+    desc: string,
+    rate: number,
+    sender: string
+  ): Promise<ApiResponseType<Post>> => {
+    try {
+      const response = await apiClient.post(`/posts/${id}/reviews`, { desc, rate, sender });
+      return {
+        status: ApiStatus.SUCCESS,
+        data: response.data,
+      };
+    } catch {
+      return {
+        status: ApiStatus.ERROR,
+        errorMessage: 'Failed to review product',
+      };
+    }
+  };
 }
 
 export const apiService = new ApiService();
