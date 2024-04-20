@@ -150,8 +150,8 @@ export class WalletService {
     const ptop = await topup.save()
     const tx = {
       txid: topup.txid,
-      sourceAccount: 'System',
-      destinationAccount: topup.account,
+      sourceAccount: topup.account,
+      destinationAccount: 'System',
       amount: topup.amount,
       type: TransactionType.Topup,
       timestamp: new Date(),
