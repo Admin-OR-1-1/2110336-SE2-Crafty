@@ -98,6 +98,7 @@ const FeedEditPage: FC = () => {
               className="input w-full text-xl [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               type="number"
               placeholder="ราคาสินค้า"
+              min={0}
               {...register('price', { required: true })}
             />
           </div>
