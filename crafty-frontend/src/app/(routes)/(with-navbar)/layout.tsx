@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import useUnreadCount from './_hooks/useUnreadCount';
 import searchStore from './_hooks/searchOnNavbar/stores/search';
 import useDebounce from '@/app/_common/hooks/debounce';
+import userStore from '@/app/_common/store/user/user-store';
 
 export default function NavbarLayout({ children }: { children: React.ReactNode }) {
   useUserStore();
@@ -81,6 +82,8 @@ export default function NavbarLayout({ children }: { children: React.ReactNode }
     }
   }, [muteNoti, initMuteNoti]);
 
+  const user = userStore((state) => state.user);
+
   return (
     <div
       className={`flex min-h-screen ${confirmModal && 'h-screen overflow-hidden'} w-full flex-col`}>
@@ -131,11 +134,9 @@ export default function NavbarLayout({ children }: { children: React.ReactNode }
           <Logo className="" height={59} />
           <h1 className="text-2xl">Crafty</h1>
         </div>
-
         <a href="/feed-list" className="flex-nowrap whitespace-nowrap text-nowrap hover:underline">
           My Post
         </a>
-
         {enableSearch && (
           <input
             type="text"
@@ -144,7 +145,6 @@ export default function NavbarLayout({ children }: { children: React.ReactNode }
             onChange={(e) => setLocalSearch(e.target.value)}
           />
         )}
-
         <div className="ml-auto flex flex-row gap-3">
           <span>mute</span>
           <input
@@ -154,7 +154,6 @@ export default function NavbarLayout({ children }: { children: React.ReactNode }
             onChange={() => setMuteNoti(!muteNoti)}
           />
         </div>
-
         <div
           className="relative duration-75 hover:cursor-pointer hover:brightness-90"
           onClick={() => {
@@ -181,6 +180,7 @@ export default function NavbarLayout({ children }: { children: React.ReactNode }
             />
           </svg>
         </div>
+        <span>{user ? user.username : ''}</span>
         <div className="relative">
           <div
             className="cursor-pointer rounded-full bg-ct_brown-100 p-2 hover:bg-ct_gray-200"
