@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 
 import * as firebase from 'firebase-admin'
+import { DecodedIdToken } from 'firebase-admin/lib/auth/token-verifier'
 
 @Injectable()
 export class FirebaseService {
@@ -17,11 +18,14 @@ export class FirebaseService {
   }
 
   async verifyUser(token: string) {
-    const response: any = await this.firebaseApp.auth().verifyIdToken(token)
+    const response: DecodedIdToken = await this.firebaseApp
+      .auth()
+      .verifyIdToken(token)
     return {
       userId: String(response.user_id),
       email: response.email,
       name: response.name,
+      phoneNumber: response.phone_number,
     }
   }
 }

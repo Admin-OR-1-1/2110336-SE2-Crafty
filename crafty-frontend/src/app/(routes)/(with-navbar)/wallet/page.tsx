@@ -9,7 +9,7 @@ import { BsFillTelephoneFill } from 'react-icons/bs';
 import Image from 'next/image';
 
 import Wallet from '@public/wallet.svg';
-import { apiClient } from '@/configs/axiosConfig';
+import { apiV2Client } from '@/configs/axiosConfig';
 import useSWR, { Fetcher } from 'swr';
 import axios from 'axios';
 import { revalidatePath } from 'next/cache';
@@ -28,13 +28,13 @@ const Page = () => {
   useDisableSearchOnNavbar();
 
   const fetcher1 = async () =>
-    await apiClient.get('wallet/balance').then((res: any) => {
+    await apiV2Client.get('wallet/balance').then((res: any) => {
       // console.log(res.data);
       return res.data;
     });
 
   const fetcher2 = async () =>
-    await apiClient.get('wallet/transactions').then((res: any) => {
+    await apiV2Client.get('wallet/transactions').then((res: any) => {
       const transaction = res.data
         .map((t: any) => {
           return { amount: t.amount, txid: t.txid, timestamp: t.timestamp, type: t.type };
@@ -136,7 +136,7 @@ const Page = () => {
   const topupSubmit = async () => {
     if (topupAmount <= 0) return;
     setOpenTopupModal(false);
-    const res = await apiClient.get(`wallet/payment/qr?amount=${topupAmount}`);
+    const res = await apiV2Client.get(`wallet/payment/qr?amount=${topupAmount}`);
     const base64: string = 'data:image/png;base64,' + res.data;
     setQr(base64);
   };

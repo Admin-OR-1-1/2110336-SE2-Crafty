@@ -3,7 +3,7 @@ import { LoginResponse } from './interface';
 import { ApiResponseType, ApiStatus } from './types';
 import { Post } from '@/app/_common/interface/post';
 import { User } from '@/app/_common/interface/user';
-import { apiClient } from '../axiosConfig';
+import { apiV2Client } from '../axiosConfig';
 import {
   ChatroomDetail,
   Message,
@@ -17,7 +17,7 @@ import { ProductHistory } from '@/app/_common/interface/product-history';
 
 class ApiService {
   constructor() {
-    axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_ENDPOINT || 'http://localhost:5000';
+    axios.defaults.baseURL = (process.env.NEXT_PUBLIC_API_ENDPOINT || 'http://localhost:5000') + "/api/v2";
   }
   setToken = (token: string) => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -25,7 +25,7 @@ class ApiService {
 
   login = async (username: string, password: string): Promise<ApiResponseType<LoginResponse>> => {
     try {
-      const response = await apiClient.post('/auth/login', { username, password });
+      const response = await apiV2Client.post('/auth/login', { username, password });
       this.setToken(response.data.token);
 
       localStorage.setItem('user', JSON.stringify(response.data.user));
@@ -47,7 +47,7 @@ class ApiService {
     firebaseToken: string
   ): Promise<ApiResponseType<LoginResponse>> => {
     try {
-      const response = await apiClient.post('/auth/login/firebase', { token: firebaseToken });
+      const response = await apiV2Client.post('/auth/login/firebase', { token: firebaseToken });
       this.setToken(response.data.token);
 
       localStorage.setItem('user', JSON.stringify(response.data.user));
@@ -71,7 +71,7 @@ class ApiService {
   ): Promise<ApiResponseType<LoginResponse>> => {
     try {
       // TODO: add other field here to create user with data
-      const response = await apiClient.post('/auth/register/firebase', { token: firebaseToken });
+      const response = await apiV2Client.post('/auth/register/firebase', { token: firebaseToken });
       this.setToken(response.data.token);
 
       localStorage.setItem('user', JSON.stringify(response.data.user));
@@ -91,7 +91,7 @@ class ApiService {
 
   getMe = async (): Promise<ApiResponseType<User>> => {
     try {
-      const response = await apiClient.get('/auth/me');
+      const response = await apiV2Client.get('/auth/me');
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -106,7 +106,7 @@ class ApiService {
 
   getPosts = async (search?: string): Promise<ApiResponseType<Post[]>> => {
     try {
-      const response = await apiClient.get('/posts', { params: { search } });
+      const response = await apiV2Client.get('/posts', { params: { search } });
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -121,7 +121,7 @@ class ApiService {
 
   getPost = async (id: string): Promise<ApiResponseType<Post>> => {
     try {
-      const response = await apiClient.get(`/posts/${id}`);
+      const response = await apiV2Client.get(`/posts/${id}`);
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -136,7 +136,7 @@ class ApiService {
 
   getMyPosts = async (): Promise<ApiResponseType<Post[]>> => {
     try {
-      const response = await apiClient.get('/posts/me');
+      const response = await apiV2Client.get('/posts/me');
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -166,7 +166,7 @@ class ApiService {
 
   updatePost = async (id: string, post: Partial<Post>): Promise<ApiResponseType<Post>> => {
     try {
-      const response = await apiClient.patch(`/posts/${id}`, post);
+      const response = await apiV2Client.patch(`/posts/${id}`, post);
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -181,7 +181,7 @@ class ApiService {
 
   boostPost = async (id: string): Promise<ApiResponseType<Post>> => {
     try {
-      const response = await apiClient.patch(`/posts/${id}/boosting`);
+      const response = await apiV2Client.patch(`/posts/${id}/boosting`);
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -196,7 +196,7 @@ class ApiService {
 
   favoritePost = async (feedId: string, userId: string): Promise<ApiResponseType<Post>> => {
     try {
-      const response = await apiClient.post(`/posts/${feedId}/addfavorites`, { userId });
+      const response = await apiV2Client.post(`/posts/${feedId}/addfavorites`, { userId });
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -211,7 +211,7 @@ class ApiService {
 
   unfavoritePost = async (feedId: string, userId: string): Promise<ApiResponseType<Post>> => {
     try {
-      const response = await apiClient.post(`/posts/${feedId}/unfavorites`, { userId });
+      const response = await apiV2Client.post(`/posts/${feedId}/unfavorites`, { userId });
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -226,7 +226,7 @@ class ApiService {
 
   deleteUser = async (userId: string): Promise<ApiResponseType<User>> => {
     try {
-      const response = await apiClient.delete(`/users/${userId}`);
+      const response = await apiV2Client.delete(`/users/${userId}`);
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -241,7 +241,7 @@ class ApiService {
 
   getmyName = async (): Promise<ApiResponseType<String>> => {
     try {
-      const response = await apiClient.get(`/auth/me`);
+      const response = await apiV2Client.get(`/auth/me`);
       return {
         status: ApiStatus.SUCCESS,
         data: response.data.username,
@@ -256,7 +256,7 @@ class ApiService {
 
   getChatrooms = async (): Promise<ApiResponseType<ReadChatroom[]>> => {
     try {
-      const response = await apiClient.get(`/chats`);
+      const response = await apiV2Client.get(`/chats`);
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -271,7 +271,7 @@ class ApiService {
 
   getChatroomDetail = async (chatroomId: string): Promise<ApiResponseType<ChatroomDetail>> => {
     try {
-      const response = await apiClient.get(`/chats/${chatroomId}`);
+      const response = await apiV2Client.get(`/chats/${chatroomId}`);
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -286,7 +286,7 @@ class ApiService {
 
   createNewMessage = async (postMessage: PostMessage): Promise<ApiResponseType<Message>> => {
     try {
-      const response = await apiClient.post(`/chats/message`, postMessage);
+      const response = await apiV2Client.post(`/chats/message`, postMessage);
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -303,7 +303,7 @@ class ApiService {
     postChatroom: PostChatroom
   ): Promise<ApiResponseType<ReadChatroom>> => {
     try {
-      const response = await apiClient.post(`/chats/chatroom`, postChatroom);
+      const response = await apiV2Client.post(`/chats/chatroom`, postChatroom);
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -318,7 +318,7 @@ class ApiService {
 
   getProductDetail = async (productId: string): Promise<ApiResponseType<ProductDetail>> => {
     try {
-      const response = await apiClient.get(`/products/${productId}`);
+      const response = await apiV2Client.get(`/products/${productId}`);
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -335,7 +335,7 @@ class ApiService {
     product: Partial<ProductDetail>
   ): Promise<ApiResponseType<ProductDetail>> => {
     try {
-      const response = await apiClient.post('/products', product);
+      const response = await apiV2Client.post('/products', product);
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -350,7 +350,7 @@ class ApiService {
 
   deleteProduct = async (productId: string): Promise<ApiResponseType<ProductDetail>> => {
     try {
-      const response = await apiClient.delete(`/products/${productId}`);
+      const response = await apiV2Client.delete(`/products/${productId}`);
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -365,7 +365,7 @@ class ApiService {
 
   incrementProductStep = async (productId: string): Promise<ApiResponseType<ProductDetail>> => {
     try {
-      const response = await apiClient.patch(`/products/${productId}`, { incrementStep: true });
+      const response = await apiV2Client.patch(`/products/${productId}`, { incrementStep: true });
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -380,7 +380,7 @@ class ApiService {
 
   pay = async (payDetail: PayDetail): Promise<ApiResponseType<ProductDetail>> => {
     try {
-      const response = await apiClient.post(`/products/pay`, payDetail);
+      const response = await apiV2Client.post(`/products/pay`, payDetail);
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -395,7 +395,7 @@ class ApiService {
 
   adminGetUsers = async (): Promise<ApiResponseType<User[]>> => {
     try {
-      const response = await apiClient.get('/users');
+      const response = await apiV2Client.get('/users');
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -410,7 +410,7 @@ class ApiService {
 
   banPostById = async (id: string): Promise<ApiResponseType<Post>> => {
     try {
-      const response = await apiClient.patch(`/posts/${id}/banning`);
+      const response = await apiV2Client.patch(`/posts/${id}/banning`);
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -425,7 +425,7 @@ class ApiService {
 
   unbanPostById = async (id: string): Promise<ApiResponseType<Post>> => {
     try {
-      const response = await apiClient.patch(`/posts/${id}/unbanning`);
+      const response = await apiV2Client.patch(`/posts/${id}/unbanning`);
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -440,7 +440,7 @@ class ApiService {
 
   adminGetPosts = async (search?: string): Promise<ApiResponseType<Post[]>> => {
     try {
-      const response = await apiClient.get('/posts/all-admin', { params: { search } });
+      const response = await apiV2Client.get('/posts/all-admin', { params: { search } });
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -455,7 +455,7 @@ class ApiService {
 
   adminGetProductHistory = async (): Promise<ApiResponseType<ProductHistory[]>> => {
     try {
-      const response = await apiClient.get('/products/history');
+      const response = await apiV2Client.get('/products/history');
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -470,7 +470,7 @@ class ApiService {
 
   getUsers = async (): Promise<ApiResponseType<User[]>> => {
     try {
-      const response = await apiClient.get('/users');
+      const response = await apiV2Client.get('/users');
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,
@@ -490,7 +490,7 @@ class ApiService {
     sender: string
   ): Promise<ApiResponseType<Post>> => {
     try {
-      const response = await apiClient.post(`/posts/${id}/reviews`, { desc, rate, sender });
+      const response = await apiV2Client.post(`/posts/${id}/reviews`, { desc, rate, sender });
       return {
         status: ApiStatus.SUCCESS,
         data: response.data,

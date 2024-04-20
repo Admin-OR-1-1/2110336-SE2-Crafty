@@ -1,7 +1,7 @@
 import { Post } from '@/app/_common/interface/post';
 import { apiService } from '@/configs/apiService/apiService';
 import { ApiStatus } from '@/configs/apiService/types';
-import { apiClient } from '@/configs/axiosConfig';
+import { apiV2Client } from '@/configs/axiosConfig';
 import { useState, useEffect } from 'react';
 
 const useFeedList = (search: string) => {
