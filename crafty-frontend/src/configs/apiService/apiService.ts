@@ -17,7 +17,7 @@ import { ProductHistory } from '@/app/_common/interface/product-history';
 
 class ApiService {
   constructor() {
-    axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_ENDPOINT || 'http://localhost:5000';
+    axios.defaults.baseURL = (process.env.NEXT_PUBLIC_API_ENDPOINT || 'http://localhost:5000') + "/api/v2";
   }
   setToken = (token: string) => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
