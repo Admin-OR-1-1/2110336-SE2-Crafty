@@ -8,5 +8,5 @@ services:
 
   frontend:
     extends:
-      file: crafty-frontend/docker-compose.local.yaml
+      file: crafty-frontend/docker-compose.yaml
       service: frontend
