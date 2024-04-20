@@ -13,7 +13,7 @@ import { Server, Socket } from 'socket.io'
   cors: {
     origin: '*', // Allow all origins (for testing)
   },
-  path: '/api/v2/chats', // Specify the path for WebSocket connections
+  path: '/api/v2/chats-sockets', // Specify the path for WebSocket connections
 })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
