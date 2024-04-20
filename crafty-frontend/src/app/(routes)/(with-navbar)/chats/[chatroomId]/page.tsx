@@ -62,16 +62,16 @@ const ChatRoomPage: FC<PageProps> = ({ params }) => {
   const isOtherChat = chatroomDetail?.crafterId !== myId && chatroomDetail?.crafteeId !== myId;
 
   return (
-    <div className="flex w-full flex-row overflow-x-hidden">
+    <div className="flex w-full flex-row overflow-hidden">
       <div className="relative flex h-full w-full">
-        <div className="mr-2 flex h-full min-h-[calc(100vh-64px)] w-full flex-col pr-3">
+        <div className="mr-2 flex h-full max-h-[calc(100vh-64px)] min-h-[calc(100vh-64px)] w-full flex-col pr-3">
           <ChatHeader
             name={
               isOtherChat ? (talkerName ? `${talkerName} - ${senderName}` : '.') : talkerName ?? ''
             }
           />
 
-          <div className="flex-1 flex-col space-y-4 overflow-y-auto py-4">
+          <div className="flex-1 space-y-4 overflow-y-auto py-4">
             {messages?.map((message: Message) => {
               return (
                 <MessageBubble
@@ -84,7 +84,9 @@ const ChatRoomPage: FC<PageProps> = ({ params }) => {
               );
             })}
           </div>
-          <ChatInput chatroomId={params.chatroomId} senderId={myId} />
+          <div>
+            <ChatInput chatroomId={params.chatroomId} senderId={myId} />
+          </div>
         </div>
         <ProductSidebar
           product={productDetail}
