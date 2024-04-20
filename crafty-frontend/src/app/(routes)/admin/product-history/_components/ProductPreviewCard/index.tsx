@@ -40,7 +40,7 @@ const ProductPreviewCard = ({ productHistory }: UserPreviewCardProps) => {
       </div>
 
       <div className="ml-auto flex flex-col gap-2">
-        <span className="text-xl">{new Date(productHistory.date).toLocaleDateString()}</span>
+        <span className="text-xl">{productHistory.date}</span>
       </div>
     </div>
   );
