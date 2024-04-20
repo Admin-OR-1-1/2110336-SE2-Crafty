@@ -8,12 +8,17 @@ export class PostsService {
   constructor(private prisma: PrismaService) {}
 
   async addReview(postId: string, desc: string, rate: number, sender: string) {
+    console.log(postId, desc, rate, sender)
     return await this.prisma.review.create({
       data: {
         desc,
         rate,
         sender,
-        postId,
+        post: {
+          connect: {
+            id: postId,
+          },
+        },
       },
     })
   }
