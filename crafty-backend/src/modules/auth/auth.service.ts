@@ -20,12 +20,13 @@ export class AuthService {
 
   async fireBaseRegister(firebaseRegisterUserDto: FirebaseRegisterUserDto) {
     const { token } = firebaseRegisterUserDto
-    const { userId, email, name } = await this.firebaseService.verifyUser(token)
+    const { userId, email, phoneNumber } =
+      await this.firebaseService.verifyUser(token)
 
     const user = await this.usersService.create(
       {
-        username: email,
-        password: name,
+        username: email || phoneNumber,
+        password: userId,
       },
       userId,
     )
