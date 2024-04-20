@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Product } from '@prisma/client'
+import { Max, Min } from 'class-validator'
 
 export class CreateProductDto implements Partial<Product> {
   @ApiProperty({
@@ -21,6 +22,7 @@ export class CreateProductDto implements Partial<Product> {
     type: Number,
     example: 1900,
   })
+  @Min(0)
   price: number
 
   @ApiProperty({
