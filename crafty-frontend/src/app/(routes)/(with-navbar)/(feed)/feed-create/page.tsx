@@ -99,7 +99,8 @@ const FeedEditPage: FC = () => {
               type="number"
               placeholder="ราคาสินค้า"
               min={0}
-              {...register('price', { required: true })}
+              
+              {...register('price', { required: true, min: 0, pattern: /^[0-9]*$/ })}
             />
           </div>
           <div className="flex flex-col gap-4">
