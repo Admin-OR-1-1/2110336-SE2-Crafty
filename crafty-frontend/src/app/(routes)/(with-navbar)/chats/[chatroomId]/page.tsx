@@ -20,7 +20,6 @@ type PageProps = {
 
 const ChatRoomPage: FC<PageProps> = ({ params }) => {
   const [isConnected, setIsConnected] = useState(socket.connected);
-  const [triggerRefresh, setTriggerRefresh] = useState(false);
 
   useEffect(() => {
     const onConnect = () => {
@@ -40,16 +39,7 @@ const ChatRoomPage: FC<PageProps> = ({ params }) => {
       socket.off('connect', onConnect);
       socket.off('disconnect', onDisconnect);
     };
-  }, []);
-
-  useEffect(() => {
-    // emit sendMessage event
-    socket.emit('sendMessage', 'message');
-  }, [triggerRefresh]);
-
-  const handleMessageSubmit = () => {
-    setTriggerRefresh((prev) => !prev); // Toggle to trigger re-fetch
-  };
+  }, [params.chatroomId]);
 
   // normal code
   const { chatroomDetail, productDetail } = useChatroomDetail(params.chatroomId);
@@ -94,11 +84,7 @@ const ChatRoomPage: FC<PageProps> = ({ params }) => {
               );
             })}
           </div>
-          <ChatInput
-            chatroomId={params.chatroomId}
-            senderId={myId}
-            onMessageSubmit={handleMessageSubmit}
-          />
+          <ChatInput chatroomId={params.chatroomId} senderId={myId} />
         </div>
         <ProductSidebar
           product={productDetail}

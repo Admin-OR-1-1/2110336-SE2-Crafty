@@ -1,6 +1,7 @@
 'use client';
 
 import { TextInput } from '@/app/_components/ui/input';
+import { socket } from '@/app/socket';
 import { apiService } from '@/configs/apiService/apiService';
 import { useState } from 'react';
 import { IoIosSend } from 'react-icons/io';
@@ -9,10 +10,9 @@ import { LuImagePlus } from 'react-icons/lu';
 interface ChatInputProps {
   chatroomId: string;
   senderId: string;
-  onMessageSubmit?: () => void;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ chatroomId, senderId, onMessageSubmit }) => {
+const ChatInput: React.FC<ChatInputProps> = ({ chatroomId, senderId }) => {
   const [text, setText] = useState('');
   const submitMessage = async () => {
     console.log('submitted text:', text);
@@ -27,9 +27,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ chatroomId, senderId, onMessageSu
       messageType: 'TEXT',
     });
 
-    if (onMessageSubmit) {
-      onMessageSubmit();
-    }
+    socket.emit('sendMessage', 'message');
   };
 
   const submitImageMessage = async (imageUrl: string) => {
