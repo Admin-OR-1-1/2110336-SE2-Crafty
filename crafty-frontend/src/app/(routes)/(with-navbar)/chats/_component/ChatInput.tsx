@@ -9,9 +9,10 @@ import { LuImagePlus } from 'react-icons/lu';
 interface ChatInputProps {
   chatroomId: string;
   senderId: string;
+  onMessageSubmit?: () => void;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ chatroomId, senderId }) => {
+const ChatInput: React.FC<ChatInputProps> = ({ chatroomId, senderId, onMessageSubmit }) => {
   const [text, setText] = useState('');
   const submitMessage = async () => {
     console.log('submitted text:', text);
@@ -25,6 +26,10 @@ const ChatInput: React.FC<ChatInputProps> = ({ chatroomId, senderId }) => {
       content: thisText,
       messageType: 'TEXT',
     });
+
+    if (onMessageSubmit) {
+      onMessageSubmit();
+    }
   };
 
   const submitImageMessage = async (imageUrl: string) => {

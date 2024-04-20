@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import MessageBubble from '../_component/MessageBubble';
 import ChatHeader from '../_component/ChatHeader';
 import ChatInput from '../_component/ChatInput';
@@ -8,13 +8,57 @@ import { ChatroomDetail, Message } from '@/app/_common/interface/chat';
 import userStore from '@/app/_common/store/user/user-store';
 import useChatroomDetail from '../_hook/useChatroomDetail';
 import ProductSidebar from '../_component/ProductSidebar';
+import { io } from 'socket.io-client';
+import { socket } from '@/app/socket';
 type PageProps = {
   params: {
     chatroomId: string;
   };
 };
 
+// const socket = io('http://localhost:5000', { transports: ['websocket'] });
+
 const ChatRoomPage: FC<PageProps> = ({ params }) => {
+  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [triggerRefresh, setTriggerRefresh] = useState(false);
+
+  useEffect(() => {
+    const onConnect = () => {
+      setIsConnected(true);
+      console.log('Connected to WebSocket server (Page)');
+    };
+
+    const onDisconnect = () => {
+      setIsConnected(false);
+      console.log('Disconnected from WebSocket server (Page)');
+    };
+
+    const onNewMessage = (message: string) => {
+      console.log('Received message:', message);
+    };
+
+    socket.on('connect', onConnect);
+    socket.on('disconnect', onDisconnect);
+    socket.on('receiveMessage', onNewMessage);
+
+    return () => {
+      socket.off('connect', onConnect);
+      socket.off('receiveMessage', onNewMessage);
+      socket.off('disconnect', onDisconnect);
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log('trigger');
+    // emit sendMessage event
+    socket.emit('sendMessage', 'Hello from client (Page)');
+  }, [triggerRefresh]);
+
+  const handleMessageSubmit = () => {
+    setTriggerRefresh((prev) => !prev); // Toggle to trigger re-fetch
+  };
+
+  // normal code
   const { chatroomDetail, productDetail } = useChatroomDetail(params.chatroomId);
   const myId = userStore((state) => state.user.id);
   const myName = userStore((state) => state.user.username);
@@ -57,7 +101,11 @@ const ChatRoomPage: FC<PageProps> = ({ params }) => {
               );
             })}
           </div>
-          <ChatInput chatroomId={params.chatroomId} senderId={myId} />
+          <ChatInput
+            chatroomId={params.chatroomId}
+            senderId={myId}
+            onMessageSubmit={handleMessageSubmit}
+          />
         </div>
         <ProductSidebar
           product={productDetail}
