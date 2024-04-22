@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  backend:
+    extends:
+      file: crafty-backend/docker-compose.yaml
+      service: backend
+
+  frontend:
+    extends:
+      file: crafty-frontend/docker-compose.yaml
+      service: frontend

@@ -4,5 +4,12 @@
     "_components": "components",
     "_types": "Typescript",
     "(routes)": "routes"
-  }
+  },
+  "conventionalCommits.scopes": [
+    "Backend/basic-auth",
+    "Backend/user",
+    "Frontend",
+    "Backend"
+  ],
+  "eslint.workingDirectories": ["./crafty-backend", "./crafty-frontend"]
 }
